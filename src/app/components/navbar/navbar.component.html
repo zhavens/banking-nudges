@@ -1,0 +1,22 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" *ngIf="currentUser">
+    <a class="navbar-brand ms-3" href="#">
+        <img src="assets/img/icon.png" width="30" height="30" class="d-inline-block align-top">
+        Bank of Bank</a>
+    <div class="navbar-nav navbar-expand-lg">
+        <a class="nav-item nav-link active" routerLink="/">Home</a>
+        <a class="nav-item nav-link active" routerLink="/accounts">Accounts</a>
+        <a class="nav-item nav-link active" routerLink="/transfer">Transfer Funds</a>
+    </div>
+    <div class="navbar-nav navbar-right d-flex ms-auto me-3">
+        <div *ngIf="auth.isLoggedIn; then thenLogout else elseLogin"></div>
+        <ng-template #thenLogout>
+            <a class="nav-item nav-link" (click)="logout()">Logout</a>
+            <a class="navbar-brand ms-1" href="#">
+                <img src="assets/img/profile.png" width="30" height="30" alt="">
+            </a>
+        </ng-template>
+        <ng-template #elseLogin>
+            <a class="nav-item nav-link" href="/login">Login</a>
+        </ng-template>
+    </div>
+</nav>
