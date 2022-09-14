@@ -27,17 +27,21 @@ export class AlertService {
   }
 
   success(message: string, keepAfterRouteChange = false) {
+    console.log("Success:", message);
     this.keepAfterRouteChange = keepAfterRouteChange;
     this.subject.next({ type: 'success', text: message });
   }
 
-  error(message: string, keepAfterRouteChange = false) {
+  error(error: Error | string, keepAfterRouteChange = false) {
+    console.log("Error:", error);
     this.keepAfterRouteChange = keepAfterRouteChange;
+    let message = error instanceof Error ? error.message : error;
     this.subject.next({ type: 'error', text: message });
   }
 
   clear() {
     // clear by calling subject.next() without parameters
+    console.log("Clear.");
     this.subject.next("");
   }
 }

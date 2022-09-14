@@ -1,16 +1,16 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { User } from '@/models';
+import { LocalDatabaseService } from './local_database.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
   private currentUserSubject: BehaviorSubject<User>;
   public currentUser: Observable<User>;
 
-  constructor(private http: HttpClient) {
+  constructor(private localdb: LocalDatabaseService, private http: HttpClient) {
     var storedUser = localStorage.getItem('currentUser')
     if (storedUser) {
       this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(storedUser));
@@ -29,34 +29,17 @@ export class AuthenticationService {
     return this.currentUserSubject.value && this.currentUserSubject.value.username != "";
   }
 
-  login(username: string, password: string) {
-    return this.http.post<any>(`/api/users/authenticate`, { username, password })
-      .pipe(catchError(this.handleError))
-      .pipe(map(user => {
-        // store user details and jwt token in local storage to keep user logged in between page refreshes
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        this.currentUserSubject.next(user);
-        return user;
-      }));
+  login(username: string, password: string): User | Error {
+    const user = this.localdb.findUser(username);
+    if (!user || user.password !== password) return Error('Username or password is incorrect.');;
+    localStorage.setItem('currentUser', JSON.stringify(user));
+    this.currentUserSubject.next(user);
+    return user;
   }
 
   logout() {
     // remove user from local storage and set current user to null
     localStorage.removeItem('currentUser');
     this.currentUserSubject.next(new User());
-  }
-
-  private handleError(error: HttpErrorResponse) {
-    if (error.status === 0) {
-      // A client-side or network error occurred. Handle it accordingly.
-      console.error('An error occurred:', error.error);
-    } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong.
-      console.error(
-        `Backend returned code ${error.status}, body was: `, error.error);
-    }
-    // Return an observable with a user-facing error message.
-    return throwError(() => new Error('Something bad happened; please try again later.'));
   }
 }

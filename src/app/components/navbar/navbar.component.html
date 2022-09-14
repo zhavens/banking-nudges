@@ -8,9 +8,11 @@
         <a class="nav-item nav-link active" routerLink="/transfer">Transfer Funds</a>
     </div>
     <div class="navbar-nav navbar-right d-flex ms-auto me-3">
+        <div *ngIf="auth.currentUserValue?.admin"><a class="nav-item nav-link" routerLink="/admin">Admin</a>
+        </div>
         <div *ngIf="auth.isLoggedIn; then thenLogout else elseLogin"></div>
         <ng-template #thenLogout>
-            <a class="nav-item nav-link" (click)="logout()">Logout</a>
+            <a class="nav-item nav-link active" (click)="logout()">Logout</a>
             <a class="navbar-brand ms-1" href="#">
                 <img src="assets/img/profile.png" width="30" height="30" alt="">
             </a>

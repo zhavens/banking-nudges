@@ -1,12 +1,66 @@
 <!-- nav -->
-<app-navbar></app-navbar>
 
 <!-- main app container -->
-<div class=" jumbotron">
-    <div class="container" id="content">
-        <div class="row justify-content-center">
-            <app-alert></app-alert>
-            <router-outlet></router-outlet>
+<div class="flex-wrapper">
+    <div class="jumbotron">
+        <app-navbar></app-navbar>
+        <div class="container" id="content">
+            <div class="row justify-content-center">
+                <app-alert></app-alert>
+                <div class="col-sm-2">
+                    <app-sidebar></app-sidebar>
+                </div>
+                <div class="col-sm-8">
+                    <router-outlet></router-outlet>
+                </div>
+                <div class="col-sm-2">
+                    <app-sidebar></app-sidebar>
+                </div>
+            </div>
         </div>
     </div>
+    <footer *ngIf="auth.isLoggedIn" id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-2">
+                    <h5>Banking</h5>
+                    <p>Accounts</p>
+                    <p>Credit Cards</p>
+                    <p>Personal Loans</p>
+                    <p>International Banking</p>
+                </div>
+                <div class="col-sm-2">
+                    <h5>Insurance</h5>
+                    <p>Travel Insurance</p>
+                    <p>Home Insurance</p>
+                    <p>Renter's Insurance</p>
+                </div>
+                <div class="col-sm-2">
+                    <h5>Investing</h5>
+                    <p>TFSAs</p>
+                    <p>Mutual Funds</p>
+                    <p>RRSPs</p>
+                    <p>Investment Services</p>
+                </div>
+                <div class="col-sm-2">
+                    <h5>Help Center</h5>
+
+                </div>
+                <div class="col-sm-2"></div>
+            </div>
+        </div>
+        <div class="container" id="legal">
+            <div class="row">
+                <div class="col-sm-6">
+                    <p>Bank of Bank, &copy; 2022</p>
+                </div>
+                <div class="col-sm-6">
+                    <span>Legal</span> &vert;
+                    <span>Accessibility</span> &vert;
+                    <span>Privacy and Security</span>
+                </div>
+            </div>
+        </div>
+    </footer>
 </div>

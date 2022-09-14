@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { first } from 'rxjs/operators';
 
+import { User } from '@/models';
 import { AlertService, AuthenticationService } from '@/services';
 
 @Component({ templateUrl: 'login.component.html' })
@@ -52,15 +52,19 @@ export class LoginComponent implements OnInit {
     }
 
     this.loading = true;
-    this.authenticationService.login(this.f['username'].value, this.f['password'].value)
-      .pipe(first())
-      .subscribe(
-        data => {
-          this.router.navigate([this.returnUrl]);
-        },
-        error => {
-          this.alertService.error(error);
-          this.loading = false;
-        });
+    var resp = this.authenticationService.login(this.f['username'].value, this.f['password'].value)
+    if (resp instanceof User) {
+      this.router.navigate([this.returnUrl]);
+    } else {
+      this.alertService.error(resp);
+      this.loading = false;
+    }
+    // .subscribe(
+    //   data => {
+    //     this.router.navigate([this.returnUrl]);
+    //   },
+    //   error => {  
+    //     this.loading = false;
+    //   });
   }
 }

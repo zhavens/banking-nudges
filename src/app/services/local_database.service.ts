@@ -1,15 +1,16 @@
 import { User } from '@/models';
 import { Injectable } from '@angular/core';
+import { plainToClass } from 'class-transformer';
 import { MemoryDb, MinimongoDb } from 'minimongo';
 
 // array in local storage for registered users
-let users = JSON.parse(localStorage.getItem('users') || "[]") || [];
+let users = JSON.parse(localStorage.getItem('users') || "[]").map((x: any) => plainToClass(User, x)) || [];
 let nextId = 1;
 
 @Injectable({
     providedIn: 'root'
 })
-export class LocalDatabase {
+export class LocalDatabaseService {
     private db: MemoryDb;
 
     constructor() {
@@ -29,7 +30,7 @@ export class LocalDatabase {
         return users.reduce((a: User, b: User) => Math.max(a.id, b.id), -Infinity).id;
     }
 
-    getAllUsers() {
+    getAllUsers(): User[] {
         // this.db.collections["users"].find("*").fetch();
         return users;
     }
@@ -39,7 +40,7 @@ export class LocalDatabase {
         return users.find((x: any) => x.username === username);
     }
 
-    insertUser(user: User) {
+    insertUser(user: User): User {
         // this.db.collections["users"].upsert(user, function (doc: any) {
         //     return doc.id;
         // });
@@ -49,7 +50,7 @@ export class LocalDatabase {
         return user;
     }
 
-    deleteUser(id: number) {
+    deleteUser(id: number): boolean {
         users = users.filter((x: any) => x.id !== id);
         localStorage.setItem('users', JSON.stringify(users));
         return true;

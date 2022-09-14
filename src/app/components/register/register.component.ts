@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { first } from 'rxjs/operators';
 
+import { User } from '@/models';
 import { AlertService, AuthenticationService, UserService } from '@/services';
 
 @Component({
@@ -53,16 +53,24 @@ export class RegisterComponent implements OnInit {
     }
 
     this.loading = true;
-    this.userService.register(this.registerForm.value)
-      .pipe(first())
-      .subscribe(
-        (data: any) => {
-          this.alertService.success('Registration successful', true);
-          this.router.navigate(['/login']);
-        },
-        (error: any) => {
-          this.alertService.error(error);
-          this.loading = false;
-        });
+    let resp = this.userService.register(this.registerForm.value)
+    if (resp instanceof User) {
+      this.alertService.success('Registration successful', true);
+      this.router.navigate(['/login'])
+    } else {
+      this.alertService.error(resp);
+      this.loading = false;
+
+    }
+    // .pipe(first())
+    // .subscribe(
+    //   (data: any) => {
+    //     this.alertService.success('Registration successful', true);
+    //     this.router.navigate(['/login']);
+    //   },
+    //   (error: any) => {
+    //     this.alertService.error(error);
+    //     this.loading = false;
+    //   });
   }
 }

@@ -1,1 +1,28 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+    /* Colors from tryeraser.com. */
+    --e-grey: #ced4da;
+    --e-blue: #3b5bdb;
+    --e-teal: #1971c2;
+    --e-aqua: #099268;
+    --e-green: #2f9e44;
+    --e-yellow: #f08c00;
+    --e-orange: #e8590c;
+    --e-red: #e03131;
+    --e-pink: #c2255c;
+    --e-bg-grey: #ced4da;
+    --e-bg-blue: #bac8ff;
+    --e-bg-teal: #a5d8ff;
+    --e-bg-aqua: #96f2d7;
+    --e-bg-green: #b2f2bb;
+    --e-bg-yellow: #ffec99;
+    --e-b-gorange: #ffd8a8;
+    --e-bg-red: #ffc9c9;
+    --e-bg-pink: #fcc2d7;
+
+    /* App specific selections. */
+    --app-yellow: var(--e-bg-yellow);
+    --app-grey: var(--e-bg-grey);
+    --app-green: var(--e-bg-green);
+    --app-blue: var(--e-bg-blue);
+    --app-red: var(--e-bg-pink);
+}

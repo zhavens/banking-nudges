@@ -2,7 +2,6 @@ import { User } from '@/models';
 import { AuthenticationService, UserService } from '@/services';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { first } from 'rxjs';
 
 @Component({
   selector: 'app-admin',
@@ -24,13 +23,14 @@ export class AdminComponent implements OnInit {
 
   deleteUser(id: number) {
     this.userService.delete(id)
-      .pipe(first())
-      .subscribe(() => this.loadAllUsers());
+    this.loadAllUsers();
+    // .pipe(first())
+    // .subscribe(() => this.loadAllUsers());
   }
 
   private loadAllUsers() {
-    this.userService.getAll()
-      .pipe(first())
-      .subscribe(users => this.users = users);
+    this.users = this.userService.getAll()
+    // .pipe(first())
+    // .subscribe(users => this.users = users);
   }
 }

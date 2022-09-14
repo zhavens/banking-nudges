@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { first } from 'rxjs/operators';
 
 import { User } from '@/models';
 import { AuthenticationService, UserService } from '@/services';
@@ -25,15 +24,10 @@ export class HomeComponent implements OnInit {
     this.loadAllUsers();
   }
 
-  deleteUser(id: number) {
-    this.userService.delete(id)
-      .pipe(first())
-      .subscribe(() => this.loadAllUsers());
-  }
-
   private loadAllUsers() {
-    this.userService.getAll()
-      .pipe(first())
-      .subscribe(users => this.users = users);
+    this.users = this.userService.getAll();
+    // this.userService.getAll()
+    //   .pipe(first())
+    //   .subscribe(users => this.users = users);
   }
 }
