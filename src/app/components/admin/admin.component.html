@@ -1,8 +1,15 @@
 <div class="row">
-    <ul>
-        <li *ngFor="let user of users">
-            {{user.username}} ({{user.firstName}} {{user.lastName}})
-            - <a (click)="deleteUser(user.id)" class="text-danger">Delete</a>
-        </li>
-    </ul>
+    <div class="col-12">
+        <div class="card">
+            <h5 class="card-header"> Users</h5>
+            <div class="card-body">
+                <ul>
+                    <li *ngFor="let user of users">
+                        {{user.username}} ({{user.firstName}} {{user.lastName}})
+                        - <a (click)="deleteUser(user.id)" class="text-danger">Delete</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>

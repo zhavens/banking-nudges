@@ -1,4 +1,5 @@
-import { AccountType } from "@/models/account";
+import { AccountType, CardType } from "@/models/account";
+import Decimal from "decimal.js";
 
 // Create our number formatter.
 var currencyFormatter = new Intl.NumberFormat('en-US', {
@@ -14,6 +15,13 @@ export const accountTypeString = (type: AccountType | undefined) => {
     return AccountType[type];
 }
 
+export const cardTypeString = (type: CardType | undefined) => {
+    if (!type) {
+        return "";
+    }
+    return CardType[type];
+}
+
 declare global {
     interface Number {
         currencyString: () => string;
@@ -24,6 +32,7 @@ declare global {
         isValidPhone: () => boolean;
     }
 }
+
 Number.prototype.currencyString = function (): string {
     return currencyFormatter.format((this.valueOf()));
 }
@@ -42,3 +51,12 @@ String.prototype.isValidPhone = function (): boolean {
             /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
         ) != null;
 };
+
+declare module "decimal.js" {
+    interface Decimal {
+        currencyString: () => string;
+    }
+}
+Decimal.prototype.currencyString = function (): string {
+    return currencyFormatter.format((this.toNumber()));
+}

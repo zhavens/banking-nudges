@@ -1,0 +1,9 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div *ngIf="currentUser">
+            <h1>Hi {{currentUser.firstName}}! <i *ngIf="currentUser.admin" class="bi bi-cup-hot-fill"></i>
+            </h1>
+            <app-accounts></app-accounts>
+        </div>
+    </div>
+</div>

@@ -1,9 +1,9 @@
 <div class="row">
     <div class="col-12">
         <div class="card">
-            <h5 class="card-header">Accounts Summary</h5>
+            <h5 class="card-header">Cards Summary</h5>
             <div class="card-body">
-                <table class="table table-striped table-hover" id="accounts_table">
+                <table class="table table-striped table-hover" id="cards_table">
                     <thead>
                         <tr>
                             <th scope="col">Name</th>
@@ -11,10 +11,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let account of accounts" (click)="selectAccount(account, accountDetails)"
-                            [class.bg-light]="currentAccount === account">
-                            <td>{{account.name}} ({{textlib.accountTypeString(account.type)}})</td>
-                            <td>${{account.balance}}</td>
+                        <tr *ngFor="let card of cards" (click)="selectCard(card, cardDetails)"
+                            [class.bg-light]="currentCard === card">
+                            <td>{{card.name}} ({{textlib.cardTypeString(card.type)}})</td>
+                            <td>${{card.balance}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -23,11 +23,11 @@
     </div>
 </div>
 
-<ng-template #accountDetails let-modal>
+<ng-template #cardDetails let-modal>
     <div class="modal-header">
 
         <div class="">
-            <h5 class="modal-title">{{currentAccount?.name}}</h5>
+            <h5 class="modal-title">{{currentCard?.name}}</h5>
         </div>
         <div class="d-flex ms-auto me-3">
             <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
@@ -35,17 +35,17 @@
     </div>
     <div class="modal-body">
         <div class="card">
-            <h5 class="card-header">Account Details</h5>
+            <h5 class="card-header">Card Details</h5>
             <div class="card-body">
                 <div class="row">
                     <div class="col-sm-4">
-                        Account ID: {{textlib.accountTypeString(currentAccount?.type)}}
-                        - {{currentAccount?.id?.safeString()}}
+                        Card ID: {{textlib.cardTypeString(currentCard?.type)}}
+                        - {{currentCard?.id?.safeString()}}
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-4">Current Balance<br>${{currentAccount?.balance}}</div>
-                    <div class="col-sm-4">Available Balance<br>${{currentAccount?.balance}}</div>
+                    <div class="col-sm-4">Current Balance<br>${{currentCard?.balance}}</div>
+                    <div class="col-sm-4">Available Balance<br>${{currentCard?.balance}}</div>
                     <div class="col-sm-4"></div>
                 </div>
             </div>
@@ -82,7 +82,7 @@
                         <tbody>
                             <tr *ngFor="let tx of filteredTransactions">
                                 <td>{{tx.date.toDateString()}}</td>
-                                <ng-template [ngIf]="currentAccount && tx.sender?.equals(currentAccount.id)"
+                                <ng-template [ngIf]="currentCard && tx.sender?.equals(currentCard.id)"
                                     [ngIfElse]="showDeposit">
                                     <td>{{tx.recipient?.safeString()}}</td>
                                     <td class="text-danger">-{{tx.amount.currencyString()}}</td>

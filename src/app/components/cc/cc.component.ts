@@ -1,5 +1,5 @@
 import * as text from '@/helpers/text';
-import { Account } from '@/models/account';
+import { CreditCard } from '@/models/account';
 import { Transaction } from '@/models/transaction';
 import { User } from '@/models/user';
 import { AuthenticationService } from '@/services';
@@ -9,16 +9,16 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
-  selector: 'app-accounts',
-  templateUrl: './accounts.component.html',
-  styleUrls: ['./accounts.component.css']
+  selector: 'app-cards',
+  templateUrl: './cc.component.html',
+  styleUrls: ['./cc.component.css']
 })
-export class AccountsComponent implements OnInit {
-  accounts?: Account[];
+export class CcComponent implements OnInit {
+  cards?: CreditCard[];
 
   txFilter: FormControl;
   txSearchForm: FormGroup;
-  currentAccount: Account | null = null;
+  currentCard: CreditCard | null = null;
   filteredTransactions: Transaction[] = [];
 
   today: Date = new Date();
@@ -28,7 +28,7 @@ export class AccountsComponent implements OnInit {
     private modalService: NgbModal,
     private auth: AuthenticationService,
     private logging: LoggingService) {
-    this.auth.currentUserTopic.subscribe((user: User) => { this.accounts = this.auth.currentUser?.accounts });
+    this.auth.currentUserTopic.subscribe((user: User) => { this.cards = this.auth.currentUser?.cards });
 
     this.txFilter = new FormControl('');
     this.txSearchForm = new FormGroup([]);
@@ -39,26 +39,26 @@ export class AccountsComponent implements OnInit {
     });
   }
 
-  selectAccount(account: Account, modalContent: any) {
-    this.logging.info(`Showing account modal for ${JSON.stringify(account.id)}`);
+  selectCard(card: CreditCard, modalContent: any) {
+    this.logging.info(`Showing card modal for ${JSON.stringify(card.id)}`);
     this.txFilter.setValue('');
-    this.currentAccount = account;
-    this.filteredTransactions = this.currentAccount.transactions || []
+    this.currentCard = card;
+    this.filteredTransactions = this.currentCard.transactions || []
     this.modalService.open(modalContent, { size: 'xl' }).result.finally(() => {
-      this.logging.info(`Closed account modal.`);
-      this.currentAccount = null;
+      this.logging.info(`Closed card modal.`);
+      this.currentCard = null;
       this.filteredTransactions = [];
     });
   }
 
   filterTx() {
     if (this.txFilter.value) {
-      this.filteredTransactions = this.currentAccount?.transactions?.filter((x: Transaction) => x.description?.includes(this.txFilter.value) || x.sender?.safeString().includes(this.txFilter.value) || x.recipient?.safeString().includes(this.txFilter.value)) || []
+      this.filteredTransactions = this.currentCard?.transactions?.filter((x: Transaction) => x.description?.includes(this.txFilter.value) || x.sender?.safeString().includes(this.txFilter.value) || x.recipient?.safeString().includes(this.txFilter.value)) || []
     } else {
-      this.filteredTransactions = this.currentAccount?.transactions || [];
+      this.filteredTransactions = this.currentCard?.transactions || [];
     }
 
-    this.logging.info(`Filtered using query "${this.txFilter.value}", showing ${this.filteredTransactions.length} accounts.`)
+    this.logging.info(`Filtered using query "${this.txFilter.value}", showing ${this.filteredTransactions.length} cards.`)
   }
 
   // Getter to expose library to templates.

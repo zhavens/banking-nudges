@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { User } from '@/models';
+import { User } from '@/models/user';
 import { AlertService, AuthenticationService } from '@/services';
 
 @Component({ templateUrl: 'login.component.html' })
@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
   ) {
     // redirect to home if already logged in
     if (this.authenticationService.isLoggedIn) {
-      this.router.navigate(['/']);
+      this.router.navigate(['/home']);
     }
     this.loginForm = new FormGroup([]);
     this.returnUrl = "";
@@ -33,8 +33,8 @@ export class LoginComponent implements OnInit {
       password: ['', Validators.required]
     });
 
-    // get return url from route parameters or default to '/'
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    // get return url from route parameters or default to '/home'
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
   }
 
   // convenience getter for easy access to form fields
@@ -59,12 +59,6 @@ export class LoginComponent implements OnInit {
       this.alertService.error(resp);
       this.loading = false;
     }
-    // .subscribe(
-    //   data => {
-    //     this.router.navigate([this.returnUrl]);
-    //   },
-    //   error => {  
-    //     this.loading = false;
-    //   });
+    this.loginForm.reset();
   }
 }

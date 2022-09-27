@@ -1,10 +1,10 @@
-import { User } from '@/models';
+import { User } from '@/models/user';
 import { Injectable } from '@angular/core';
-import { plainToClass } from 'class-transformer';
+import { instanceToPlain, plainToClass } from 'class-transformer';
 import { MemoryDb, MinimongoDb } from 'minimongo';
 
 // array in local storage for registered users
-let users = JSON.parse(localStorage.getItem('users') || "[]").map((x: any) => plainToClass(User, x)) || [];
+let users: User[] = JSON.parse(localStorage.getItem('users') || "[]").map((x: any) => plainToClass(User, x)) || [];
 let nextId = 1;
 
 @Injectable({
@@ -27,35 +27,45 @@ export class LocalDatabaseService {
     }
 
     getNextId(): number {
-        return users.reduce((a: User, b: User) => Math.max(a.id, b.id), -Infinity).id;
+        return users.reduce((a: User, b: User) => a.id > b.id ? a : b).id + 1;
     }
 
     getAllUsers(): User[] {
-        // this.db.collections["users"].find("*").fetch();
         return users;
     }
 
-    findUser(username: string): User | null {
-        // this.db.collections["users"].find({"username": username}).fetch();
+    findUser(id: number): User | undefined {
+        return users.find((x: any) => x.id === id);
+    }
+
+    findUserByUsername(username: string): User | undefined {
         return users.find((x: any) => x.username === username);
     }
 
     insertUser(user: User): User {
-        // this.db.collections["users"].upsert(user, function (doc: any) {
-        //     return doc.id;
-        // });
         user.id = users.length ? Math.max(...users.map((x: any) => x.id)) + 1 : 1;
         users.push(user);
-        localStorage.setItem('users', JSON.stringify(users));
+        this.writeUsers();
         return user;
     }
 
     deleteUser(id: number): boolean {
         users = users.filter((x: any) => x.id !== id);
-        localStorage.setItem('users', JSON.stringify(users));
+        this.writeUsers();
         return true;
-        // return this.db.collections["users"].remove(id);
     }
 
+    updateUser(user: User): boolean {
+        let idx = users.findIndex((x: User) => x.id == user.id)
+        if (idx == -1) {
+            return false;
+        }
+        users[idx] = user;
+        this.writeUsers();
+        return true;
+    }
 
+    private writeUsers() {
+        localStorage.setItem('users', JSON.stringify(instanceToPlain(users)));
+    }
 }

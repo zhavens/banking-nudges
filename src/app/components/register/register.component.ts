@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { User } from '@/models';
+import { User } from '@/models/user';
 import { AlertService, AuthenticationService, UserService } from '@/services';
+import { plainToClass } from 'class-transformer';
 
 @Component({
   templateUrl: 'register.component.html',
@@ -22,10 +23,6 @@ export class RegisterComponent implements OnInit {
     private alertService: AlertService
   ) {
     this.registerForm = new FormGroup([]);
-    // redirect to home if already logged in
-    // if (this.authenticationService.isLoggedIn) {
-    //   this.router.navigate(['/']);
-    // }
   }
 
   ngOnInit() {
@@ -53,24 +50,15 @@ export class RegisterComponent implements OnInit {
     }
 
     this.loading = true;
-    let resp = this.userService.register(this.registerForm.value)
+    let user = plainToClass(User, this.registerForm.value);
+    let resp = this.userService.register(user)
     if (resp instanceof User) {
       this.alertService.success('Registration successful', true);
       this.router.navigate(['/login'])
     } else {
-      this.alertService.error(resp);
+      this.alertService.error(JSON.stringify(resp));
       this.loading = false;
 
     }
-    // .pipe(first())
-    // .subscribe(
-    //   (data: any) => {
-    //     this.alertService.success('Registration successful', true);
-    //     this.router.navigate(['/login']);
-    //   },
-    //   (error: any) => {
-    //     this.alertService.error(error);
-    //     this.loading = false;
-    //   });
   }
 }

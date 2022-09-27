@@ -1,0 +1,114 @@
+<div class="col-12">
+    <div class="card">
+        <h5 class="card-header">Manage Payees</h5>
+        <div class="card-body">
+            <div class="mb-3">
+                <table class="table table-bordered table-striped">
+                    <tbody>
+                        <tr *ngFor=" let payee of user?.payees">
+                            <td>{{payee.safeString()}}</td>
+                            <td><button type="button" class="btn btn-danger d-flex ms-auto"
+                                    (click)="removePayee(payee)"><i class="bi bi-trash"></i></button>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button type="button" class="btn btn-primary" (click)="showPayeeModal(addPayeeModal)">Add
+                Payee</button>
+        </div>
+    </div>
+</div>
+
+<ng-template #addPayeeModal let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title">Add Payee</h5>
+        <div class="d-flex ms-auto me-3">
+            <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+        </div>
+    </div>
+    <div class="modal-body">
+        <div class="col-md-6 mb-3">
+            <form>
+                <div class="input-group">
+                    <span class="input-group-text">Nickname</span>
+                    <input type="text" name="nickname" class="form-control" id="nicknameInput" placeholder="Nickname"
+                        [(ngModel)]="nickname" #ctrl="ngModel">
+                </div>
+            </form>
+        </div>
+        <nav ngbNav #nav="ngbNav" class="nav-tabs">
+            <ng-container ngbNavItem>
+                <a ngbNavLink>Accocunt</a>
+                <ng-template ngbNavContent>
+                    <form [formGroup]="accountPayeeForm" (submit)="addAccountPayee()">
+                        <div class="mb-3">
+                            <label for="accountNumInput">Account Number</label>
+                            <input type="number" class="form-control" id="accountNumInput" placeholder="Account Number"
+                                formControlName="accountNum">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </ng-template>
+            </ng-container>
+            <ng-container ngbNavItem>
+                <a ngbNavLink>ACH Client</a>
+                <ng-template ngbNavContent>
+                    <form [formGroup]="achPayeeForm" (ngSubmit)="addAchPayee()">
+                        <div class="vstack gap-3 mb-3">
+                            <div>
+                                <label for="achInstitutionInput" class="form-label">Institution Number</label>
+                                <input type="number" class="form-control" placeholder="nstitution Number"
+                                    id="achInstitutionInput" formControlName="institutionNum">
+                            </div>
+                            <div>
+                                <label for="achRoutingInput" class="form-label">Routing Number</label>
+                                <input type="number" class="form-control" placeholder="Routing Number"
+                                    id="achRoutingInput" formControlName="routingNum">
+                            </div>
+                            <div>
+                                <label for="achAccountInput" class="form-label">Account Number</label>
+                                <input type="number" class="form-control" placeholder="Account Number"
+                                    id="achAccountInput" formControlName="accountNum">
+                            </div>
+                            <button class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </ng-template>
+            </ng-container>
+            <ng-container ngbNavItem>
+                <a ngbNavLink>e-Transfer</a>
+                <ng-template ngbNavContent>
+                    <form [formGroup]="etransferPayeeForm" (ngSubmit)="addEtransferPayee()">
+                        <div class="mb-3">
+                            <label for="etransferEmailInput" class="form-label">Email</label>
+                            <input type="text" class="form-control" placeholder="Email" id="etransferEmailInput"
+                                formControlName="email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="etransferPhoneInput" class="form-label">Phone</label>
+                            <input type="text" class="form-control" placeholder="Phone" id="etransferPhoneInput"
+                                formControlName="phoneNum">
+                        </div>
+                        <button class="btn btn-primary">Submit</button>
+                    </form>
+                </ng-template>
+            </ng-container>
+            <ng-container ngbNavItem>
+                <a ngbNavLink>Other</a>
+                <ng-template ngbNavContent>
+                    <form [formGroup]="otherPayeeForm" (ngSubmit)="addOtherPayee()">
+                        <div class="mb-3">
+                            <label for="otherDescriptionInput" class="form-label">Description</label>
+                            <input type="text" class="form-control" placeholder="Description" id="otherDescriptionInput"
+                                formControlName="description">
+                        </div>
+                        <button class="btn btn-primary">Submit</button>
+                    </form>
+                </ng-template>
+            </ng-container>
+        </nav>
+        <div class="row">
+            <div [ngbNavOutlet]="nav" class="col-12 mt-3"></div>
+        </div>
+    </div>
+</ng-template>

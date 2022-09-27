@@ -14,7 +14,7 @@ export class LoggingService {
   constructor() { }
 
   private writeLog(entry: LogEntry) {
-    console.log(entry);
+    console.log(entry.toString());
     logs.push(entry);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
   }

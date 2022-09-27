@@ -1,24 +1,36 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark" *ngIf="currentUser">
-    <a class="navbar-brand ms-3" href="#">
-        <img src="assets/img/icon.png" width="30" height="30" class="d-inline-block align-top">
-        Bank of Bank</a>
-    <div class="navbar-nav navbar-expand-lg">
-        <a class="nav-item nav-link active" routerLink="/">Home</a>
-        <a class="nav-item nav-link active" routerLink="/accounts">Accounts</a>
-        <a class="nav-item nav-link active" routerLink="/transfer">Transfer Funds</a>
-    </div>
-    <div class="navbar-nav navbar-right d-flex ms-auto me-3">
-        <div *ngIf="auth.currentUserValue?.admin"><a class="nav-item nav-link" routerLink="/admin">Admin</a>
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark" *ngIf="currentUserTopic">
+    <div class="container-fluid">
+        <a class="navbar-brand ms-3" href="#">
+            <img src="assets/img/icon.png" width="30" height="30" class="d-inline-block align-top">
+            Bank of Bank</a>
+        <div class="navbar-nav navbar-expand-lg">
+            <a class="nav-item nav-link" routerLink="/" routerLinkActive="active">Home</a>
+            <a class="nav-item nav-link" routerLink="/accounts" routerLinkActive="active">Accounts</a>
+            <a class="nav-item nav-link" routerLink="/transfer" routerLinkActive="active">Transfer Funds</a>
         </div>
-        <div *ngIf="auth.isLoggedIn; then thenLogout else elseLogin"></div>
-        <ng-template #thenLogout>
-            <a class="nav-item nav-link active" (click)="logout()">Logout</a>
-            <a class="navbar-brand ms-1" href="#">
-                <img src="assets/img/profile.png" width="30" height="30" alt="">
-            </a>
-        </ng-template>
-        <ng-template #elseLogin>
-            <a class="nav-item nav-link" href="/login">Login</a>
-        </ng-template>
+        <div class="navbar-nav navbar-right d-flex ms-auto me-3">
+            <ng-template [ngIf]="auth.currentUser?.admin">
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" routerLink="/admin" data-bs-toggle="dropdown">Admin</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item text-danger" (click)="admin.clearLogs()">Clear Logs</a>
+                        </li>
+                        <li><a class="dropdown-item text-danger" (click)="admin.resetAcounts()">Reset
+                                Accounts</a>
+                        </li>
+                    </ul>
+                </div>
+            </ng-template>
+            <div *ngIf="auth.isLoggedIn; then thenLogout else elseLogin"></div>
+            <ng-template #thenLogout>
+                <a class="nav-item nav-link" (click)="logout()">Logout</a>
+                <a class="navbar-brand ms-1" routerLink="/profile">
+                    <img src="assets/img/profile.png" width="30" height="30" alt="">
+                </a>
+            </ng-template>
+            <ng-template #elseLogin>
+                <a class="nav-item nav-link" routerLink="/login">Login</a>
+            </ng-template>
+        </div>
     </div>
 </nav>

@@ -26,6 +26,10 @@
     margin-bottom: 0px;
 }
 
+#legal a {
+    color: var(--app-grey);
+}
+
 .flex-wrapper {
     display: flex;
     min-height: 100vh;

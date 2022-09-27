@@ -1,0 +1,44 @@
+<div class="col-12 mb-4">
+    <div class="card">
+        <h5 class="card-header">Transfer Funds</h5>
+        <div class="card-body">
+            <form [formGroup]="transferForm" (submit)="submitTransfer()">
+                <div class="vstack gap-3 mb-3">
+                    <div>
+                        <label for="transferFromInput" class="form-label">From:</label>
+                        <select class="form-select" id="transferFromInput" formControlName="sender"
+                            aria-label="From account" required>
+                            <option *ngFor="let account of user?.accounts" [ngValue]="account.id"> {{account.name}} -
+                                {{account.id.safeString()}} - ({{account.balance.currencyString()}})</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="transferToInput" class="form-label">To:</label>
+                        <select class="form-select" id="transferToInput" formControlName="recipient"
+                            aria-label="To recipient" required>
+                            <option *ngFor="let account of user?.accounts" [ngValue]="account.id"> {{account.name}} -
+                                {{account.id.safeString()}}</option>
+                            <option disabled>--------</option>
+                            <option *ngFor="let payee of user?.payees" [ngValue]="payee"> {{payee.safeString()}}
+                            </option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="transferAmountInput" class="form-label">Amount:</label>
+                        <div class="input-group">
+                            <span class="input-group-text" id="basic-addon1">$</span>
+                            <input type="number" class="form-control" id="transferAmountInput" formControlName="amount"
+                                [value]="transferAmount" (change)="transferAmount=twoNumberDecimal($event)"
+                                aria-label="Transfer amount" placeholder="0.00" value="" step="0.01" min="0.01"
+                                required>
+                        </div>
+
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-primary" [disabled]="!transferForm.valid">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

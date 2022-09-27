@@ -26,3 +26,14 @@
     --app-blue: var(--e-bg-blue);
     --app-red: var(--e-bg-pink);
 }
+
+.ng-valid[required],
+.ng-valid.required {
+    border-left: 5px solid var(--bs-green);
+    /* green */
+}
+
+.ng-invalid:not(form) {
+    border-left: 5px solid var(--bs-red);
+    /* red */
+}

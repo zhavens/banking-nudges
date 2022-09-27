@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
-import { User } from '@/models';
+import { User } from '@/models/user';
 import { AuthenticationService, UserService } from '@/services';
 import { Router } from '@angular/router';
 
-@Component({ templateUrl: 'home.component.html' })
-export class HomeComponent implements OnInit {
-  currentUser: User | null;
+@Component({ templateUrl: 'home.page.html' })
+export class HomePage implements OnInit {
+  currentUser?: User;
   users: User[] = [];
 
   constructor(
@@ -14,7 +14,7 @@ export class HomeComponent implements OnInit {
     private userService: UserService,
     private router: Router,
   ) {
-    this.currentUser = this.authenticationService.currentUserValue;
+    this.currentUser = this.authenticationService.currentUser;
     if (!this.authenticationService.isLoggedIn) {
       this.router.navigate(['/login']);
     }

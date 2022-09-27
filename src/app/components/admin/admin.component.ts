@@ -1,4 +1,4 @@
-import { User } from '@/models';
+import { User } from '@/models/user';
 import { AuthenticationService, UserService } from '@/services';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -22,15 +22,13 @@ export class AdminComponent implements OnInit {
   }
 
   deleteUser(id: number) {
-    this.userService.delete(id)
-    this.loadAllUsers();
-    // .pipe(first())
-    // .subscribe(() => this.loadAllUsers());
+    if (confirm("Are you sure you want to delete this user?")) {
+      this.userService.delete(id)
+      this.loadAllUsers();
+    }
   }
 
   private loadAllUsers() {
     this.users = this.userService.getAll()
-    // .pipe(first())
-    // .subscribe(users => this.users = users);
   }
 }

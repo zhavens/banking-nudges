@@ -1,3 +1,17 @@
 a {
     cursor: pointer;
 }
+
+.dropdown-menu {
+    display: none;
+}
+
+.nav-item:hover .nav-link {}
+
+.nav-item:hover .dropdown-menu {
+    display: block;
+}
+
+.nav-item .dropdown-menu {
+    margin-top: 0;
+}
