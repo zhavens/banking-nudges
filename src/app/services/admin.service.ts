@@ -1,4 +1,4 @@
-import { TEST_ACCOUNTS } from '@/models/account';
+import { TEST_ACCOUNTS, TEST_CARDS, TEST_PAYEES, TEST_PAYMENTS } from '@/helpers/testdata';
 import { Injectable } from '@angular/core';
 import { AuthenticationService } from './auth.service';
 import { LoggingService } from './logging.service';
@@ -23,6 +23,27 @@ export class AdminService {
       let user = this.auth.currentUser;
       if (user) {
         user.accounts = TEST_ACCOUNTS;
+        user.cards = TEST_CARDS;
+        this.users.updateUser(user);
+      }
+    }
+  }
+
+  resetPayees() {
+    if (confirm("Are you sure you want to reset the user's payees?")) {
+      let user = this.auth.currentUser;
+      if (user) {
+        user.payees = TEST_PAYEES;
+        this.users.updateUser(user);
+      }
+    }
+  }
+
+  resetPayments() {
+    if (confirm("Are you sure you want to reset the user's payments?")) {
+      let user = this.auth.currentUser;
+      if (user) {
+        user.payments = TEST_PAYMENTS;
         this.users.updateUser(user);
       }
     }

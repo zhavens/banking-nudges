@@ -25,7 +25,10 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { TransferComponent } from './components/transfer/transfer.component';
 import { AccountsPage } from './pages/accounts/accounts.page';
 import { HomePage } from './pages/home/home.page';
+import { PaymentsPage } from './pages/payments/payments.page';
 import { TransferPage } from './pages/transfer/transfer.page';
+import { PaymentsComponent } from './components/payments/payments.component';
+import { TasksComponent } from './components/tasks/tasks.component';
 
 @NgModule({
   imports: [
@@ -41,6 +44,7 @@ import { TransferPage } from './pages/transfer/transfer.page';
     HomePage,
     AccountsPage,
     TransferPage,
+    PaymentsPage,
     // Components
     AppComponent,
     LoginComponent,
@@ -55,6 +59,8 @@ import { TransferPage } from './pages/transfer/transfer.page';
     TransferComponent,
     PayeesComponent,
     CcComponent,
+    PaymentsComponent,
+    TasksComponent,
   ],
   providers: [
     // provider used to create fake backend

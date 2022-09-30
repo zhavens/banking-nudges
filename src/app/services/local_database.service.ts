@@ -1,7 +1,6 @@
 import { User } from '@/models/user';
 import { Injectable } from '@angular/core';
 import { instanceToPlain, plainToClass } from 'class-transformer';
-import { MemoryDb, MinimongoDb } from 'minimongo';
 
 // array in local storage for registered users
 let users: User[] = JSON.parse(localStorage.getItem('users') || "[]").map((x: any) => plainToClass(User, x)) || [];
@@ -11,20 +10,7 @@ let nextId = 1;
     providedIn: 'root'
 })
 export class LocalDatabaseService {
-    private db: MemoryDb;
-
-    constructor() {
-        this.db = new MemoryDb();
-
-        this.db.addCollection("users");
-        this.db.addCollection("accounts");
-        this.db.addCollection("cards");
-        this.db.addCollection("transactions");
-    }
-
-    get database(): MinimongoDb {
-        return this.database;
-    }
+    constructor() { }
 
     getNextId(): number {
         return users.reduce((a: User, b: User) => a.id > b.id ? a : b).id + 1;

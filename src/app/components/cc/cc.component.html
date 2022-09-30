@@ -8,13 +8,15 @@
                         <tr>
                             <th scope="col">Name</th>
                             <th scope="col">Balance</th>
+                            <th scope="col">Available</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let card of cards" (click)="selectCard(card, cardDetails)"
                             [class.bg-light]="currentCard === card">
                             <td>{{card.name}} ({{textlib.cardTypeString(card.type)}})</td>
-                            <td>${{card.balance}}</td>
+                            <td>${{card.balance.toFixed(2)}}</td>
+                            <td>${{card.limit.minus(card.balance || 0).toFixed(2)}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -33,7 +35,7 @@
             <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
         </div>
     </div>
-    <div class="modal-body">
+    <div class="modal-body vstack gap-3">
         <div class="card">
             <h5 class="card-header">Card Details</h5>
             <div class="card-body">
@@ -44,8 +46,10 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-4">Current Balance<br>${{currentCard?.balance}}</div>
-                    <div class="col-sm-4">Available Balance<br>${{currentCard?.balance}}</div>
+                    <div class="col-sm-4">Current Balance<br>${{currentCard?.balance?.toFixed(2)}}</div>
+                    <div class="col-sm-4">Available Balance<br>${{currentCard?.limit?.minus(currentCard?.balance ||
+                        0)?.toFixed(2)}}
+                    </div>
                     <div class="col-sm-4"></div>
                 </div>
             </div>
@@ -74,25 +78,24 @@
                             <tr>
                                 <th scope="col">Date</th>
                                 <th scope="col">Description</th>
-                                <th scope="col">Withdrawals</th>
-                                <th scope="col">Deposits</th>
+                                <th scope="col">Debits</th>
+                                <th scope="col">Credits</th>
                                 <th scope="col">Balance</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let tx of filteredTransactions">
                                 <td>{{tx.date.toDateString()}}</td>
-                                <ng-template [ngIf]="currentCard && tx.sender?.equals(currentCard.id)"
-                                    [ngIfElse]="showDeposit">
-                                    <td>{{tx.recipient?.safeString()}}</td>
-                                    <td class="text-danger">-{{tx.amount.currencyString()}}</td>
+                                <ng-template [ngIf]="currentCard && tx.recipient" [ngIfElse]="showDeposit">
+                                    <td>{{tx.recipient.safeString()}}</td>
                                     <td></td>
+                                    <td>{{tx.amount.currencyString()}}</td>
                                     <td>{{tx.balance?.currencyString()}}</td>
                                 </ng-template>
                                 <ng-template #showDeposit>
                                     <td class=>{{tx.sender?.safeString()}}</td>
+                                    <td class="text-success">+{{tx.amount.currencyString()}}</td>
                                     <td></td>
-                                    <td>{{tx.amount.currencyString()}}</td>
                                     <td>{{tx.balance?.currencyString()}}</td>
                                 </ng-template>
                             </tr>

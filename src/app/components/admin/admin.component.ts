@@ -1,7 +1,6 @@
-import { User } from '@/models/user';
 import { AuthenticationService, UserService } from '@/services';
+import { AdminService } from '@/services/admin.service';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin',
@@ -9,26 +8,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./admin.component.css']
 })
 export class AdminComponent implements OnInit {
-  users: User[] = [];
-
   constructor(
-    private authenticationService: AuthenticationService,
+    public auth: AuthenticationService,
+    public admin: AdminService,
     private userService: UserService,
-    private router: Router,
   ) { }
 
-  ngOnInit() {
-    this.loadAllUsers();
-  }
-
-  deleteUser(id: number) {
-    if (confirm("Are you sure you want to delete this user?")) {
-      this.userService.delete(id)
-      this.loadAllUsers();
-    }
-  }
-
-  private loadAllUsers() {
-    this.users = this.userService.getAll()
-  }
+  ngOnInit() { }
 }

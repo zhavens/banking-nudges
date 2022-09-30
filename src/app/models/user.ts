@@ -4,6 +4,7 @@ import 'reflect-metadata';
 import { Account, CreditCard } from "./account";
 import { Address } from "./address";
 import { Entity, OtherEntity } from "./entities";
+import { Payment } from "./payment";
 
 export class User {
     id: number = 0;
@@ -27,6 +28,9 @@ export class User {
 
     @Type(() => Payee)
     payees: Payee[] = [];
+
+    @Type(() => Payment)
+    payments: Payment[] = [];
 }
 
 // export type PayeeTypes = AccountId | AchAccount | EtransferClient | OtherEntity;
@@ -36,6 +40,11 @@ export class Payee {
     id: Entity = new OtherEntity();
 
     nickname?: string = '';
+
+    constructor(id: Entity, nickname?: string) {
+        this.id = id;
+        this.nickname = nickname;
+    }
 
     safeString(): string {
         return this.nickname ? `${this.nickname} - ${this.id.safeString()}` : this.id.safeString();

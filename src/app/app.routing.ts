@@ -9,6 +9,7 @@ import { AdminGuard } from './guard/admin.guard';
 import { LoggedInGuard } from './guard/logged-in.guard';
 import { AccountsPage } from './pages/accounts/accounts.page';
 import { HomePage } from './pages/home/home.page';
+import { PaymentsPage } from './pages/payments/payments.page';
 import { TransferPage } from './pages/transfer/transfer.page';
 
 const routes: Routes = [
@@ -19,8 +20,9 @@ const routes: Routes = [
     { path: 'profile', component: ProfileComponent, title: "Edit Profile - Bank of Bank", canActivate: [LoggedInGuard] },
     { path: 'accounts', component: AccountsPage, title: "Accounts - Bank of Bank", canActivate: [LoggedInGuard] },
     { path: 'transfer', component: TransferPage, title: "Transfer - Bank of Bank", canActivate: [LoggedInGuard] },
+    { path: 'payments', component: PaymentsPage, title: "Payments - Bank of Bank", canActivate: [LoggedInGuard] },
 
-    { path: 'admin', component: AdminComponent, title: "Admin Panel", canActivate: [AdminGuard] },
+    { path: 'admin', component: AdminComponent, title: "Administration - Bank of Bank", canActivate: [AdminGuard] },
     { path: 'register', component: RegisterComponent, title: "Register User" },
 
     // otherwise redirect to 404 page

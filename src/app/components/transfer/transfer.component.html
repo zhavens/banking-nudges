@@ -1,13 +1,13 @@
-<div class="col-12 mb-4">
+<div class="col-12">
     <div class="card">
         <h5 class="card-header">Transfer Funds</h5>
         <div class="card-body">
-            <form [formGroup]="transferForm" (submit)="submitTransfer()">
+            <form [formGroup]="transferForm" (submit)="submitTransferForm()">
                 <div class="vstack gap-3 mb-3">
                     <div>
                         <label for="transferFromInput" class="form-label">From:</label>
                         <select class="form-select" id="transferFromInput" formControlName="sender"
-                            aria-label="From account" required>
+                            aria-label="From Account" required>
                             <option *ngFor="let account of user?.accounts" [ngValue]="account.id"> {{account.name}} -
                                 {{account.id.safeString()}} - ({{account.balance.currencyString()}})</option>
                         </select>
@@ -18,9 +18,13 @@
                             aria-label="To recipient" required>
                             <option *ngFor="let account of user?.accounts" [ngValue]="account.id"> {{account.name}} -
                                 {{account.id.safeString()}}</option>
+                            <option *ngIf="user?.cards?.length" disabled>--------</option>
+                            <option *ngFor="let card of user?.cards" [ngValue]="card.id"> {{card.name}} -
+                                {{card.id.safeString()}}</option>
                             <option disabled>--------</option>
                             <option *ngFor="let payee of user?.payees" [ngValue]="payee"> {{payee.safeString()}}
                             </option>
+                            <option [ngValue]="otherEtransfer"> Other e-Transfer Client</option>
                         </select>
                     </div>
                     <div>
@@ -32,7 +36,6 @@
                                 aria-label="Transfer amount" placeholder="0.00" value="" step="0.01" min="0.01"
                                 required>
                         </div>
-
                     </div>
                     <div>
                         <button type="submit" class="btn btn-primary" [disabled]="!transferForm.valid">Submit</button>
@@ -42,3 +45,64 @@
         </div>
     </div>
 </div>
+
+<ng-template #etransferClientModal let-modal>
+    <div class="modal-header">
+
+        <div class="">
+            <h5 class="modal-title">Other e-Transfer Client</h5>
+        </div>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <h5 class="card-header">Transfer Details</h5>
+            <div class="card-body">
+                <div class="col-12">
+                    <p><b>Amount:</b> {{transferAmount}}</p>
+                    <p><b>From:</b> {{tx.sender?.safeString()}}</p>
+                </div>
+                <hr>
+                <h5>Payee Details</h5>
+                <form [formGroup]="etransferForm" (ngSubmit)="submitEtransferForm()">
+                    <div class="vstack gap-3">
+                        <div>
+                            <label for="etransferEmailInput" class="form-label">Email</label>
+                            <input type="text" class="form-control" placeholder="Email" id="etransferEmailInput"
+                                formControlName="email">
+                        </div>
+                        <div>
+                            <label for="etransferPhoneInput" class="form-label">Phone</label>
+                            <input type="text" class="form-control" placeholder="Phone" id="etransferPhoneInput"
+                                formControlName="phoneNum">
+                        </div>
+                        <!-- <div>
+                            <label for="transferAmountInput" class="form-label">Amount:</label>
+                            <div class="input-group">
+                                <span class="input-group-text" id="basic-addon1">$</span>
+                                <input type="number" class="form-control" id="transferAmountInput"
+                                    formControlName="amount" [value]="transferAmount"
+                                    (change)="transferAmount=twoNumberDecimal($event)" aria-label="Transfer amount"
+                                    placeholder="0.00" value="" step="0.01" min="0.01" required>
+                            </div>
+                        </div> -->
+                        <div class="form-check">
+                            <label for="etransferSavePayee" class="form-check-label">Save as new payee?</label>
+                            <input type="checkbox" class="form-check-input" id="etransferSavePayee"
+                                formControlName="savePayee">
+                        </div>
+                        <div [hidden]="!etransferForm.value['savePayee']">
+                            <label for="etransferPayeeNick" class="form-label">Nickname (optional):</label>
+                            <input type="text" class="form-control" id="etransferPayeeNick" formControlName="nickname"
+                                placeholder="Optional">
+                        </div>
+                        <div class="row">
+                            <div class="col-1 me-3"><button type="submit" class="btn btn-primary">Submit</button></div>
+                            <div class="col-1"><button class="btn btn-danger" (click)="cancelTransfer()">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</ng-template>

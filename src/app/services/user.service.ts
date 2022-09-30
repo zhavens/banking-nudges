@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { TEST_ACCOUNTS } from '@/models/account';
+import { TEST_ACCOUNTS } from '@/helpers/testdata';
 import { User } from '@/models/user';
 import { AuthenticationService } from './auth.service';
 import { LocalDatabaseService } from './local_database.service';

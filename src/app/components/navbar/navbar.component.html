@@ -7,16 +7,23 @@
             <a class="nav-item nav-link" routerLink="/" routerLinkActive="active">Home</a>
             <a class="nav-item nav-link" routerLink="/accounts" routerLinkActive="active">Accounts</a>
             <a class="nav-item nav-link" routerLink="/transfer" routerLinkActive="active">Transfer Funds</a>
+            <a class="nav-item nav-link" routerLink="/payments" routerLinkActive="active">Manage Payments</a>
         </div>
         <div class="navbar-nav navbar-right d-flex ms-auto me-3">
             <ng-template [ngIf]="auth.currentUser?.admin">
                 <div class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" routerLink="/admin" data-bs-toggle="dropdown">Admin</a>
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Admin</a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item text-danger" (click)="admin.clearLogs()">Clear Logs</a>
                         </li>
                         <li><a class="dropdown-item text-danger" (click)="admin.resetAcounts()">Reset
                                 Accounts</a>
+                        </li>
+                        <li><a class="dropdown-item text-danger" (click)="admin.resetPayees()">Reset
+                                Payees</a>
+                        </li>
+                        <li><a class="dropdown-item text-danger" (click)="admin.resetPayments()">Reset
+                                Payments</a>
                         </li>
                     </ul>
                 </div>
