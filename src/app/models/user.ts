@@ -31,6 +31,9 @@ export class User {
 
     @Type(() => Payment)
     payments: Payment[] = [];
+
+    @Type(() => PersonalizationConfig)
+    personalization: PersonalizationConfig = new PersonalizationConfig();
 }
 
 // export type PayeeTypes = AccountId | AchAccount | EtransferClient | OtherEntity;
@@ -49,4 +52,8 @@ export class Payee {
     safeString(): string {
         return this.nickname ? `${this.nickname} - ${this.id.safeString()}` : this.id.safeString();
     }
+}
+
+export class PersonalizationConfig {
+    showTasksModal: boolean = true;
 }

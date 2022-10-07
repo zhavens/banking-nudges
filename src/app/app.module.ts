@@ -29,6 +29,7 @@ import { PaymentsPage } from './pages/payments/payments.page';
 import { TransferPage } from './pages/transfer/transfer.page';
 import { PaymentsComponent } from './components/payments/payments.component';
 import { TasksComponent } from './components/tasks/tasks.component';
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   imports: [
@@ -37,7 +38,8 @@ import { TasksComponent } from './components/tasks/tasks.component';
     ReactiveFormsModule,
     HttpClientModule,
     NgbModule,
-    appRoutingModule
+    appRoutingModule,
+    NgChartsModule
   ],
   declarations: [
     // Pages

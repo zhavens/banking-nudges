@@ -1,3 +1,4 @@
+import { SidebarType } from '@/models/sidebar';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -5,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./transfer.page.css']
 })
 export class TransferPage implements OnInit {
+
+  SidebarType = SidebarType;
 
   constructor() { }
 

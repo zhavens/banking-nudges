@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { TEST_ACCOUNTS } from '@/helpers/testdata';
+import { TEST_ACCOUNTS, TEST_CARDS, TEST_PAYEES } from '@/helpers/testdata';
 import { User } from '@/models/user';
 import { AuthenticationService } from './auth.service';
 import { LocalDatabaseService } from './local_database.service';
@@ -23,21 +23,27 @@ export class UserService {
         if (this.localdb.findUserByUsername(user.username)) {
             return Error('Username "' + user.username + '" is already taken');
         }
-        // TODO(zhavens): Remove once account config is in?
         user.accounts = TEST_ACCOUNTS;
+        user.cards = TEST_CARDS;
+        user.payees = TEST_PAYEES;
+        // Don't show task modal on first login!
+        user.personalization.showTasksModal = false;
         return this.localdb.insertUser(user);
     }
 
     delete(id: number): boolean | Error {
-        // return this.http.delete(`/users/${id}`);
         if (!this.auth.isLoggedIn) return Error('Not logged in!');
         if (this.auth.currentUser?.id == id) return Error("Can't delete current user!");
         return this.localdb.deleteUser(id);
     }
 
     updateUser(user: User): boolean {
+        // Sort transactions by 
         for (let account of user.accounts) {
             account.transactions.sort((a, b) => { return b.date.valueOf() - a.date.valueOf() });
+        }
+        for (let card of user.cards) {
+            card.transactions.sort((a, b) => { return b.date.valueOf() - a.date.valueOf() });
         }
 
         if (!this.localdb.updateUser(user)) {

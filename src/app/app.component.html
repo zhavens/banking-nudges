@@ -5,26 +5,20 @@
         <div class="container" id="content">
             <div class="row justify-content-center">
                 <app-alert></app-alert>
-                <div class="col-sm-2">
-                    <app-sidebar></app-sidebar>
-                </div>
-                <div class="col-sm-8">
-                    <router-outlet></router-outlet>
-                </div>
-                <div class="col-sm-2">
-                    <app-sidebar></app-sidebar>
-                </div>
+            </div>
+            <div class="row justify-content-center">
+                <router-outlet></router-outlet>
             </div>
         </div>
     </div>
-    <footer *ngIf="auth.isLoggedIn" id="footer">
+    <footer *ngIf="auth.isLoggedIn" id="footer" class="text-bg-yellow">
         <div class="container">
             <div class="row">
-                <div class="col-sm-2"></div>
+                <div class=" col-sm-2"></div>
                 <div class="col-sm-2">
                     <h5>Banking</h5>
-                    <p>Accounts</p>
-                    <p>Credit Cards</p>
+                    <p><a routerLink="/accounts">Accounts</a></p>
+                    <p><a routerLink="/accounts">Credit Cards</a></p>
                     <p>Personal Loans</p>
                     <p>International Banking</p>
                 </div>
@@ -43,7 +37,7 @@
                 </div>
                 <div class="col-sm-2">
                     <h5>Help Center</h5>
-
+                    <p>Contact Us</p>
                 </div>
                 <div class="col-sm-2"></div>
             </div>
@@ -54,13 +48,13 @@
                     <p>Bank of Bank, &copy; 2022</p>
                 </div>
                 <div class="col-sm-6 text-end">
-                    <a href="#">Consent</a>
+                    <a href="assets/pdf/AppendixJ_Consent_Form_v5.pdf" target="_blank">Consent</a>
                     <div class="vr ms-1 me-1"></div>
-                    <a href="#">Legal</a>
+                    <a href="assets/pdf/AppendixJ_Consent_Form_v5.pdf" target="_blank">Legal</a>
                     <div class="vr ms-1 me-1"></div>
                     <a href="#">Accessibility</a>
                     <div class="vr ms-1 me-1"></div>
-                    <a href="#">Privacy and Security</a>
+                    <a href="assets/pdf/AppendixJ_Consent_Form_v5.pdf" target="_blank">Privacy and Security</a>
                 </div>
             </div>
         </div>

@@ -1,13 +1,23 @@
+import { TEST_PAYEES } from '@/helpers/testdata';
 import { atLeastOne } from '@/helpers/validators';
 import { Account, CreditCard } from '@/models/account';
-import { AccountId, AchAccount, CreditCardId, EtransferClient } from '@/models/entities';
+import { AccountId, AchAccount, CreditCardId, EtransferClient, isEntity } from '@/models/entities';
 import { Transaction, TransactionType } from '@/models/transaction';
 import { Payee, User } from '@/models/user';
 import { AlertService, AuthenticationService, UserService } from '@/services';
 import { LoggingService } from '@/services/logging.service';
+import { NudgingService } from '@/services/nudging.service';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+
+
+const srcDestValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+  const sender = control.get('sender');
+  const recipient = control.get('recipient');
+
+  return sender && recipient && sender.value == recipient.value ? { srcDest: true } : null;
+};
 
 @Component({
   selector: 'app-transfer',
@@ -26,13 +36,18 @@ export class TransferComponent implements OnInit {
 
   otherEtransfer = new EtransferClient("", "");
 
+  unusualPayment: boolean = false;
+  largePayment: boolean = false;
+
   constructor(
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
     public auth: AuthenticationService,
     private alert: AlertService,
-    private userService: UserService,
     private logging: LoggingService,
+    private userService: UserService,
+    private nudgeService: NudgingService,
+
   ) {
     if (auth.currentUser) {
       this.user = auth.currentUser;
@@ -45,7 +60,8 @@ export class TransferComponent implements OnInit {
       sender: ['', Validators.required],
       recipient: ['', Validators.required],
       amount: [0.0, Validators.required],
-
+    }, {
+      validators: [srcDestValidator, this.unusualPaymentValidator, this.largePaymentValidator]
     })
 
     this.etransferForm = this.formBuilder.group({
@@ -60,6 +76,27 @@ export class TransferComponent implements OnInit {
   }
 
   ngOnInit(): void { }
+
+
+  unusualPaymentValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    let recipient = control.get('recipient');
+    let amount = control.get('amount');
+
+    this.unusualPayment = recipient && amount
+      && recipient.touched && recipient.value && isEntity(recipient.value)
+      && recipient.value.equals(TEST_PAYEES[0].id)
+      && amount.value > 0.0 && amount.value != 46.45;
+
+    return null;
+  };
+
+  largePaymentValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    let amount = control.get('amount');
+
+    this.largePayment = amount && amount.value && amount.value > 200.0;
+
+    return null;
+  };
 
   submitTransferForm() {
     if (!this.transferForm.valid) {
@@ -114,7 +151,7 @@ export class TransferComponent implements OnInit {
   submitTransfer() {
     this.tx.date = new Date();
 
-    switch (this.transferForm.value['recipient'].constructor) {
+    switch (this.tx.recipient?.constructor) {
       case EtransferClient:
         this.tx.type = TransactionType.ETRANSFER;
         break;
@@ -134,7 +171,7 @@ export class TransferComponent implements OnInit {
       srcAccount.balance = srcAccount.balance.minus(this.tx.amount);
       this.tx.balance = srcAccount.balance;
       srcAccount.transactions?.push(this.tx);
-      this.logging.info(`Submitting transfer: ${JSON.stringify(this.tx)}`);
+      this.logging.info(`Submitting transfer`, [this.tx]);
       if (this.tx.recipient instanceof AccountId) {
         let destAccount = this.user?.accounts?.find((account: Account) => { return account.id.equals(this.tx.recipient as AccountId) });
         if (destAccount) {
@@ -171,7 +208,7 @@ export class TransferComponent implements OnInit {
   }
 
   twoNumberDecimal(event: Event): string {
-    if (event && event.target && event.target instanceof HTMLInputElement) {
+    if (event && event.target && event.target instanceof HTMLInputElement && event.target.value) {
       return parseFloat((event.target as HTMLInputElement).value).toFixed(2);
     }
     return ''

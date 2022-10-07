@@ -1,4 +1,4 @@
-import { AccountId, AchAccount, CreditCardId, Entity, EtransferClient, OtherEntity } from "@/models/entities";
+import { AccountId, AchAccount, CreditCardId, EtransferClient, OtherEntity } from "@/models/entities";
 import { Transform, Type } from "class-transformer";
 import Decimal from "decimal.js";
 
@@ -12,7 +12,7 @@ export function DecimalTransform() {
 }
 
 export function EntityType(): PropertyDecorator {
-    return Type(() => Entity, {
+    return Type(() => Object, {
         discriminator: {
             property: '__type',
             subTypes: [

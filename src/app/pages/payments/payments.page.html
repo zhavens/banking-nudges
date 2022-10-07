@@ -1,4 +1,12 @@
-<div class="vstack gap-3 mb-3">
-    <app-payments></app-payments>
-    <app-payees></app-payees>
+<div class="row">
+    <div class="col-2">
+        <app-sidebar [type]="SidebarType.DEFAULT"></app-sidebar>
+    </div>
+    <div class="col-8 vstack gap-3 mb-3">
+        <app-payments></app-payments>
+        <app-payees></app-payees>
+    </div>
+    <div class="col-2">
+        <app-sidebar [type]="SidebarType.CONSEQUENCES"></app-sidebar>
+    </div>
 </div>

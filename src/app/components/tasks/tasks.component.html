@@ -1,0 +1,45 @@
+<ng-template #tasksModal let-modal>
+    <div class="card">
+        <h5 class="card-header">Today's Tasks</h5>
+        <div class=" card-body">
+            <p class="mb-3"><b>Hello {{user.firstName}}! What tasks will you be performing today?</b></p>
+            <form [formGroup]="tasksForm" (submit)="submitTasks()">
+                <div class="vstack gap-1">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="taskPayBills" formControlName="payBills">
+                        <label class="form-check-label" for="taskPayBills">Pay Bils</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="taskMoveBetween"
+                            formControlName="moveBetween">
+                        <label class="form-check-label" for="taskMoveBetween">Balance Accounts</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="taskTransfer" formControlName="transfer">
+                        <label class="form-check-label" for="taskTransfer">Transfer Funds</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="taskPayments"
+                            formControlName="managePayments">
+                        <label class="form-check-label" for="taskPayments">Manage Payments</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="taskMortgage"
+                            formControlName="manageMortgage">
+                        <label class="form-check-label" for="taskMortgage">Manage Mortgages</label>
+                    </div>
+                    <div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="taskOther" formControlName="other">
+                            <label class="form-label" for="taskOther">Other</label>
+                        </div>
+                        <input class="form-control" type="string" id="taskOtherDetails" formControlName="otherDetails">
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-primary">Continue</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</ng-template>

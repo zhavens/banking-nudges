@@ -1,3 +1,4 @@
+import { SidebarType } from '@/models/sidebar';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -5,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./payments.page.css']
 })
 export class PaymentsPage implements OnInit {
+  SidebarType = SidebarType;
 
   constructor() { }
 

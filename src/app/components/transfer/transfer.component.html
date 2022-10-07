@@ -4,12 +4,17 @@
         <div class="card-body">
             <form [formGroup]="transferForm" (submit)="submitTransferForm()">
                 <div class="vstack gap-3 mb-3">
+                    <div class="alert alert-danger"
+                        *ngIf="transferForm.errors?.['srcDest']  && (transferForm.touched || transferForm.dirty)"
+                        role="alert">
+                        <p>Source and destination accounts must be different!</p>
+                    </div>
                     <div>
                         <label for="transferFromInput" class="form-label">From:</label>
                         <select class="form-select" id="transferFromInput" formControlName="sender"
                             aria-label="From Account" required>
                             <option *ngFor="let account of user?.accounts" [ngValue]="account.id"> {{account.name}} -
-                                {{account.id.safeString()}} - ({{account.balance.currencyString()}})</option>
+                                {{account.id.safeString()}} ({{account.balance.currencyString()}})</option>
                         </select>
                     </div>
                     <div>
@@ -20,9 +25,9 @@
                                 {{account.id.safeString()}}</option>
                             <option *ngIf="user?.cards?.length" disabled>--------</option>
                             <option *ngFor="let card of user?.cards" [ngValue]="card.id"> {{card.name}} -
-                                {{card.id.safeString()}}</option>
+                                {{card.id.safeString()}} (${{card.balance.toDecimalPlaces(2)}})</option>
                             <option disabled>--------</option>
-                            <option *ngFor="let payee of user?.payees" [ngValue]="payee"> {{payee.safeString()}}
+                            <option *ngFor="let payee of user?.payees" [ngValue]="payee.id"> {{payee.safeString()}}
                             </option>
                             <option [ngValue]="otherEtransfer"> Other e-Transfer Client</option>
                         </select>
@@ -33,12 +38,32 @@
                             <span class="input-group-text" id="basic-addon1">$</span>
                             <input type="number" class="form-control" id="transferAmountInput" formControlName="amount"
                                 [value]="transferAmount" (change)="transferAmount=twoNumberDecimal($event)"
-                                aria-label="Transfer amount" placeholder="0.00" value="" step="0.01" min="0.01"
-                                required>
+                                [ngClass]="{'large-payment': largePayment}" aria-label="Transfer amount"
+                                placeholder="0.00" value="" step="0.01" min="0.01" required>
                         </div>
                     </div>
-                    <div>
-                        <button type="submit" class="btn btn-primary" [disabled]="!transferForm.valid">Submit</button>
+                    <div class="text-center mt-3">
+                        <div class="card mb-3" *ngIf="largePayment && transferForm.valid">
+                            <div class="card-body text-bg-orange">
+                                This payment is large enough (>$200) that a notification will be sent to the primary
+                                account holder.
+                            </div>
+                        </div>
+                        <div class="card" *ngIf="unusualPayment && transferForm.valid">
+                            <div class="card-body text-bg-yellow">
+                                <p> The value of the payment to this account is different from your usual amount. Would
+                                    you
+                                    like
+                                    to reset this to the usual amount, or continue as usual?</p>
+                                <button type="submit" class="btn btn-primary me-3">Submit</button>
+                                <button type="button" class="btn btn-success"
+                                    (click)="transferForm.controls['amount'].setValue(46.45)">Reset</button>
+                            </div>
+                        </div>
+                        <div *ngIf="!unusualPayment">
+                            <button type="submit" class="btn btn-primary"
+                                [disabled]="!transferForm.valid">Submit</button>
+                        </div>
                     </div>
                 </div>
             </form>

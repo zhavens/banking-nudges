@@ -1,1 +1,58 @@
-<div *ngIf="auth.isLoggedIn" style="width: 100%">Sidebar Content</div>
+<div *ngIf="auth.isLoggedIn" style="width: 100%">
+    <div *ngIf="sidebarType == SidebarType.DEFAULT">
+        <div class="vstack gap-3">
+            <div class="card">
+                <div class="card-body card-body-separated text-bg-yellow">
+                    <h5 class="card-title">Mortgage Offer</h5>
+                    <p>Switch your mortgage to Bank of Bank and get pre-approved within the week.</p>
+                    <a href="#">Speak with a Representative</a>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Free Air Miles</h5>
+                    <p>Clients who sign up for the new Bank of Bank Air Miles<sup>&copy;</sup> Rewards
+                        Mastercard<sup>&copy;</sup> are elligible for
+                        10,000 free
+                        miles upon approval.</p>
+                    <button type="button" class="btn btn-dark">Apply Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="sidebarType == SidebarType.CHART">
+        <div class="vstack gap-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Recent Transactions</h5>
+                    <div>
+                        <canvas baseChart [type]="'bar'" [data]="barChartData" [options]="barChartOptions"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Transaction Categories</h5>
+                    <div>
+                        <canvas baseChart [type]="'doughnut'" [data]="doughnutChartData"
+                            [options]="doughnutChartOptions"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="sidebarType == SidebarType.CONSEQUENCES">
+        <div class="row">
+            <div class="card text-bg-red">
+                <div class=" card-body">
+                    <h5 class="card-title">Did you know?</h5>
+                    <p>Did you know that financial misconduct affects 1 in 20 older adults, and impacts their
+                        ability
+                        to support themselves and maintain independence?</p>
+                    <a class="btn btn-dark" role="button" target="_blank"
+                        href="https://www.canada.ca/en/employment-social-development/corporate/seniors/forum/financial-abuse.html">
+                        Get More Info <i class="bi bi-box-arrow-up-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

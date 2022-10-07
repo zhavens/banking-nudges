@@ -14,33 +14,33 @@ export class LoggingService {
   constructor() { }
 
   private writeLog(entry: LogEntry) {
-    console.log(entry.toString());
-    logs.push(entry);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
+    console.log(entry.toShortString(), ...entry.objects);
+    // logs.push(entry);
+    // localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
   }
 
   clearLog() {
     localStorage.removeItem(STORAGE_KEY);
   }
 
-  info(message: string) {
-    this.writeLog(LogEntry.info(message));
+  info(message: string, objects: Object[] = []) {
+    this.writeLog(LogEntry.info(message, objects));
   }
 
-  warning(message: string) {
-    this.writeLog(LogEntry.warning(message));
+  warning(message: string, objects: Object[] = []) {
+    this.writeLog(LogEntry.warning(message, objects));
 
   }
 
-  error(message: string) {
-    this.writeLog(LogEntry.error(message));
+  error(message: string, objects: Object[] = []) {
+    this.writeLog(LogEntry.error(message, objects));
   }
 
-  fatal(message: string) {
-    this.writeLog(LogEntry.fatal(message));
+  fatal(message: string, objects: Object[] = []) {
+    this.writeLog(LogEntry.fatal(message, objects));
   }
 
-  verbose(message: string) {
-    this.writeLog(LogEntry.verbose(message));
+  verbose(message: string, objects: Object[] = []) {
+    this.writeLog(LogEntry.verbose(message, objects));
   }
 }

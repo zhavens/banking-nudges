@@ -1,4 +1,5 @@
 import { TEST_ACCOUNTS, TEST_CARDS, TEST_PAYEES, TEST_PAYMENTS } from '@/helpers/testdata';
+import { PersonalizationConfig } from '@/models/user';
 import { Injectable } from '@angular/core';
 import { AuthenticationService } from './auth.service';
 import { LoggingService } from './logging.service';
@@ -44,6 +45,16 @@ export class AdminService {
       let user = this.auth.currentUser;
       if (user) {
         user.payments = TEST_PAYMENTS;
+        this.users.updateUser(user);
+      }
+    }
+  }
+
+  resetPersonalization() {
+    if (confirm("Are you sure you want to reset the user's personalization?")) {
+      let user = this.auth.currentUser;
+      if (user) {
+        user.personalization = new PersonalizationConfig();
         this.users.updateUser(user);
       }
     }

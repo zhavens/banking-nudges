@@ -1,8 +1,12 @@
 
-export abstract class Entity {
-    equals(other: Entity): boolean { return false; };
-    isValid(): boolean { return false; };
-    safeString(): string { return ""; };
+export interface Entity {
+    equals(other: Entity): boolean;
+    isValid(): boolean;
+    safeString(): string;
+}
+
+export function isEntity(object: any): boolean {
+    return 'safeString' in object;
 }
 
 export class OtherEntity implements Entity {

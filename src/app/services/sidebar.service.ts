@@ -1,13 +1,10 @@
+import { SidebarType } from '@/models/sidebar';
 import { Injectable } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
 
-export enum SidebarType {
-  DEFAULT
-}
-
 @Injectable({ providedIn: 'root' })
 export class SidebarService {
-  private sidebarType: SidebarType = SidebarType.DEFAULT;
+  private sidebarType: SidebarType = SidebarType.NONE;
   private keepAfterRouteChange = false;
 
   constructor(private router: Router) {
@@ -16,7 +13,7 @@ export class SidebarService {
         if (this.keepAfterRouteChange) {
           this.keepAfterRouteChange = false;
         } else {
-          this.sidebarType = SidebarType.DEFAULT;
+          this.sidebarType = SidebarType.NONE;
         }
       }
     });

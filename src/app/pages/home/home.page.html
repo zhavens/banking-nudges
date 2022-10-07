@@ -1,9 +1,19 @@
-<div class="row">
-    <div class="col-sm-12">
-        <div *ngIf="currentUser">
-            <h1>Hi {{currentUser.firstName}}! <i *ngIf="currentUser.admin" class="bi bi-cup-hot-fill"></i>
-            </h1>
+<div class="row" *ngIf="!loading">
+    <app-alert></app-alert>
+    <div class="col-sm-2">
+        <app-sidebar></app-sidebar>
+    </div>
+    <div class="col-sm-8">
+        <h1>Hi {{user.firstName}}! <i *ngIf="user.admin" class="bi bi-cup-hot-fill"></i>
+        </h1>
+        <div class="vstack gap-3">
             <app-accounts></app-accounts>
+            <app-cards></app-cards>
         </div>
     </div>
+    <div class="col-sm-2">
+        <app-sidebar></app-sidebar>
+    </div>
 </div>
+
+<app-tasks></app-tasks>

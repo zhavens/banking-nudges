@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 
 import { User } from '@/models/user';
 import { AdminService } from '@/services/admin.service';
+import { PersonalizationService } from '@/services/personalization.service';
 
 @Component({
   selector: 'app-navbar',
@@ -17,11 +18,13 @@ export class NavbarComponent {
     private router: Router,
     public auth: AuthenticationService,
     public admin: AdminService,
+    private personalization: PersonalizationService
   ) {
     this.auth.currentUserTopic.subscribe(x => this.currentUserTopic = x);
   }
 
   logout() {
+    this.personalization.doLogoutUpdate();
     this.auth.logout();
     this.router.navigate(['/login']);
   }

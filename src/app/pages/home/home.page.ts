@@ -1,33 +1,47 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 
+import { TasksComponent } from '@/components/tasks/tasks.component';
 import { User } from '@/models/user';
 import { AuthenticationService, UserService } from '@/services';
+import { PersonalizationService } from '@/services/personalization.service';
 import { Router } from '@angular/router';
 
 @Component({ templateUrl: 'home.page.html' })
-export class HomePage implements OnInit {
-  currentUser?: User;
-  users: User[] = [];
+export class HomePage implements OnInit, AfterViewInit, AfterContentInit {
+  @ViewChild(TasksComponent)
+  private tasksModal!: TasksComponent;
+
+  user: User = new User();
+  loading: boolean = true;
 
   constructor(
-    private authenticationService: AuthenticationService,
+    private auth: AuthenticationService,
     private userService: UserService,
     private router: Router,
+    private personalization: PersonalizationService
   ) {
-    this.currentUser = this.authenticationService.currentUser;
-    if (!this.authenticationService.isLoggedIn) {
+    this.auth.currentUserTopic.subscribe((user: User) => {
+      this.user = user;
+    })
+    if (!this.auth.isLoggedIn) {
       this.router.navigate(['/login']);
     }
   }
 
-  ngOnInit() {
-    this.loadAllUsers();
+  ngOnInit() { }
+
+  ngAfterViewInit(): void {
+    if (this.auth.isLoggedIn && this.user.personalization.showTasksModal) {
+      this.tasksModal.openTasksModal(() => {
+        this.loading = false;
+        this.personalization.setShownTaskModal();
+      })
+    }
   }
 
-  private loadAllUsers() {
-    this.users = this.userService.getAll();
-    // this.userService.getAll()
-    //   .pipe(first())
-    //   .subscribe(users => this.users = users);
+  ngAfterContentInit(): void {
+    if (this.auth.isLoggedIn && !this.user.personalization.showTasksModal) {
+      this.loading = false;
+    }
   }
 }

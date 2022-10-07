@@ -15,7 +15,7 @@
     --e-bg-aqua: #96f2d7;
     --e-bg-green: #b2f2bb;
     --e-bg-yellow: #ffec99;
-    --e-b-gorange: #ffd8a8;
+    --e-bg-orange: #ffd8a8;
     --e-bg-red: #ffc9c9;
     --e-bg-pink: #fcc2d7;
 
@@ -24,7 +24,7 @@
     --app-grey: var(--e-bg-grey);
     --app-green: var(--e-bg-green);
     --app-blue: var(--e-bg-blue);
-    --app-red: var(--e-bg-pink);
+    --app-red: var(--e-bg-red);
 }
 
 .ng-valid[required],
@@ -36,4 +36,28 @@
 .ng-invalid:not(form) {
     border-left: 5px solid var(--bs-red);
     /* red */
+}
+
+.text-bg-yellow {
+    background-color: var(--app-yellow);
+    color: black;
+}
+
+.text-bg-red {
+    background-color: var(--e-bg-red);
+    color: black;
+}
+
+.text-bg-orange {
+    background-color: var(--e-bg-orange);
+    color: black;
+}
+
+.bg-grey {
+    background-color: var(--e-bg-grey);
+}
+
+.card-body-separated {
+    border-bottom: var(--bs-border-color) 1px;
+    border-bottom-style: solid;
 }
