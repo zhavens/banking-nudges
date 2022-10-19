@@ -6,7 +6,7 @@ import { Transaction, TransactionType } from '@/models/transaction';
 import { Payee, User } from '@/models/user';
 import { AlertService, AuthenticationService, UserService } from '@/services';
 import { LoggingService } from '@/services/logging.service';
-import { NudgingService } from '@/services/nudging.service';
+import { PersonalizationService } from '@/services/personalization.service';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
@@ -16,7 +16,7 @@ const srcDestValidator: ValidatorFn = (control: AbstractControl): ValidationErro
   const sender = control.get('sender');
   const recipient = control.get('recipient');
 
-  return sender && recipient && sender.value == recipient.value ? { srcDest: true } : null;
+  return sender && recipient && sender.value && sender.value == recipient.value ? { srcDest: true } : null;
 };
 
 @Component({
@@ -38,16 +38,18 @@ export class TransferComponent implements OnInit {
 
   unusualPayment: boolean = false;
   largePayment: boolean = false;
+  missingReceipt: boolean = false;
+  receiptUploaded: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
     public auth: AuthenticationService,
+    public personaliztion: PersonalizationService,
     private alert: AlertService,
     private logging: LoggingService,
     private userService: UserService,
-    private nudgeService: NudgingService,
-
+    public personalization: PersonalizationService,
   ) {
     if (auth.currentUser) {
       this.user = auth.currentUser;
@@ -59,9 +61,14 @@ export class TransferComponent implements OnInit {
     this.transferForm = this.formBuilder.group({
       sender: ['', Validators.required],
       recipient: ['', Validators.required],
-      amount: [0.0, Validators.required],
+      amount: [0.0, [Validators.required, Validators.min(0.01)]],
     }, {
-      validators: [srcDestValidator, this.unusualPaymentValidator, this.largePaymentValidator]
+      validators: [
+        srcDestValidator,
+        this.unusualPaymentValidator,
+        this.largePaymentValidator,
+        this.missingReceiptValidator,
+      ]
     })
 
     this.etransferForm = this.formBuilder.group({
@@ -97,6 +104,14 @@ export class TransferComponent implements OnInit {
 
     return null;
   };
+
+  missingReceiptValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    let recipient = control.get('recipient');
+
+    this.missingReceipt = recipient && recipient.value && isEntity(recipient.value) && recipient.value.equals(TEST_PAYEES[1].id);
+
+    return null;
+  }
 
   submitTransferForm() {
     if (!this.transferForm.valid) {

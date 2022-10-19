@@ -1,10 +1,11 @@
-import { AuthenticationService } from '@/services';
+import { AuthenticationService, UserService } from '@/services';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { User } from '@/models/user';
+import { PersonalizationLevel, User } from '@/models/user';
 import { AdminService } from '@/services/admin.service';
 import { PersonalizationService } from '@/services/personalization.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-navbar',
@@ -12,15 +13,29 @@ import { PersonalizationService } from '@/services/personalization.service';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
-  currentUserTopic: User = new User();
+  user: User = new User();
+
+  public PersonalizationLevel = PersonalizationLevel;
+  public levels: string[] = Object.values(PersonalizationLevel).filter((v) => typeof v === 'string' && isNaN(Number(v))) as string[];
+  personalizationForm: FormGroup;
 
   constructor(
     private router: Router,
+    private formBuilder: FormBuilder,
     public auth: AuthenticationService,
     public admin: AdminService,
+    private userService: UserService,
     private personalization: PersonalizationService
   ) {
-    this.auth.currentUserTopic.subscribe(x => this.currentUserTopic = x);
+    this.auth.currentUserTopic.subscribe(x => this.user = x);
+    this.personalizationForm = this.formBuilder.group({
+      level: [PersonalizationLevel[this.user.personalization.level]],
+    })
+  }
+
+  updatePersonalizationLevel(level: string) {
+    this.user.personalization.level = (<any>PersonalizationLevel)[level];
+    this.userService.updateUser(this.user);
   }
 
   logout() {

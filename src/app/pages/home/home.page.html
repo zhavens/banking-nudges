@@ -1,18 +1,22 @@
 <div class="row" *ngIf="!loading">
     <app-alert></app-alert>
-    <div class="col-sm-2">
-        <app-sidebar></app-sidebar>
-    </div>
+    <h1>Hi {{user.firstName}}! <i *ngIf="user.admin" class="bi bi-cup-hot-fill"></i></h1>
     <div class="col-sm-8">
-        <h1>Hi {{user.firstName}}! <i *ngIf="user.admin" class="bi bi-cup-hot-fill"></i>
-        </h1>
         <div class="vstack gap-3">
             <app-accounts></app-accounts>
             <app-cards></app-cards>
+            <div class="card borderless">
+                <h5 class="card-header">Investments</h5>
+                <div class="card-body">
+                    <p>Manage your investments online, all in one place, with Bank of Bank!</p>
+                    <button type="button" class="btn btn-yellow">Purchase Investments</button>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="col-sm-2">
-        <app-sidebar></app-sidebar>
+    <div class="col-sm-4 vstack gap-3">
+        <app-sidebar [type]="SidebarType.SECURITY"></app-sidebar>
+        <app-sidebar [type]="SidebarType.QUICKLINKS"></app-sidebar>
     </div>
 </div>
 

@@ -44,7 +44,10 @@ export class CcComponent implements OnInit {
     this.txFilter.setValue('');
     this.currentCard = card;
     this.filteredTransactions = this.currentCard.transactions || []
-    this.modalService.open(modalContent, { size: 'xl' }).result.finally(() => {
+    this.modalService.open(modalContent, {
+      size: 'lg',
+      fullscreen: 'md'
+    }).result.finally(() => {
       this.logging.info(`Closed card modal.`);
       this.currentCard = null;
       this.filteredTransactions = [];

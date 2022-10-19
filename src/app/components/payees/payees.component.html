@@ -46,7 +46,13 @@
                             <input type="number" class="form-control" id="accountNumInput" placeholder="Account Number"
                                 formControlName="accountNum">
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <div class="card mb-3" *ngIf="accountPayeeForm.valid">
+                            <div class="card-body text-bg-red">
+                                Notifiation of this new payee will be sent to {{personalization.oaString()}}.
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary"
+                            [disabled]="!accountPayeeForm.valid">Submit</button>
                     </form>
                 </ng-template>
             </ng-container>
@@ -70,7 +76,12 @@
                                 <input type="number" class="form-control" placeholder="Account Number"
                                     id="achAccountInput" formControlName="accountNum">
                             </div>
-                            <button class="btn btn-primary">Submit</button>
+                            <div class="card mb-3" *ngIf="achPayeeForm.valid">
+                                <div class="card-body text-bg-red">
+                                    Notifiation of this new payee will be sent to {{personalization.oaString()}}.
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" [disabled]="!achPayeeForm.valid">Submit</button>
                         </div>
                     </form>
                 </ng-template>
@@ -81,7 +92,7 @@
                     <form [formGroup]="etransferPayeeForm" (ngSubmit)="addEtransferPayee()">
                         <div class="mb-3">
                             <label for="etransferEmailInput" class="form-label">Email</label>
-                            <input type="text" class="form-control" placeholder="Email" id="etransferEmailInput"
+                            <input type="email" class="form-control" placeholder="Email" id="etransferEmailInput"
                                 formControlName="email">
                         </div>
                         <div class="mb-3">
@@ -89,7 +100,12 @@
                             <input type="text" class="form-control" placeholder="Phone" id="etransferPhoneInput"
                                 formControlName="phoneNum">
                         </div>
-                        <button class="btn btn-primary">Submit</button>
+                        <div class="card mb-3" *ngIf="etransferPayeeForm.valid">
+                            <div class="card-body text-bg-red">
+                                Notifiation of this new payee will be sent to {{personalization.oaString()}}.
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" [disabled]="!etransferPayeeForm.valid">Submit</button>
                     </form>
                 </ng-template>
             </ng-container>
@@ -102,7 +118,12 @@
                             <input type="text" class="form-control" placeholder="Description" id="otherDescriptionInput"
                                 formControlName="description">
                         </div>
-                        <button class="btn btn-primary">Submit</button>
+                        <div class="card mb-3" *ngIf="otherPayeeForm.valid">
+                            <div class="card-body text-bg-red">
+                                Notifiation of this new payee will be sent to {{personalization.oaString()}}.
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" [disabled]="!otherPayeeForm.valid">Submit</button>
                     </form>
                 </ng-template>
             </ng-container>

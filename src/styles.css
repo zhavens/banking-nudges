@@ -57,7 +57,29 @@
     background-color: var(--e-bg-grey);
 }
 
+.bg-dark-grey {
+    background-color: var(--bs-gray-dark);
+}
+
+.btn.btn-yellow {
+    background-color: var(--e-bg-yellow);
+    color: black;
+}
+
+.btn.btn-yellow:hover {
+    background-color: var(--e-bg-orange);
+    border-color: var(--e-bg-orange);
+}
+
 .card-body-separated {
     border-bottom: var(--bs-border-color) 1px;
     border-bottom-style: solid;
+}
+
+hr.thin {
+    margin: 0.5rem 0rem;
+}
+
+hr.bottomless {
+    margin-bottom: 0rem;
 }

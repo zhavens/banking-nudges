@@ -45,7 +45,7 @@ export class AccountId implements Entity {
     }
 
     safeString(): string {
-        return `******${this.accountNum % 1000}`
+        return `00549-****${this.accountNum % 1000}`
     }
 }
 
@@ -81,7 +81,11 @@ export class CreditCardId implements Entity {
     }
 
     safeString(): string {
-        return `Ending in ${this.ccNum % 1000}`
+        return `Ending in ${this.ccNum % 10000}`
+    }
+
+    safeStringLong(): string {
+        return `${(this.ccNum / 1000000000000).toFixed(0)} **** **** ${this.ccNum % 10000}`
     }
 }
 

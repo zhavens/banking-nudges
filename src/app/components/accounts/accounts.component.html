@@ -13,7 +13,11 @@
                     <tbody>
                         <tr *ngFor="let account of accounts" (click)="selectAccount(account, accountDetails)"
                             [class.bg-light]="currentAccount === account">
-                            <td>{{account.name}} ({{textlib.accountTypeString(account.type)}})</td>
+                            <td>
+                                {{account.name}} ({{textlib.accountTypeString(account.type)}})
+                                <br>
+                                <i>{{account.id.safeString()}}</i>
+                            </td>
                             <td>${{account.balance}}</td>
                         </tr>
                     </tbody>
@@ -38,9 +42,11 @@
             <h5 class="card-header">Account Details</h5>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-sm-4">
-                        Account ID: {{textlib.accountTypeString(currentAccount?.type)}}
-                        - {{currentAccount?.id?.safeString()}}
+                    <div class="col-12">
+                        Account ID:
+                        <br>
+                        <i>{{textlib.accountTypeString(currentAccount?.type)}} -
+                            {{currentAccount?.id?.safeString()}}</i>
                     </div>
                 </div>
                 <div class="row">

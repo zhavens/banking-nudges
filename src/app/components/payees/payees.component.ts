@@ -3,6 +3,7 @@ import { AccountId, AchAccount, Entity, EtransferClient, OtherEntity } from '@/m
 import { Payee, User } from '@/models/user';
 import { AuthenticationService, UserService } from '@/services';
 import { LoggingService } from '@/services/logging.service';
+import { PersonalizationService } from '@/services/personalization.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
@@ -30,6 +31,7 @@ export class PayeesComponent implements OnInit {
     private modalService: NgbModal,
     public auth: AuthenticationService,
     private userService: UserService,
+    public personalization: PersonalizationService,
     private logging: LoggingService,
   ) {
     this.user = auth.currentUser;
@@ -37,15 +39,15 @@ export class PayeesComponent implements OnInit {
       this.user = user;
     })
     this.accountPayeeForm = this.formBuilder.group({
-      accountNum: [0, Validators.required],
+      accountNum: [0, [Validators.required, Validators.min(1)]],
     })
     this.achPayeeForm = this.formBuilder.group({
-      institutionNum: [0, Validators.required],
-      routingNum: [0, Validators.required],
-      accountNum: [0, Validators.required],
+      institutionNum: [0, [Validators.required, Validators.min(1)]],
+      routingNum: [0, [Validators.required, Validators.min(1)]],
+      accountNum: [0, [Validators.required, Validators.min(1)]],
     })
     this.etransferPayeeForm = this.formBuilder.group({
-      email: [''],
+      email: ['', Validators.email],
       phoneNum: [''],
     }, {
       validators: [atLeastOne(Validators.required, ['email', 'phoneNum'])]

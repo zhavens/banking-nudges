@@ -40,18 +40,42 @@
         </div>
     </div>
     <div *ngIf="sidebarType == SidebarType.CONSEQUENCES">
-        <div class="row">
-            <div class="card text-bg-red">
-                <div class=" card-body">
-                    <h5 class="card-title">Did you know?</h5>
-                    <p>Did you know that financial misconduct affects 1 in 20 older adults, and impacts their
-                        ability
-                        to support themselves and maintain independence?</p>
-                    <a class="btn btn-dark" role="button" target="_blank"
-                        href="https://www.canada.ca/en/employment-social-development/corporate/seniors/forum/financial-abuse.html">
-                        Get More Info <i class="bi bi-box-arrow-up-right"></i>
-                    </a>
-                </div>
+        <div class="card text-bg-red">
+            <div class="card-body">
+                <h5 class="card-title">Did you know?</h5>
+                <p>Did you know that financial misconduct affects 1 in 20 older adults, and impacts their
+                    ability
+                    to support themselves and maintain independence?</p>
+                <a class="btn btn-dark" role="button" target="_blank"
+                    href="https://www.canada.ca/en/employment-social-development/corporate/seniors/forum/financial-abuse.html">
+                    Get More Info <i class="bi bi-box-arrow-up-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="sidebarType == SidebarType.SECURITY">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Recent Activity</h5>
+                Logged in <b>2</b> times
+                <hr>
+                Made <b>13</b> transactions
+                <hr>
+                No trasactions pending
+            </div>
+        </div>
+    </div>
+    <div *ngIf="sidebarType == SidebarType.QUICKLINKS">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Quick Links</h5>
+                <!-- <hr class="thin bottomless"> -->
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Schedule an Appointment <i class="bi bi-box-arrow-up-right"></i></li>
+                    <li class="list-group-item">Go Paperless <i class="bi bi-box-arrow-up-right"></i></li>
+                    <li class="list-group-item">Make a Transfer <i class="bi bi-box-arrow-up-right"></i></li>
+                    <li class="list-group-item">Manage Profile <i class="bi bi-box-arrow-up-right"></i></li>
+                </ul>
             </div>
         </div>
     </div>

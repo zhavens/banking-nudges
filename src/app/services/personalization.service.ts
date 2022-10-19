@@ -1,4 +1,4 @@
-import { User } from '@/models/user';
+import { PersonalizationLevel, User } from '@/models/user';
 import { Injectable } from '@angular/core';
 import { AuthenticationService } from './auth.service';
 import { LoggingService } from './logging.service';
@@ -30,5 +30,16 @@ export class PersonalizationService {
     this.logging.info(`Updating personalization on logout.`)
     this.user.personalization.showTasksModal = true;
     this.userService.updateUser(this.user);
+  }
+
+  oaString() {
+    switch (this.user.personalization.level) {
+      case (PersonalizationLevel.NAME):
+        return this.user.personalization.oaName;
+      case (PersonalizationLevel.RELATIONSHIP):
+        return `your ${this.user.personalization.oaRelation}`;
+      default:
+        return `the primary account holder`;
+    }
   }
 }

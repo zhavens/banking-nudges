@@ -1,6 +1,7 @@
 import { User } from '@/models/user';
 import { Injectable } from '@angular/core';
 import { instanceToPlain, plainToClass } from 'class-transformer';
+import { DatabaseService } from './database.service';
 
 // array in local storage for registered users
 let users: User[] = JSON.parse(localStorage.getItem('users') || "[]").map((x: any) => plainToClass(User, x)) || [];
@@ -9,7 +10,7 @@ let nextId = 1;
 @Injectable({
     providedIn: 'root'
 })
-export class LocalDatabaseService {
+export class LocalDatabaseService implements DatabaseService {
     constructor() { }
 
     getNextId(): number {

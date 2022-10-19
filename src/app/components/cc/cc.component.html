@@ -14,7 +14,11 @@
                     <tbody>
                         <tr *ngFor="let card of cards" (click)="selectCard(card, cardDetails)"
                             [class.bg-light]="currentCard === card">
-                            <td>{{card.name}} ({{textlib.cardTypeString(card.type)}})</td>
+                            <td>
+                                {{card.name}} ({{textlib.cardTypeString(card.type)}})
+                                <br>
+                                <i>{{card.id.safeStringLong()}}</i>
+                            </td>
                             <td>${{card.balance.toFixed(2)}}</td>
                             <td>${{card.limit.minus(card.balance || 0).toFixed(2)}}</td>
                         </tr>
@@ -27,7 +31,6 @@
 
 <ng-template #cardDetails let-modal>
     <div class="modal-header">
-
         <div class="">
             <h5 class="modal-title">{{currentCard?.name}}</h5>
         </div>
@@ -40,9 +43,10 @@
             <h5 class="card-header">Card Details</h5>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-sm-4">
-                        Card ID: {{textlib.cardTypeString(currentCard?.type)}}
-                        - {{currentCard?.id?.safeString()}}
+                    <div class="col-12">
+                        Card ID:
+                        <br>
+                        <i>{{textlib.cardTypeString(currentCard?.type)}} - {{currentCard?.id?.safeStringLong()}}</i>
                     </div>
                 </div>
                 <div class="row">

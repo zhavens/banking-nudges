@@ -44,7 +44,10 @@ export class AccountsComponent implements OnInit {
     this.txFilter.setValue('');
     this.currentAccount = account;
     this.filteredTransactions = this.currentAccount.transactions || []
-    this.modalService.open(modalContent, { size: 'xl' }).result.finally(() => {
+    this.modalService.open(modalContent, {
+      size: 'lg',
+      fullscreen: 'md'
+    }).result.finally(() => {
       this.logging.info(`Closed account modal.`);
       this.currentAccount = null;
       this.filteredTransactions = [];

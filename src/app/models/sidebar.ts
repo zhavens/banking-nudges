@@ -3,6 +3,8 @@ export enum SidebarType {
     DEFAULT,
     CHART,
     CONSEQUENCES,
+    SECURITY,
+    QUICKLINKS,
 }
 
 export enum SidebarLocation {

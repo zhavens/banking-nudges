@@ -1,33 +1,37 @@
-<nav class="navbar navbar-expand-sm navbar-dark bg-dark" *ngIf="currentUserTopic">
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark-grey" *ngIf="user">
     <div class="container-fluid">
         <a class="navbar-brand ms-3" href="#">
             <img src="assets/img/icon.png" width="30" height="30" class="d-inline-block align-top">
             Bank of Bank</a>
         <div class="navbar-nav navbar-expand-lg">
-            <a class="nav-item nav-link" routerLink="/" routerLinkActive="active">Home</a>
+            <a class="nav-item nav-link" routerLink="/home" routerLinkActive="active">Home</a>
             <a class="nav-item nav-link" routerLink="/accounts" routerLinkActive="active">Accounts</a>
             <a class="nav-item nav-link" routerLink="/transfer" routerLinkActive="active">Transfer Funds</a>
             <a class="nav-item nav-link" routerLink="/payments" routerLinkActive="active">Manage Payments</a>
+            <a class="nav-item nav-link disabled">Add Services</a>
         </div>
         <div class="navbar-nav navbar-right d-flex ms-auto me-3">
             <ng-template [ngIf]="auth.currentUser?.admin">
                 <div class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Admin</a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item text-danger" (click)="admin.clearLogs()">Clear Logs</a>
+                        <li>
+                            <form [formGroup]="personalizationForm">
+                                <div class="form-floating">
+                                    <select class="form-select" id="personaliztionLevel" formControlName="level"
+                                        (change)="updatePersonalizationLevel($any($event.target).value)">
+                                        <option *ngFor="let level of levels" [value]="level">
+                                            {{level}}</option>
+                                    </select>
+                                    <label for="floatingSelect">Pesonalization Level</label>
+                                </div>
+                            </form>
                         </li>
-                        <li><a class="dropdown-item text-danger" (click)="admin.resetAcounts()">Reset
-                                Accounts</a>
+                        <li><a class="dropdown-item text-danger" (click)="admin.resetUser()">Reset
+                                User</a>
                         </li>
-                        <li><a class="dropdown-item text-danger" (click)="admin.resetPayees()">Reset
-                                Payees</a>
-                        </li>
-                        <li><a class="dropdown-item text-danger" (click)="admin.resetPayments()">Reset
-                                Payments</a>
-                        </li>
-                        <li><a class="dropdown-item text-danger" (click)="admin.resetPersonalization()">Reset
-                                Personalization</a>
-                        </li>
+                        <!-- <li><a class="dropdown-item text-danger" (click)="admin.clearLogs()">Clear Logs</a>
+                        </li> -->
                     </ul>
                 </div>
             </ng-template>

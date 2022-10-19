@@ -1,15 +1,21 @@
 import { AfterContentInit, AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 
 import { TasksComponent } from '@/components/tasks/tasks.component';
+import { SidebarType } from '@/models/sidebar';
 import { User } from '@/models/user';
 import { AuthenticationService, UserService } from '@/services';
 import { PersonalizationService } from '@/services/personalization.service';
 import { Router } from '@angular/router';
 
-@Component({ templateUrl: 'home.page.html' })
+@Component({
+  styleUrls: ['home.page.css'],
+  templateUrl: 'home.page.html'
+})
 export class HomePage implements OnInit, AfterViewInit, AfterContentInit {
   @ViewChild(TasksComponent)
   private tasksModal!: TasksComponent;
+
+  SidebarType = SidebarType;
 
   user: User = new User();
   loading: boolean = true;

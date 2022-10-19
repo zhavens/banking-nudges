@@ -1,4 +1,4 @@
-import { TEST_ACCOUNTS, TEST_CARDS, TEST_PAYEES, TEST_PAYMENTS } from '@/helpers/testdata';
+import { TEST_ACCOUNTS, TEST_CARDS, TEST_PAYEES, TEST_PAYMENTS, TEST_PERSONALIZATION } from '@/helpers/testdata';
 import { PersonalizationConfig } from '@/models/user';
 import { Injectable } from '@angular/core';
 import { AuthenticationService } from './auth.service';
@@ -16,6 +16,20 @@ export class AdminService {
   clearLogs() {
     if (confirm("Are you sure you want to clear the logs?")) {
       this.logging.clearLog();
+    }
+  }
+
+  resetUser() {
+    if (confirm("Are you sure you want to reset the user?")) {
+      let user = this.auth.currentUser;
+      if (user) {
+        user.accounts = TEST_ACCOUNTS;
+        user.cards = TEST_CARDS;
+        user.payees = TEST_PAYEES;
+        user.payments = TEST_PAYMENTS;
+        user.personalization = TEST_PERSONALIZATION;
+        this.users.updateUser(user);
+      }
     }
   }
 

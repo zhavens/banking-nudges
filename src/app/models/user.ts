@@ -54,6 +54,17 @@ export class Payee {
     }
 }
 
+export enum PersonalizationLevel {
+    NONE,
+    NAME,
+    RELATIONSHIP,
+}
+
 export class PersonalizationConfig {
+    level: PersonalizationLevel = PersonalizationLevel.NONE;
+
+    oaName: string = '';
+    oaRelation: string = '';
+
     showTasksModal: boolean = true;
 }
