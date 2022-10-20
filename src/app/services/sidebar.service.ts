@@ -1,4 +1,4 @@
-import { SidebarType } from '@/models/sidebar';
+import { SidebarType } from '../../models/sidebar';
 import { Injectable } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
 

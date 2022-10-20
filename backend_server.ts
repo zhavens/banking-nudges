@@ -8,7 +8,7 @@ var bodyParser = require("body-parser");
  * Normalize a port into a number, string, or false.
  */
 
-function normalizePort(val) {
+function normalizePort(val: any) {
     var port = parseInt(val, 10);
 
     if (isNaN(port)) {
@@ -28,7 +28,7 @@ function normalizePort(val) {
  * Event listener for HTTP server "error" event.
  */
 
-function onError(error) {
+function onError(error: any) {
     if (error.syscall !== 'listen') {
         throw error;
     }
@@ -59,7 +59,7 @@ function onListening() {
     var bind = typeof addr === 'string'
         ? 'pipe ' + addr
         : 'port ' + addr.port;
-    debug('Listening on ' + bind);
+    console.log('Listening on ' + bind);
 }
 
 // Create new instance of the express server
@@ -70,7 +70,7 @@ var app = express();
 // exposed APIs
 app.use(bodyParser.json());
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env['PORT'] || '3000');
 app.set('port', port);
 
 // Create link to Angular build directory
@@ -86,6 +86,6 @@ var server = app.listen(port);
  *   GET: Get server status
  *   PS: it's just an example, not mandatory
  */
-app.get("/api/status", function (req, res) {
+app.get("/api/status", function (req: any, res: any) {
     res.status(200).json({ status: "UP" });
 });

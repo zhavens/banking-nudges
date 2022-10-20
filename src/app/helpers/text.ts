@@ -1,4 +1,4 @@
-import { AccountType, CardType } from "@/models/account";
+import { AccountType, CardType } from "../../models/account";
 import Decimal from "decimal.js";
 
 // Create our number formatter.

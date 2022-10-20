@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { SidebarLocation, SidebarType } from '@/models/sidebar';
 import { AuthenticationService } from '@/services';
 import { LoggingService } from '@/services/logging.service';
 import { SidebarService } from '@/services/sidebar.service';
+import { SidebarLocation, SidebarType } from '@models/sidebar';
 import { ChartConfiguration, ChartData, ChartOptions } from 'chart.js';
 
 @Component({

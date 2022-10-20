@@ -2,7 +2,7 @@ import { AuthenticationService } from '@/services';
 import { Component } from '@angular/core';
 import { Event, NavigationEnd, Router } from '@angular/router';
 
-import { User } from '@/models/user';
+import { User } from '../models/user';
 import { filter } from 'rxjs';
 import { LoggingService } from './services/logging.service';
 import { SidebarService } from './services/sidebar.service';

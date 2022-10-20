@@ -1,11 +1,11 @@
 import { atLeastOne } from '@/helpers/validators';
-import { AccountId, AchAccount, Entity, EtransferClient, OtherEntity } from '@/models/entities';
-import { Payee, User } from '@/models/user';
 import { AuthenticationService, UserService } from '@/services';
 import { LoggingService } from '@/services/logging.service';
 import { PersonalizationService } from '@/services/personalization.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AccountId, AchAccount, Entity, EtransferClient, OtherEntity } from '@models/entities';
+import { Payee, User } from '@models/user';
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { plainToInstance } from 'class-transformer';
 

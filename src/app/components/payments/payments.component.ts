@@ -1,11 +1,11 @@
 import { conditionalValidator, futureDateValidator } from '@/helpers/validators';
-import { EtransferClient } from '@/models/entities';
-import { Payment } from '@/models/payment';
-import { User } from '@/models/user';
 import { AlertService, AuthenticationService, UserService } from '@/services';
 import { LoggingService } from '@/services/logging.service';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { EtransferClient } from '@models/entities';
+import { Payment } from '@models/payment';
+import { User } from '@models/user';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as uuid from "uuid";
 

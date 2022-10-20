@@ -1,8 +1,8 @@
-import { User } from '@/models/user';
 import { AlertService, AuthenticationService, UserService } from '@/services';
 import { LoggingService } from '@/services/logging.service';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { User } from '@models/user';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({

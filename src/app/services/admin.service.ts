@@ -1,5 +1,5 @@
 import { TEST_ACCOUNTS, TEST_CARDS, TEST_PAYEES, TEST_PAYMENTS, TEST_PERSONALIZATION } from '@/helpers/testdata';
-import { PersonalizationConfig } from '@/models/user';
+import { PersonalizationConfig } from '../../models/user';
 import { Injectable } from '@angular/core';
 import { AuthenticationService } from './auth.service';
 import { LoggingService } from './logging.service';

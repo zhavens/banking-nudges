@@ -2,10 +2,10 @@ import { AuthenticationService, UserService } from '@/services';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { PersonalizationLevel, User } from '@/models/user';
 import { AdminService } from '@/services/admin.service';
 import { PersonalizationService } from '@/services/personalization.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { PersonalizationLevel, User } from '@models/user';
 
 @Component({
   selector: 'app-navbar',

@@ -1,5 +1,5 @@
-import { SidebarType } from '@/models/sidebar';
 import { Component, OnInit } from '@angular/core';
+import { SidebarType } from '@models/sidebar';
 
 @Component({
   templateUrl: './payments.page.html',

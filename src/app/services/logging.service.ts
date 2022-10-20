@@ -1,4 +1,4 @@
-import { LogEntry } from '@/models/log';
+import { LogEntry } from '../../models/log';
 import { Injectable } from '@angular/core';
 import { plainToInstance } from 'class-transformer';
 

@@ -6,6 +6,15 @@
     "paths": {
       "@/*": [
         "app/*"
+      ],
+      "@app/*": [
+        "app/*"
+      ],
+      "@backend/*": [
+        "backend/*"
+      ],
+      "@models/*": [
+        "models/*"
       ]
     },
     "outDir": "./dist/out-tsc",
