@@ -1,8 +1,8 @@
-import { Account, AccountType, CardType, CreditCard } from "../../models/account";
-import { AccountId, CreditCardId, EtransferClient, OtherEntity } from "../../models/entities";
-import { Payment } from "../../models/payment";
-import { TransactionType } from "../../models/transaction";
-import { Payee, PersonalizationConfig, PersonalizationLevel } from "../../models/user";
+import { Account, AccountType, CardType, CreditCard } from "@models/account";
+import { AccountId, CreditCardId, EtransferClient, OtherEntity } from "@models/entities";
+import { Payment } from "@models/payment";
+import { TransactionType } from "@models/transaction";
+import { Payee, PersonalizationConfig, PersonalizationLevel } from "@models/user";
 import { plainToClass, plainToInstance } from "class-transformer";
 import Decimal from "decimal.js";
 import * as uuid from "uuid";

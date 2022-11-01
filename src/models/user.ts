@@ -1,4 +1,4 @@
-import { EntityType } from "@/helpers/decorators";
+import { EntityType } from "../helpers/decorators";
 import { Type } from "class-transformer";
 import 'reflect-metadata';
 import { Account, CreditCard } from "./account";

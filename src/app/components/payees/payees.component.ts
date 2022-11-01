@@ -1,9 +1,9 @@
-import { atLeastOne } from '@/helpers/validators';
-import { AuthenticationService, UserService } from '@/services';
-import { LoggingService } from '@/services/logging.service';
-import { PersonalizationService } from '@/services/personalization.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { atLeastOne } from '@app/helpers/validators';
+import { AuthenticationService, UserService } from '@app/services';
+import { LoggingService } from '@app/services/logging.service';
+import { PersonalizationService } from '@app/services/personalization.service';
 import { AccountId, AchAccount, Entity, EtransferClient, OtherEntity } from '@models/entities';
 import { Payee, User } from '@models/user';
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";

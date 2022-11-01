@@ -1,4 +1,4 @@
-import { DecimalTransform } from "@/helpers/decorators";
+import { DecimalTransform } from "../helpers/decorators";
 import { Type } from "class-transformer";
 import Decimal from "decimal.js";
 import 'reflect-metadata';

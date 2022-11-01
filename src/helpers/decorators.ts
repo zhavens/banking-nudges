@@ -1,4 +1,4 @@
-import { AccountId, AchAccount, CreditCardId, EtransferClient, OtherEntity } from "../../models/entities";
+import { AccountId, AchAccount, CreditCardId, EtransferClient, OtherEntity } from "@models/entities";
 import { Transform, Type } from "class-transformer";
 import Decimal from "decimal.js";
 

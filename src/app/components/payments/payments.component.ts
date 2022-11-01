@@ -1,8 +1,8 @@
-import { conditionalValidator, futureDateValidator } from '@/helpers/validators';
-import { AlertService, AuthenticationService, UserService } from '@/services';
-import { LoggingService } from '@/services/logging.service';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { conditionalValidator, futureDateValidator } from '@app/helpers/validators';
+import { AlertService, AuthenticationService, UserService } from '@app/services';
+import { LoggingService } from '@app/services/logging.service';
 import { EtransferClient } from '@models/entities';
 import { Payment } from '@models/payment';
 import { User } from '@models/user';

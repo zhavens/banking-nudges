@@ -1,10 +1,10 @@
-import { AuthenticationService, UserService } from '@/services';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthenticationService, UserService } from '@app/services';
 
-import { AdminService } from '@/services/admin.service';
-import { PersonalizationService } from '@/services/personalization.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { AdminService } from '@app/services/admin.service';
+import { PersonalizationService } from '@app/services/personalization.service';
 import { PersonalizationLevel, User } from '@models/user';
 
 @Component({

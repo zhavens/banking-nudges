@@ -1,12 +1,12 @@
-import * as text from '@/helpers/text';
-import { AuthenticationService } from '@/services';
-import { LoggingService } from '@/services/logging.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { AuthenticationService } from '@app/services';
+import { LoggingService } from '@app/services/logging.service';
 import { CreditCard } from '@models/account';
 import { Transaction } from '@models/transaction';
 import { User } from '@models/user';
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import * as text from '../../../helpers/text';
 
 @Component({
   selector: 'app-cards',

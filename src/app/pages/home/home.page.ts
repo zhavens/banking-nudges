@@ -1,9 +1,9 @@
 import { AfterContentInit, AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 
-import { TasksComponent } from '@/components/tasks/tasks.component';
-import { AuthenticationService, UserService } from '@/services';
-import { PersonalizationService } from '@/services/personalization.service';
 import { Router } from '@angular/router';
+import { TasksComponent } from '@app/components/tasks/tasks.component';
+import { AuthenticationService, UserService } from '@app/services';
+import { PersonalizationService } from '@app/services/personalization.service';
 import { SidebarType } from '@models/sidebar';
 import { User } from '@models/user';
 

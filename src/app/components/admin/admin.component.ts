@@ -1,6 +1,6 @@
-import { AuthenticationService, UserService } from '@/services';
-import { AdminService } from '@/services/admin.service';
 import { Component, OnInit } from '@angular/core';
+import { AuthenticationService, UserService } from '@app/services';
+import { AdminService } from '@app/services/admin.service';
 
 @Component({
   selector: 'app-admin',

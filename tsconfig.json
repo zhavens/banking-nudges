@@ -2,10 +2,11 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "src",
+    "outDir": "./dist",
+    "baseUrl": "./src",
     "paths": {
       "@/*": [
-        "app/*"
+        "./*"
       ],
       "@app/*": [
         "app/*"
@@ -15,13 +16,13 @@
       ],
       "@models/*": [
         "models/*"
+      ],
+      "@helpers/*": [
+        "helpers/*"
       ]
     },
-    "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    // "strict": false,
-    // "noImplicitAny": false,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
@@ -30,19 +31,27 @@
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     "importHelpers": true,
-    "target": "es2020",
-    "module": "es2020",
+    "target": "ESNext",
+    "module": "ESNext",
     "lib": [
-      "es2020",
+      "ESNext",
       "dom"
-    ]
+    ],
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "allowJs": true,
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs",
+    }
   }
 }

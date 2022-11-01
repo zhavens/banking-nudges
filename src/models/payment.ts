@@ -1,4 +1,4 @@
-import { DecimalTransform, EntityType } from "@/helpers/decorators";
+import { DecimalTransform, EntityType } from "../helpers/decorators";
 import Decimal from "decimal.js";
 import { Entity, OtherEntity } from "./entities";
 

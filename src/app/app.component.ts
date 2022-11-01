@@ -1,9 +1,9 @@
-import { AuthenticationService } from '@/services';
 import { Component } from '@angular/core';
 import { Event, NavigationEnd, Router } from '@angular/router';
+import { AuthenticationService } from '@app/services';
 
-import { User } from '../models/user';
 import { filter } from 'rxjs';
+import { User } from '../models/user';
 import { LoggingService } from './services/logging.service';
 import { SidebarService } from './services/sidebar.service';
 

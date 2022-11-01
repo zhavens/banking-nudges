@@ -1,3 +1,4 @@
+// var text = require('../helpers/text');
 
 export interface Entity {
     equals(other: Entity): boolean;
@@ -138,8 +139,9 @@ export class EtransferClient implements Entity {
     }
 
     isValid(): boolean {
-        return (this.email != null && this.email.isValidEmail())
-            || (this.phoneNum != null && this.phoneNum.isValidPhone());
+        return (typeof this.email == 'string' || typeof this.phoneNum == 'string');
+        // return (this.email != null && this.email.isValidEmail())
+        //     || (this.phoneNum != null && this.phoneNum.isValidPhone());
     }
 
     safeString(): string {

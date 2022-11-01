@@ -1,10 +1,10 @@
 import { RouterModule, Routes } from '@angular/router';
 
-import { AdminComponent } from '@/components/admin/admin.component';
-import { LoginComponent } from '@/components/login/login.component';
-import { PageNotFoundComponent } from '@/components/page-not-found/page-not-found.component';
-import { ProfileComponent } from '@/components/profile/profile.component';
-import { RegisterComponent } from '@/components/register/register.component';
+import { AdminComponent } from '@app/components/admin/admin.component';
+import { LoginComponent } from '@app/components/login/login.component';
+import { PageNotFoundComponent } from '@app/components/page-not-found/page-not-found.component';
+import { ProfileComponent } from '@app/components/profile/profile.component';
+import { RegisterComponent } from '@app/components/register/register.component';
 import { AdminGuard } from './guard/admin.guard';
 import { LoggedInGuard } from './guard/logged-in.guard';
 import { AccountsPage } from './pages/accounts/accounts.page';

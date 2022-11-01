@@ -1,15 +1,15 @@
-import { TEST_PAYEES } from '@/helpers/testdata';
-import { atLeastOne } from '@/helpers/validators';
-import { AlertService, AuthenticationService, UserService } from '@/services';
-import { LoggingService } from '@/services/logging.service';
-import { PersonalizationService } from '@/services/personalization.service';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { atLeastOne } from '@app/helpers/validators';
+import { AlertService, AuthenticationService, UserService } from '@app/services';
+import { LoggingService } from '@app/services/logging.service';
+import { PersonalizationService } from '@app/services/personalization.service';
 import { Account, CreditCard } from '@models/account';
 import { AccountId, AchAccount, CreditCardId, EtransferClient, isEntity } from '@models/entities';
 import { Transaction, TransactionType } from '@models/transaction';
 import { Payee, User } from '@models/user';
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { TEST_PAYEES } from '../../../helpers/testdata';
 
 
 const srcDestValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {

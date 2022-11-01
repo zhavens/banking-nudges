@@ -15,15 +15,22 @@
     ],
     "rules": {
         "@typescript-eslint/strict-boolean-expressions": [
-            2,
+            "error",
             {
                 "allowString": false,
                 "allowNumber": false
+            }
+        ],
+        "semi": [
+            "warn",
+            "always",
+            {
+                "omitLastInOneLineBlock": true
             }
         ]
     },
     "ignorePatterns": [
         "src/**/*.test.ts",
         "src/frontend/generated/*"
-    ]
+    ],
 }
