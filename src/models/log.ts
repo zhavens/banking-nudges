@@ -1,3 +1,6 @@
+import { Type } from "class-transformer";
+import 'reflect-metadata';
+
 export enum LogLevel {
     INFO,
     WARNING,
@@ -7,6 +10,7 @@ export enum LogLevel {
 };
 
 export class LogEntry {
+    @Type(() => Date)
     date: Date = new Date();
 
     constructor(public level: LogLevel = LogLevel.INFO,

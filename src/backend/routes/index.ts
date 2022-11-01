@@ -1,6 +1,10 @@
 import express from 'express';
+import loggingRoute from './logging';
 import { usersRoute } from './users';
 
-export const routes = express.Router();
+const routes = express.Router();
 
 routes.use(usersRoute);
+routes.use(loggingRoute);
+
+export default routes;

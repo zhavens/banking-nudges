@@ -10,6 +10,6 @@ usersRoute.get('/users', (req: Request<{ id: string }>, res) => {
     if (contents) {
         res.status(200).json(JSON.stringify(instanceToPlain(contents)));
     } else {
-        res.status(404);
+        res.status(404).json(JSON.stringify({ msg: "Missing contents!" }));
     }
 });
