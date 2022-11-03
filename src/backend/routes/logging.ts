@@ -1,6 +1,7 @@
 import { LogEntry } from '@/models/log';
 import * as ndjson from '@helpers/ndjson';
-import { instanceToPlain } from 'class-transformer';
+import { instanceToPlain, plainToInstance } from 'class-transformer';
+import debug from 'debug';
 import { Router } from 'express';
 import fs from 'fs';
 import createError from 'http-errors';
@@ -9,9 +10,10 @@ const LOG_FILE_PATH = "/var/log/www/banking-nudges/log.ndjson"
 
 const loggingRoute = Router();
 
+var dlog = debug.debug('banking:logging');
 
 loggingRoute.get('/logging', (req, res, next) => {
-    console.log('Fetching logs.');
+    dlog('Fetching logs.');
     if (fs.existsSync(LOG_FILE_PATH)) {
         const contents = fs.readFileSync(LOG_FILE_PATH, 'utf-8');
         try {
@@ -26,8 +28,14 @@ loggingRoute.get('/logging', (req, res, next) => {
 })
 
 loggingRoute.post('/logging', (req, res, next) => {
-    let entry: LogEntry = LogEntry.info('test', [{ val: 1 }])
-    fs.appendFileSync(LOG_FILE_PATH, `${JSON.stringify(instanceToPlain(entry))}\n`, 'utf-8');
+    if (typeof req.body == 'object') {
+        dlog(`Log Posted: ${JSON.stringify(req.body)}`)
+        let entry = plainToInstance(LogEntry, req.body);
+        fs.appendFileSync(LOG_FILE_PATH, `${JSON.stringify(instanceToPlain(entry))}\n`, 'utf-8');
+        res.status(200);
+    } else {
+        next(createError(500, `Invalid log type.`));
+    }
 });
 
 export default loggingRoute;

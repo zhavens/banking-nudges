@@ -1,6 +1,7 @@
-import { LogEntry } from '../../models/log';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { plainToInstance } from 'class-transformer';
+import { instanceToPlain, plainToInstance } from 'class-transformer';
+import { LogEntry } from '../../models/log';
 
 const STORAGE_KEY = 'log';
 
@@ -11,10 +12,11 @@ let logs = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]").map((x: any) =>
 })
 export class LoggingService {
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   private writeLog(entry: LogEntry) {
     console.log(entry.toShortString(), ...entry.objects);
+    return this.http.post('/api/logging', { log: JSON.stringify(instanceToPlain(entry)) });
     // logs.push(entry);
     // localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
   }
