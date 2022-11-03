@@ -1,19 +1,18 @@
-// import debug from 'debug';
 import bodyParser from 'body-parser';
+import debug from 'debug';
 import express, { Express } from 'express';
 import expressWs from 'express-ws';
-import createError from 'http-errors';
-
-// var debug = require('debug')('src:server');
-import routes from '@backend/routes';
 import http from 'http';
-// var path = require('path');
+import createError, { HttpError } from 'http-errors';
+
+import routes from '@backend/routes';
 
 export default class BackendApp {
     app: Express;
     server: http.Server;
     wss: expressWs.Instance;
     heartbeat?: NodeJS.Timer;
+    dlog: debug.Debugger;
 
     routesInitialized = false;
 
@@ -21,6 +20,7 @@ export default class BackendApp {
         this.app = express();
         this.server = http.createServer(this.app);
         this.wss = expressWs(this.app, this.server);
+        this.dlog = debug.debug('backend:app');
 
         this.app.set('port', this.port);
 
@@ -29,11 +29,7 @@ export default class BackendApp {
         // exposed APIs.
         this.app.use(bodyParser.json());
 
-        // Can create link to Angular build directory
-        // The `ng build` command will save the result
-        // under the `dist` folder.
-        // const distDir = __dirname + "/dist/";
-        const assetsDir = __dirname + "/assets/";
+        const assetsDir = __dirname + '/assets/';
         this.app.use(express.static(assetsDir));
     }
 
@@ -46,33 +42,33 @@ export default class BackendApp {
         this.server.on('listening', this.onListening);
 
         // Setup heartbeating for WebSocket connections.
+        this.dlog('Starting WebSocket heartbeats.');
         this.heartbeat = setInterval(() => {
-            // console.log("Sending pings.")
             this.wss.getWss().clients.forEach(function each(ws: any) {
-                // console.log(" - Pinging socket.",)
-                ws.send(JSON.stringify({ type: "heartbeat" }));
+                ws.send(JSON.stringify({ type: 'heartbeat' }));
             });
         }, 30000);
 
         this.wss.getWss().on('close', () => {
+            this.dlog('Shutting down WebSocket heartbeats.');
             clearInterval(this.heartbeat);
         });
     }
 
     listen() {
+        this.dlog('Listening...');
         this.server.listen(this.port);
     }
 
     private initializeRoutes() {
+        this.dlog(`Initializing routes.`);
 
+        // all app routes defined within
         this.app.use('/api', routes);
 
-        /*  "/api/status"
-        *   GET: Get server status
-        *   PS: it's just an example, not mandatory
-        */
-        this.app.get("/api/status", function (req: any, res: any) {
-            res.status(200).json({ status: "UP" });
+        // expose server running status
+        this.app.get('/api/status', function (req: any, res: any) {
+            res.status(200).json({ status: 'UP' });
         });
 
         // catch 404 and forward to error handler
@@ -81,14 +77,17 @@ export default class BackendApp {
         });
 
         // error handler
-        this.app.use(function (err: any, req: any, res: any, next: any) {
+        this.app.use(function (err: HttpError, req: any, res: any, next: any) {
             // set locals, only providing error in development
             res.locals.message = err.message;
             res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-            // render the error page
+            // set internal error message as json response for debugging
+            if (req.app.get('env') === 'development') {
+                res.json({ status: err.status || 500, msg: err.message })
+            }
+            // set appropriate response. 
             res.status(err.status || 500);
-            res.json({ status: err.status || 500, msg: err.message })
         });
 
         this.routesInitialized = true;
@@ -115,7 +114,7 @@ export default class BackendApp {
     }
 
     /**
-     * Event listener for HTTP server "listening" event.
+     * Event listener for HTTP server 'listening' event.
      */
     private onListening() {
         var addr = this.server?.address();
@@ -123,7 +122,7 @@ export default class BackendApp {
             var bind = typeof addr === 'string'
                 ? 'pipe ' + addr
                 : 'port ' + addr.port;
-            console.log('Listening on ' + bind);
+            this.dlog('Listening on ' + bind);
         }
     }
 }

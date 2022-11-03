@@ -6,7 +6,7 @@ import { Router } from 'express';
 import fs from 'fs';
 import createError from 'http-errors';
 
-const LOG_FILE_PATH = "/var/log/www/banking-nudges/log.ndjson"
+const LOG_FILE_PATH = '/var/log/www/banking-nudges/log.ndjson'
 
 const loggingRoute = Router();
 
@@ -23,7 +23,7 @@ loggingRoute.get('/logging', (req, res, next) => {
         }
     } else {
         console.log('Log file missing!');
-        next(createError(404, "Log file is missing!"));
+        next(createError(404, 'Log file is missing!'));
     }
 })
 
