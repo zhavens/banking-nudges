@@ -13,7 +13,7 @@ const USER_DIRECTORY = '/var/log/www/banking-nudges/users'
 var dlog = debug.debug('banking:users');
 export const usersRoute = Router();
 
-usersRoute.get('/users', (req: Request<{ id: string }>, res) => {
+function getUsers(): User[] {
     const userfiles = fs.readdirSync(USER_DIRECTORY);
     dlog(`Fetching users: ${userfiles}`)
     let users: User[] = [];
@@ -21,23 +21,49 @@ usersRoute.get('/users', (req: Request<{ id: string }>, res) => {
     for (let userfile of userfiles) {
         users.push(plainToInstance(User, JSON.parse(fs.readFileSync(path.join(USER_DIRECTORY, userfile), 'utf8'))));
     }
-    res.status(200).json(JSON.stringify(instanceToPlain(users)));
+
+    return users;
+}
+
+
+function getUserById(id: string): User | undefined {
+    dlog(`Fetching user ${id}`);
+    const userPath = path.join(USER_DIRECTORY, `${id}.json`);
+    if (fs.existsSync(userPath)) {
+        return plainToInstance(User, JSON.parse(fs.readFileSync(userPath, 'utf-8')));
+    }
+    return undefined;
+}
+
+
+usersRoute.get('/users', (req: Request<{ id: string }>, res) => {
+    res.status(200).json(JSON.stringify(getUsers()));
 });
 
-usersRoute.get('/user', (req: TypedRequestQuery<{ id: string }>, res, next) => {
+usersRoute.get('/user', (req: TypedRequestQuery<{ id: string, name: string }>, res, next) => {
     console.log(JSON.stringify(req.query));
-    if (!req.query.id) {
+    if (!req.query.id && !req.query.name) {
         return next(createError(400, 'Missing user ID.'));
     }
 
-    dlog(`Fetching user ${req.query.id}`);
-    const userPath = path.join(USER_DIRECTORY, `${req.query.id}.json`);
-    if (fs.existsSync(userPath)) {
-        const contents: User = plainToInstance(User, JSON.parse(fs.readFileSync(userPath, 'utf-8')));
-        res.status(200).json(JSON.stringify(instanceToPlain(contents)));
+    if (req.query.id) {
+        const user = getUserById(req.query.id);
+        if (user) {
+            res.status(200).json(JSON.stringify(instanceToPlain(user)));
+            return
+        }
     } else {
-        next(createError(404, 'User not found.'));
+        const users = getUsers();
+        for (let user of users) {
+            if (user.username == req.query.name) {
+                res.status(200).json(JSON.stringify(instanceToPlain(user)));
+                return;
+            }
+        }
+
     }
+
+    next(createError(404, 'User not found.'));
 });
 
 usersRoute.post('/user', (req, res, next) => {
