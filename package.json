@@ -7,7 +7,7 @@
     "build-app": "ng build",
     "lint": "./node_modules/.bin/eslint -c .eslintrc.json 'src/**/**.ts'",
     "watch": "ng build --watch --configuration development",
-    "dev-app": "ng serve --proxy-config proxy.config.json --host $HOST --open",
+    "dev-app": "ng serve --proxy-config proxy.config.json --host $HOST --open --disable-host-check",
     "dev-backend": "DEBUG=* nodemon --config nodemon.backend.json"
   },
   "private": true,

@@ -8,7 +8,7 @@ import { Account, CreditCard } from '@models/account';
 import { AccountId, AchAccount, CreditCardId, EtransferClient, isEntity } from '@models/entities';
 import { Transaction, TransactionType } from '@models/transaction';
 import { Payee, User } from '@models/user';
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { TEST_PAYEES } from '../../../helpers/testdata';
 
 
@@ -26,6 +26,8 @@ const srcDestValidator: ValidatorFn = (control: AbstractControl): ValidationErro
 })
 export class TransferComponent implements OnInit {
   @ViewChild('etransferClientModal') etransferClientModal: ElementRef = new ElementRef(null);
+  @ViewChild('transferSuccessModal') transferSuccessModal: ElementRef = new ElementRef(null);
+  successModal?: NgbModalRef;
 
   user: User = new User();
   tx = new Transaction();
@@ -219,6 +221,10 @@ export class TransferComponent implements OnInit {
       this.alert.success('Transfer successful!');
       this.transferForm.reset();
       this.etransferForm.reset();
+      this.modalService.open(
+        this.transferSuccessModal, { size: 's' }).result.finally(() => {
+          this.logging.info(`Closed success modal.`);
+        });
     }
   }
 

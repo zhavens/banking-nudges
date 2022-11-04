@@ -38,7 +38,7 @@
         </div>
         <nav ngbNav #nav="ngbNav" class="nav-tabs">
             <ng-container ngbNavItem>
-                <a ngbNavLink>Accocunt</a>
+                <a ngbNavLink>Account</a>
                 <ng-template ngbNavContent>
                     <form [formGroup]="accountPayeeForm" (submit)="addAccountPayee()">
                         <div class="mb-3">
@@ -48,7 +48,7 @@
                         </div>
                         <div class="card mb-3" *ngIf="accountPayeeForm.valid">
                             <div class="card-body text-bg-red">
-                                Notifiation of this new payee will be sent to {{personalization.oaString()}}.
+                                Notification of this new payee will be sent to {{personalization.oaString()}}.
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary"
@@ -78,7 +78,7 @@
                             </div>
                             <div class="card mb-3" *ngIf="achPayeeForm.valid">
                                 <div class="card-body text-bg-red">
-                                    Notifiation of this new payee will be sent to {{personalization.oaString()}}.
+                                    Notification of this new payee will be sent to {{personalization.oaString()}}.
                                 </div>
                             </div>
                             <button class="btn btn-primary" [disabled]="!achPayeeForm.valid">Submit</button>
@@ -102,7 +102,7 @@
                         </div>
                         <div class="card mb-3" *ngIf="etransferPayeeForm.valid">
                             <div class="card-body text-bg-red">
-                                Notifiation of this new payee will be sent to {{personalization.oaString()}}.
+                                Notification of this new payee will be sent to {{personalization.oaString()}}.
                             </div>
                         </div>
                         <button class="btn btn-primary" [disabled]="!etransferPayeeForm.valid">Submit</button>
@@ -120,7 +120,7 @@
                         </div>
                         <div class="card mb-3" *ngIf="otherPayeeForm.valid">
                             <div class="card-body text-bg-red">
-                                Notifiation of this new payee will be sent to {{personalization.oaString()}}.
+                                Notifiaction of this new payee will be sent to {{personalization.oaString()}}.
                             </div>
                         </div>
                         <button class="btn btn-primary" [disabled]="!otherPayeeForm.valid">Submit</button>

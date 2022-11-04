@@ -85,6 +85,7 @@ export class PayeesComponent implements OnInit {
       console.log(this.user);
       this.modalService.dismissAll();
       form.reset();
+      this.nickname = '';
     }
   }
 
@@ -96,7 +97,7 @@ export class PayeesComponent implements OnInit {
   }
 
   removePayee(payee: Payee) {
-    if (this.user && this.user.payees) {
+    if (this.user && this.user.payees && confirm("Are you sure you want to delete this payee?")) {
       let idx = this.user.payees.findIndex((p: Payee) => p == payee);
       if (idx > -1) {
         this.user?.payees?.splice(idx, 1);

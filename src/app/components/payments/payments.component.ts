@@ -65,7 +65,7 @@ export class PaymentsComponent implements OnInit {
       this.logging.error(`Error removing payment with ID: ${payment.id}`);
       return;
     }
-    this.logging.info(`Removing payment: ${payment}`);
+    this.logging.info(`Removing payment:`, [payment]);
     this.user.payments = this.user.payments.splice(idx, 1);
     this.userService.updateUser(this.user);
   }

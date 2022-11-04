@@ -154,3 +154,13 @@
         </div>
     </div>
 </ng-template>
+
+
+<ng-template #transferSuccessModal let-modal>
+    <div class="modal-body">
+        <!-- MAKE THIS PRETTY -->
+        <h2>Transfer Successful</h2>
+        <button class="btn btn-primary" (click)="modal.close()">Continue</button>
+    </div>
+
+</ng-template>

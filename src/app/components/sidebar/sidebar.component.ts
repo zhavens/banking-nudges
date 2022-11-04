@@ -32,8 +32,8 @@ export class SidebarComponent implements OnInit {
           },
           label: function (context) {
             let label = '';
-            if (context.parsed.y !== null) {
-              label += new Intl.NumberFormat('en-CA', { style: 'currency', currency: 'CAD' }).format(context.parsed.y);
+            if (context.parsed.x !== null) {
+              label += new Intl.NumberFormat('en-CA', { style: 'currency', currency: 'CAD' }).format(context.parsed.x);
             }
             return label;
           }
