@@ -1,3 +1,4 @@
+import { ModalService } from '@/app/services/modal.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { atLeastOne } from '@app/helpers/validators';
@@ -6,7 +7,6 @@ import { LoggingService } from '@app/services/logging.service';
 import { PersonalizationService } from '@app/services/personalization.service';
 import { AccountId, AchAccount, Entity, EtransferClient, OtherEntity } from '@models/entities';
 import { Payee, User } from '@models/user';
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { plainToInstance } from 'class-transformer';
 
 @Component({
@@ -28,7 +28,7 @@ export class PayeesComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private modalService: NgbModal,
+    private modalService: ModalService,
     public auth: AuthenticationService,
     private userService: UserService,
     public personalization: PersonalizationService,
@@ -91,18 +91,20 @@ export class PayeesComponent implements OnInit {
 
   showPayeeModal(modalContent: any) {
     this.logging.info(`Showing add payee modal.`);
-    this.modalService.open(modalContent, { size: 'xl' }).result.finally(() => {
+    this.modalService.baseService.open(modalContent, { size: 'xl' }).result.finally(() => {
       this.logging.info(`Closed add payee modal.`);
     });
   }
 
   removePayee(payee: Payee) {
-    if (this.user && this.user.payees && confirm("Are you sure you want to delete this payee?")) {
-      let idx = this.user.payees.findIndex((p: Payee) => p == payee);
-      if (idx > -1) {
-        this.user?.payees?.splice(idx, 1);
-        this.userService.updateUser(this.user);
+    this.modalService.openConfirmation('Delete Payee', 'Are you sure you want to delete this payee?').then(() => {
+      if (this.user) {
+        let idx = this.user.payees.findIndex((p: Payee) => p == payee);
+        if (idx > -1) {
+          this.user.payees?.splice(idx, 1);
+          this.userService.updateUser(this.user);
+        }
       }
-    }
+    });
   }
 }

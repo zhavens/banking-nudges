@@ -1,3 +1,4 @@
+import { ModalService } from '@/app/services/modal.service';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { atLeastOne } from '@app/helpers/validators';
@@ -8,7 +9,7 @@ import { Account, CreditCard } from '@models/account';
 import { AccountId, AchAccount, CreditCardId, EtransferClient, isEntity } from '@models/entities';
 import { Transaction, TransactionType } from '@models/transaction';
 import { Payee, User } from '@models/user';
-import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
+import { NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { TEST_PAYEES } from '../../../helpers/testdata';
 
 
@@ -45,7 +46,7 @@ export class TransferComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private modalService: NgbModal,
+    private modalService: ModalService,
     public auth: AuthenticationService,
     public personaliztion: PersonalizationService,
     private alert: AlertService,
@@ -127,7 +128,7 @@ export class TransferComponent implements OnInit {
 
       if (this.transferForm.value['recipient'] == this.otherEtransfer) {
         this.logging.info(`Showing e-transfer modal.`);
-        this.modalService.open(
+        this.modalService.baseService.open(
           this.etransferClientModal, { size: 'xl' }).result.finally(() => {
             this.logging.info(`Closed e-transfer modal.`);
           });
@@ -222,10 +223,7 @@ export class TransferComponent implements OnInit {
       this.alert.success('Transfer successful!');
       this.transferForm.reset();
       this.etransferForm.reset();
-      this.modalService.open(
-        this.transferSuccessModal, { size: 's' }).result.finally(() => {
-          this.logging.info(`Closed success modal.`);
-        });
+      this.modalService.openNotification('Transfer Successful', 'The transfer has been completed successfully!');
     }
   }
 

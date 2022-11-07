@@ -1,3 +1,4 @@
+import { ModalService } from '@/app/services/modal.service';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { conditionalValidator, futureDateValidator } from '@app/helpers/validators';
@@ -6,7 +7,6 @@ import { LoggingService } from '@app/services/logging.service';
 import { EtransferClient } from '@models/entities';
 import { Payment } from '@models/payment';
 import { Payee, User } from '@models/user';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as uuid from "uuid";
 
 @Component({
@@ -27,7 +27,7 @@ export class PaymentsComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private modalService: NgbModal,
+    private modalService: ModalService,
     public auth: AuthenticationService,
     private alert: AlertService,
     private userService: UserService,
@@ -60,19 +60,21 @@ export class PaymentsComponent implements OnInit {
   }
 
   removePayment(payment: Payment) {
-    let idx = this.user.payments.findIndex((p: Payment) => { return p.id == payment.id });
-    if (idx == -1) {
-      this.logging.error(`Error removing payment with ID: ${payment.id}`);
-      return;
-    }
-    this.logging.info(`Removing payment:`, [payment]);
-    this.user.payments.splice(idx, 1);
-    this.userService.updateUser(this.user);
+    this.modalService.openConfirmation('Remove Payment', 'Are you sure you want to delete this payment?').then(() => {
+      let idx = this.user.payments.findIndex((p: Payment) => { return p.id == payment.id });
+      if (idx == -1) {
+        this.logging.error(`Error removing payment with ID: ${payment.id}`);
+        return;
+      }
+      this.logging.info(`Removing payment:`, [payment]);
+      this.user.payments.splice(idx, 1);
+      this.userService.updateUser(this.user);
+    });
   }
 
   showPaymentModal() {
     this.logging.info(`Showing payment modal.`);
-    this.modalService.open(
+    this.modalService.baseService.open(
       this.paymentModal, { size: 'l' }).result.finally(() => {
         this.logging.info(`Closed payment modal.`);
       });
