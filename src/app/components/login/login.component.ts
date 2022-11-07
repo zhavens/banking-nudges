@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { AlertService, AuthenticationService } from '@app/services';
+import { AlertService, AuthenticationService, UserService } from '@app/services';
 import { User } from '@models/user';
 
 @Component({ templateUrl: 'login.component.html' })
@@ -17,6 +17,7 @@ export class LoginComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private authenticationService: AuthenticationService,
+    private userService: UserService,
     private alertService: AlertService
   ) {
     // redirect to home if already logged in
@@ -54,6 +55,8 @@ export class LoginComponent implements OnInit {
     this.loading = true;
     var resp = this.authenticationService.login(this.f['username'].value, this.f['password'].value)
     if (resp instanceof User) {
+      resp.personalization.loginCount += 1;
+      this.userService.updateUser(resp);
       this.router.navigate([this.returnUrl]);
     } else {
       this.alertService.error(resp);

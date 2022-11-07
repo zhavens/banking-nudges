@@ -106,5 +106,7 @@ export const TEST_PERSONALIZATION: PersonalizationConfig = (() => {
     config.oaName = "Maggie";
     config.oaRelation = "mother";
     config.showTasksModal = true;
+    config.loginCount = 0;
+    config.txCount = 5;
     return config
 })();

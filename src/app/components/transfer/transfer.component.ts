@@ -217,6 +217,7 @@ export class TransferComponent implements OnInit {
           destCard.transactions.push(destTx);
         }
       }
+      this.user.personalization.txCount += 1;
       this.userService.updateUser(this.user);
       this.alert.success('Transfer successful!');
       this.transferForm.reset();

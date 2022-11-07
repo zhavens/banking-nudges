@@ -57,11 +57,14 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Recent Activity</h5>
-                Logged in <b>2</b> times
+                Logged in <b>{{auth.currentUser?.personalization?.loginCount}}</b> times
                 <hr>
-                Made <b>13</b> transactions
+                Made <b>{{auth.currentUser?.personalization?.txCount}}</b> transactions
                 <hr>
-                No transactions pending
+                <span
+                    *ngIf="auth.currentUser && auth.currentUser.payments.length > 0; else noTx"><b>{{auth.currentUser.payments.length}}</b>
+                    pending transaction(s)</span>
+                <ng-template #noTx>No transactions pending</ng-template>
             </div>
         </div>
     </div>

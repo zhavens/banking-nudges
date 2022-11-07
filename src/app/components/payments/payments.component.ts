@@ -5,7 +5,7 @@ import { AlertService, AuthenticationService, UserService } from '@app/services'
 import { LoggingService } from '@app/services/logging.service';
 import { EtransferClient } from '@models/entities';
 import { Payment } from '@models/payment';
-import { User } from '@models/user';
+import { Payee, User } from '@models/user';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as uuid from "uuid";
 
@@ -66,7 +66,7 @@ export class PaymentsComponent implements OnInit {
       return;
     }
     this.logging.info(`Removing payment:`, [payment]);
-    this.user.payments = this.user.payments.splice(idx, 1);
+    this.user.payments.splice(idx, 1);
     this.userService.updateUser(this.user);
   }
 
@@ -83,7 +83,13 @@ export class PaymentsComponent implements OnInit {
     payment.id = uuid.v4();
     payment.amount = this.paymentForm.value['amount'];
     payment.from = this.paymentForm.value['from'];
-    payment.to = this.paymentForm.value['to'];
+
+    if (this.paymentForm.value['to'] instanceof Payee) {
+      payment.to = this.paymentForm.value['to'].id;
+    } else {
+      payment.to = this.paymentForm.value['to'];
+    }
+
     if (this.paymentForm.value['onetime']) {
       payment.frequency = `One time on ${this.paymentForm.value['date']}`
     } else {

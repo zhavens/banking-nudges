@@ -1,6 +1,6 @@
-import { EntityType } from "../helpers/decorators";
 import { Type } from "class-transformer";
 import 'reflect-metadata';
+import { EntityType } from "../helpers/decorators";
 import { Account, CreditCard } from "./account";
 import { Address } from "./address";
 import { Entity, OtherEntity } from "./entities";
@@ -67,4 +67,7 @@ export class PersonalizationConfig {
     oaRelation: string = '';
 
     showTasksModal: boolean = true;
+
+    loginCount: number = 0;
+    txCount: number = 0;
 }
