@@ -1,5 +1,5 @@
-import { DecimalTransform, EntityType } from "../helpers/decorators";
 import Decimal from "decimal.js";
+import { DecimalTransform, EntityType } from "../helpers/decorators";
 import { Entity, OtherEntity } from "./entities";
 
 export class Payment {

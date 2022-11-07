@@ -3,37 +3,41 @@
         <h5 class="card-header">Today's Tasks</h5>
         <div class=" card-body">
             <p class="mb-3"><b>Hello {{user.firstName}}! What tasks will you be performing today?</b></p>
-            <form [formGroup]="tasksForm" (submit)="submitTasks()">
+            <form (submit)="submitTasks()">
                 <div class="vstack gap-1">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="taskPayBills" formControlName="payBills">
+                        <input class="form-check-input" name="payBills" type="checkbox" id="taskPayBills"
+                            [(ngModel)]="taskSelection.payBills">
                         <label class="form-check-label" for="taskPayBills">Pay Bils</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="taskMoveBetween"
-                            formControlName="moveBetween">
+                        <input class="form-check-input" name="moveBetween" type="checkbox" id="taskMoveBetween"
+                            [(ngModel)]="taskSelection.moveBetween">
                         <label class="form-check-label" for="taskMoveBetween">Balance Accounts</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="taskTransfer" formControlName="transfer">
+                        <input class="form-check-input" name="transfer" type="checkbox" id="taskTransfer"
+                            [(ngModel)]="taskSelection.transfer">
                         <label class="form-check-label" for="taskTransfer">Transfer Funds</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="taskPayments"
-                            formControlName="managePayments">
+                        <input class="form-check-input" name="managePayments" type="checkbox" id="taskPayments"
+                            [(ngModel)]="taskSelection.managePayments">
                         <label class="form-check-label" for="taskPayments">Manage Payments</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="taskMortgage"
-                            formControlName="manageMortgage">
+                        <input class="form-check-input" name="manageMortgage" type="checkbox" id="taskMortgage"
+                            [(ngModel)]="taskSelection.manageMortgage">
                         <label class="form-check-label" for="taskMortgage">Manage Mortgages</label>
                     </div>
                     <div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="taskOther" formControlName="other">
+                            <input class="form-check-input" name="other" type="checkbox" id="taskOther"
+                                [(ngModel)]="taskSelection.other">
                             <label class="form-label" for="taskOther">Other</label>
                         </div>
-                        <input class="form-control" type="string" id="taskOtherDetails" formControlName="otherDetails">
+                        <input class="form-control" name="otherDetails" type="string" id="taskOtherDetails"
+                            [(ngModel)]="taskSelection.otherDetails">
                     </div>
                 </div>
                 <div class="mt-3">

@@ -1,8 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { AlertService, AuthenticationService, UserService } from '@app/services';
 import { LoggingService } from '@app/services/logging.service';
-import { User } from '@models/user';
+import { TaskSelection, User } from '@models/user';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -15,7 +15,8 @@ export class TasksComponent implements OnInit {
 
   user: User = new User();
 
-  tasksForm: FormGroup;
+  // tasksForm: FormGroup;
+  taskSelection: TaskSelection;
 
   TASK_TYPES = [];
 
@@ -30,15 +31,7 @@ export class TasksComponent implements OnInit {
     this.auth.currentUserTopic.subscribe((user: User) => {
       this.user = user;
     })
-    this.tasksForm = this.formBuilder.group({
-      payBills: [false],
-      moveBetween: [false],
-      transfer: [false],
-      managePayments: [false],
-      manageMortgage: [false],
-      other: [false],
-      otherDetails: [''],
-    });
+    this.taskSelection = new TaskSelection();
   }
 
   ngOnInit(): void {
@@ -54,7 +47,10 @@ export class TasksComponent implements OnInit {
   }
 
   submitTasks(): void {
-    this.logging.info(`Submitted tasks: ${JSON.stringify(this.tasksForm.value)}`)
+    this.logging.info(`Submitted tasks`, [this.taskSelection]);
+    this.user.personalization.tasksSelected = true;
+    this.user.personalization.tasks = this.taskSelection;
+    this.userService.updateUser(this.user);
     this.modalService.dismissAll();
   }
 }

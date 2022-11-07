@@ -60,6 +60,16 @@ export enum PersonalizationLevel {
     RELATIONSHIP,
 }
 
+export class TaskSelection {
+    payBills: boolean = false;
+    moveBetween: boolean = false;
+    transfer: boolean = false;
+    managePayments: boolean = false;
+    manageMortgage: boolean = false;
+    other: boolean = false;
+    otherDetails: string = '';
+}
+
 export class PersonalizationConfig {
     level: PersonalizationLevel = PersonalizationLevel.NONE;
 
@@ -70,4 +80,8 @@ export class PersonalizationConfig {
 
     loginCount: number = 0;
     txCount: number = 0;
+
+    tasksSelected: boolean = false;
+    @Type(() => TaskSelection)
+    tasks: TaskSelection = new TaskSelection();
 }
