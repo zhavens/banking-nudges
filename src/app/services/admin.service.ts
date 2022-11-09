@@ -1,6 +1,7 @@
+import { Injectable } from '@angular/core';
 import { TEST_ACCOUNTS, TEST_CARDS, TEST_PAYEES, TEST_PAYMENTS, TEST_PERSONALIZATION } from '../../helpers/testdata';
 import { PersonalizationConfig } from '../../models/user';
-import { Injectable } from '@angular/core';
+import { AlertService } from './alert.service';
 import { AuthenticationService } from './auth.service';
 import { LoggingService } from './logging.service';
 import { UserService } from './user.service';
@@ -10,7 +11,11 @@ import { UserService } from './user.service';
 })
 export class AdminService {
 
-  constructor(private auth: AuthenticationService, private logging: LoggingService, private users: UserService
+  constructor(
+    private auth: AuthenticationService,
+    private alert: AlertService,
+    private logging: LoggingService,
+    private users: UserService
   ) { }
 
   clearLogs() {
@@ -72,5 +77,13 @@ export class AdminService {
         this.users.updateUser(user);
       }
     }
+  }
+
+  testAlertSuccess() {
+    this.alert.success('Success alert.')
+  }
+
+  testAlertError() {
+    this.alert.error('Error alert.')
   }
 }

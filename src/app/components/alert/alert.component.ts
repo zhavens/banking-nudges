@@ -3,7 +3,11 @@ import { Subscription } from 'rxjs';
 
 import { AlertService } from '@app/services';
 
-@Component({ selector: 'app-alert', templateUrl: 'alert.component.html' })
+@Component({
+    selector: 'app-alert',
+    styleUrls: ['alert.component.css'],
+    templateUrl: 'alert.component.html'
+})
 export class AlertComponent implements OnInit, OnDestroy {
     private subscription: Subscription = new Subscription();
     message: any;
@@ -28,5 +32,9 @@ export class AlertComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
+    }
+
+    clearAlert() {
+        this.alertService.clear();
     }
 }

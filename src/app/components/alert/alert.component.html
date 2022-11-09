@@ -1,1 +1,4 @@
-<div *ngIf="message" [ngClass]="message.cssClass" id="alert">{{message.text}}</div>
+<div *ngIf="message" [ngClass]="message.cssClass" id="alert">
+    {{message.text}}
+    <button id="close" class="btn btn-sm" (click)="clearAlert()"><i class="bi bi-x"></i></button>
+</div>
