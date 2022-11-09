@@ -1,0 +1,50 @@
+<div class="row" *ngIf="pageConfirmed">
+    <div class="col-2 vstack gap-3">
+        <app-sidebar [type]="SidebarType.CONSEQUENCES"></app-sidebar>
+        <app-sidebar [type]="SidebarType.SECURITY"></app-sidebar>
+    </div>
+    <div class="col-8 vstack gap-5 mb-3">
+
+        <div class="card borderless">
+            <h5 class="card-header">Accounts</h5>
+            <div class="card-body">
+                <p>Sign up for a new account today, selecting from our wide variety of account types! Both no-fee and
+                    low-fee options with high interest rates are available.</p>
+                <button type="button" class="btn btn-yellow">Submit Application</button>
+            </div>
+        </div>
+
+        <div class="card borderless">
+            <h5 class="card-header">Credit Cards</h5>
+            <div class="card-body">
+                <p>Bank of Bank offers credit cards through all the major credit card companies. Each company offers
+                    cards with a wide varieity of fee and interest structures, as well as a vast array of reward
+                    options! Looking for travel points, cash bask on gas, or discounts on groceries? Take a look at our
+                    card comparator to chosse the product that's right for you!</p>
+                <button type="button" class="btn btn-yellow">Compare Cards</button>
+            </div>
+        </div>
+
+        <div class="card borderless">
+            <h5 class="card-header">Investments</h5>
+            <div class="card-body">
+                <p>Manage your investments online, all in one place, with Bank of Bank!</p>
+                <button type="button" class="btn btn-yellow">Purchase Investments</button>
+            </div>
+        </div>
+
+        <div class="card borderless">
+            <h5 class="card-header">Mortgages</h5>
+            <div class="card-body">
+                <p>Get the most value for your home with Bank of Bank. Whether for renovations, new acquisitions, or
+                    simply a change in lifestyle, let us help you refinance your mortgage to minmize interest rates and
+                    get your home working better for you.</p>
+                <button type="button" class="btn btn-yellow">Speak With an Advisor</button>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-2">
+        <app-sidebar [type]="SidebarType.DEFAULT"></app-sidebar>
+    </div>
+</div>

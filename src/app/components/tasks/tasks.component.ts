@@ -37,9 +37,20 @@ export class TasksComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  openTasksModal(callback?: () => void) {
+  selectAll(): void {
+    this.taskSelection.checkBalance = true;
+    this.taskSelection.payBills = true;
+    this.taskSelection.moveBetween = true;
+    this.taskSelection.transfer = true;
+    this.taskSelection.managePayments = true;
+    this.taskSelection.manageServices = true;
+    this.taskSelection.other = false;
+    this.taskSelection.otherDetails = '';
+  }
+
+  openTasksModal(callback?: () => void): Promise<any> {
     this.logging.info(`Showing tasks modal.`);
-    this.modalService.open(
+    return this.modalService.open(
       this.tasksModal, { size: 'l', centered: true, backdrop: 'static', keyboard: this.user.admin }).result.finally(() => {
         if (callback) callback();
         this.logging.info(`Closed tasks modal.`);

@@ -8,7 +8,7 @@
             <a class="nav-item nav-link" routerLink="/accounts" routerLinkActive="active">Accounts</a>
             <a class="nav-item nav-link" routerLink="/transfer" routerLinkActive="active">Transfer Funds</a>
             <a class="nav-item nav-link" routerLink="/payments" routerLinkActive="active">Manage Payments</a>
-            <a class="nav-item nav-link disabled">Add Services</a>
+            <a class="nav-item nav-link" routerLink="/services" routerLinkActive="active">Add Services</a>
         </div>
         <div class="navbar-nav navbar-right d-flex ms-auto me-3">
             <ng-template [ngIf]="auth.currentUser?.admin">

@@ -6,9 +6,14 @@
             <form (submit)="submitTasks()">
                 <div class="vstack gap-1">
                     <div class="form-check">
+                        <input class="form-check-input" name="checkBalance" type="checkbox" id="taskCheckBalance"
+                            [(ngModel)]="taskSelection.checkBalance">
+                        <label class="form-check-label" for="taskCheckBalance">Check Balance</label>
+                    </div>
+                    <div class="form-check">
                         <input class="form-check-input" name="payBills" type="checkbox" id="taskPayBills"
                             [(ngModel)]="taskSelection.payBills">
-                        <label class="form-check-label" for="taskPayBills">Pay Bils</label>
+                        <label class="form-check-label" for="taskPayBills">Pay Bills</label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" name="moveBetween" type="checkbox" id="taskMoveBetween"
@@ -27,7 +32,7 @@
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" name="manageMortgage" type="checkbox" id="taskMortgage"
-                            [(ngModel)]="taskSelection.manageMortgage">
+                            [(ngModel)]="taskSelection.manageServices">
                         <label class="form-check-label" for="taskMortgage">Manage Mortgages</label>
                     </div>
                     <div>
@@ -38,6 +43,9 @@
                         </div>
                         <input class="form-control" name="otherDetails" type="string" id="taskOtherDetails"
                             [(ngModel)]="taskSelection.otherDetails">
+                    </div>
+                    <div *ngIf="user.admin" class="mt-2">
+                        <button type="button" class="btn btn-success" (click)="selectAll()">Select All</button>
                     </div>
                 </div>
                 <div class="mt-3">

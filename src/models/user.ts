@@ -61,11 +61,12 @@ export enum PersonalizationLevel {
 }
 
 export class TaskSelection {
+    checkBalance: boolean = false;
     payBills: boolean = false;
     moveBetween: boolean = false;
     transfer: boolean = false;
     managePayments: boolean = false;
-    manageMortgage: boolean = false;
+    manageServices: boolean = false;
     other: boolean = false;
     otherDetails: string = '';
 }

@@ -133,9 +133,14 @@ export class TransferComponent implements OnInit {
             this.logging.info(`Closed e-transfer modal.`);
           });
       } else {
-        this.submitTransfer()
+        this.confirmTransfer().then(() => {
+          this.submitTransfer();
+          this.transferForm.reset();
+          this.etransferForm.reset();
+        }).finally(() => {
+          this.modalService.dismissAll();
+        });
       }
-      this.transferForm.reset();
     }
   }
 
@@ -154,9 +159,17 @@ export class TransferComponent implements OnInit {
     if (this.etransferForm.value['savePayee']) {
       this.user.payees.push(new Payee(client, nickname));
     }
-    this.submitTransfer();
-    this.etransferForm.reset();
-    this.modalService.dismissAll();
+    this.confirmTransfer().then(() => {
+      this.submitTransfer();
+      this.transferForm.reset();
+      this.etransferForm.reset();
+    }).finally(() => {
+      this.modalService.dismissAll();
+    });
+  }
+
+  confirmTransfer(): Promise<any> {
+    return this.modalService.openConfirmation('Confirm Transaction', 'Are you sure you want to confirm this transaction?')
   }
 
   cancelTransfer() {

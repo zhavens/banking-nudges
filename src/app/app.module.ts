@@ -2,6 +2,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
+import { NgChartsModule } from 'ng2-charts';
 
 import { AppComponent } from '@app/app.component';
 import { appRoutingModule } from '@app/app.routing';
@@ -24,9 +26,8 @@ import { fakeBackendProvider } from '@app/helpers/fake-backend';
 import { AccountsPage } from '@app/pages/accounts/accounts.page';
 import { HomePage } from '@app/pages/home/home.page';
 import { PaymentsPage } from '@app/pages/payments/payments.page';
+import { ServicesPage } from '@app/pages/services/services.page';
 import { TransferPage } from '@app/pages/transfer/transfer.page';
-import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
-import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   imports: [
@@ -44,6 +45,7 @@ import { NgChartsModule } from 'ng2-charts';
     AccountsPage,
     TransferPage,
     PaymentsPage,
+    ServicesPage,
     // Components
     AppComponent,
     LoginComponent,
