@@ -15,7 +15,7 @@ export const usersRoute = Router();
 
 function getUsers(): User[] {
     const userfiles = fs.readdirSync(USER_DIRECTORY);
-    dlog(`Fetching users: ${userfiles}`)
+    dlog(`Loading users: ${userfiles}`)
     let users: User[] = [];
 
     for (let userfile of userfiles) {
@@ -27,7 +27,7 @@ function getUsers(): User[] {
 
 
 function getUserById(id: string): User | undefined {
-    dlog(`Fetching user ${id}`);
+    dlog(`Loading user ${id}`);
     const userPath = path.join(USER_DIRECTORY, `${id}.json`);
     if (fs.existsSync(userPath)) {
         return plainToInstance(User, JSON.parse(fs.readFileSync(userPath, 'utf-8')));
@@ -41,7 +41,7 @@ usersRoute.get('/users', (req: Request<{ id: string }>, res) => {
 });
 
 usersRoute.get('/user', (req: TypedRequestQuery<{ id: string, name: string }>, res, next) => {
-    console.log(JSON.stringify(req.query));
+    dlog(`Getting user: ${JSON.stringify(req.query)}`);
     if (!req.query.id && !req.query.name) {
         return next(createError(400, 'Missing user ID.'));
     }
@@ -67,20 +67,20 @@ usersRoute.get('/user', (req: TypedRequestQuery<{ id: string, name: string }>, r
 });
 
 usersRoute.post('/user', (req, res, next) => {
-    console.log(req.body);
-    if ('user' in req.body && typeof req.body['user'] == 'object') {
+    dlog(`User update request ${JSON.stringify(req.body)}`);
+    if (req.body && typeof req.body === 'object') {
         let user = new User();
         try {
-            user = plainToInstance(User, req.body['user']);
+            user = plainToInstance(User, req.body);
         } catch (e) {
             dlog(`Error parsing user object`);
             return next(createError(400, 'Invalid user object.'));
         }
 
-        dlog(`Updating user ${user.id}.`);
+        dlog(`Updating user ${user.id}`);
         const userPath = path.join(USER_DIRECTORY, `${user.id}.json`);
         try {
-            fs.writeFileSync(userPath, JSON.stringify(instanceToPlain(user, { excludeExtraneousValues: true })));
+            fs.writeFileSync(userPath, JSON.stringify(instanceToPlain(user)));
         } catch (e) {
             dlog(`Error writing user file: ${e}`);
             return next(createError(500));
@@ -91,3 +91,13 @@ usersRoute.post('/user', (req, res, next) => {
         return next(createError(400, 'Missing user data.'))
     }
 });
+
+usersRoute.get('/users/nextid', (req, res, next) => {
+    const users = getUsers();
+
+    let id = 0;
+    for (let user of users) {
+        id = Math.max(id, user.id + 1);
+    }
+    res.status(200).send(id.toString());
+})
