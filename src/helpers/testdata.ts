@@ -13,6 +13,7 @@ export const TEST_ACCOUNTS: Account[] = [
         type: AccountType.SAVINGS,
         name: "Account A",
         balance: new Decimal(876.55),
+        showTransactions: false,
         transactions: [{
             type: TransactionType.ETRANSFER,
             date: new Date(),
@@ -36,6 +37,7 @@ export const TEST_ACCOUNTS: Account[] = [
         type: AccountType.CHEQUING,
         name: "Account B",
         balance: new Decimal(267.89),
+        showTransactions: false,
         transactions: [
             {
                 type: TransactionType.ETRANSFER,
@@ -61,6 +63,7 @@ export const TEST_CARDS: CreditCard[] = [
         type: CardType.VISA,
         limit: new Decimal(2000),
         balance: new Decimal(180.71),
+        showTransactions: false,
         transactions: [
             {
                 type: TransactionType.CREDIT,

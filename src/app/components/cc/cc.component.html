@@ -60,7 +60,7 @@
         </div>
         <div class="card" id="transaction-card">
             <h5 class="card-header">Recent Transactions</h5>
-            <div class="card-body">
+            <div class="card-body position-relative">
                 <div class="col-sm-12">
                     Transactions as of {{today | date}}:
                 </div>
@@ -106,6 +106,10 @@
                         </tbody>
                     </table>
                     <!-- TODO@: ADD PAGINATION -->
+                </div>
+                <div class="blur-overlay" *ngIf=" !currentCard?.showTransactions">
+                    <button class="btn btn-warning" (click)="showCurrentTransactions()">Show
+                        Transactions</button>
                 </div>
             </div>
         </div>

@@ -38,6 +38,12 @@ export class PersonalizationService {
     this.logging.info(`Updating personalization on logout.`)
     this.user.personalization.showTasksModal = true;
     this.user.personalization.showConsequencesBanner = !this.user.personalization.showConsequencesBanner;
+    for (let account of this.user.accounts) {
+      account.showTransactions = false;
+    }
+    for (let card of this.user.cards) {
+      card.showTransactions = false;
+    }
     this.userService.updateUser(this.user);
   }
 

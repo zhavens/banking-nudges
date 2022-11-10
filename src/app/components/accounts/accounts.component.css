@@ -1,7 +1,3 @@
 #accounts_table>tr {
     cursor: pointer;
 }
-
-#transaction-card {
-    margin-top: 10px
-}

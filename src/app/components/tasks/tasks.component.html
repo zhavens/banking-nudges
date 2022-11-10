@@ -2,7 +2,8 @@
     <div class="card">
         <h5 class="card-header">Today's Tasks</h5>
         <div class=" card-body">
-            <p class="mb-3"><b>Hello {{user.firstName}}! What tasks will you be performing today?</b></p>
+            <p class="mb-3"><b>Hello {{user.firstName}}! What tasks will you be performing today on behalf of
+                    {{personalization.oaString()}}?</b></p>
             <form (submit)="submitTasks()">
                 <div class="vstack gap-1">
                     <div class="form-check">

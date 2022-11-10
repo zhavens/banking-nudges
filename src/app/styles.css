@@ -76,10 +76,36 @@
     border-bottom-style: solid;
 }
 
+.card.borderless {
+    border: 0px;
+}
+
 hr.thin {
     margin: 0.5rem 0rem;
 }
 
 hr.bottomless {
     margin-bottom: 0rem;
+}
+
+.blur-overlay {
+    backdrop-filter: blur(6px);
+
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    /* Covers the BS buttons, usually at 2 */
+    z-index: 3;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.blur-overlay>button {
+    border: 1px black;
+    box-shadow: 0.5rem 0.5rem 6px 0 var(--e-bg-grey);
 }

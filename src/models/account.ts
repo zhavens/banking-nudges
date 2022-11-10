@@ -1,7 +1,7 @@
-import { DecimalTransform } from "../helpers/decorators";
 import { Type } from "class-transformer";
 import Decimal from "decimal.js";
 import 'reflect-metadata';
+import { DecimalTransform } from "../helpers/decorators";
 import { AccountId, CreditCardId } from "./entities";
 import { Transaction } from "./transaction";
 
@@ -24,6 +24,8 @@ export class Account {
 
     @Type(() => Transaction)
     transactions: Transaction[] = [];
+
+    showTransactions: boolean = false;
 }
 
 export enum CardType {
@@ -48,4 +50,6 @@ export class CreditCard {
 
     @Type(() => Transaction)
     transactions: Transaction[] = [];
+
+    showTransactions: boolean = false;
 }

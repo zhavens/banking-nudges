@@ -3,7 +3,7 @@
         <a class="navbar-brand ms-3" href="#">
             <img src="assets/img/icon.png" width="30" height="30" class="d-inline-block align-top">
             Bank of Bank</a>
-        <div class="navbar-nav navbar-expand-lg">
+        <div class="navbar-nav navbar-expand-lg" *ngIf="auth.isLoggedIn">
             <a class="nav-item nav-link" routerLink="/home" routerLinkActive="active">Home</a>
             <a class="nav-item nav-link" routerLink="/accounts" routerLinkActive="active">Accounts</a>
             <a class="nav-item nav-link" routerLink="/transfer" routerLinkActive="active">Transfer Funds</a>
@@ -16,7 +16,7 @@
                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Admin</a>
                     <ul class="dropdown-menu">
                         <li>
-                            <form [formGroup]="personalizationForm" style="margin: 0rem 0.5rem">
+                            <form [formGroup]="personalizationForm">
                                 <div class="form-floating">
                                     <select class="form-select" id="personaliztionLevel" formControlName="level"
                                         (change)="updatePersonalizationLevel($any($event.target).value)">

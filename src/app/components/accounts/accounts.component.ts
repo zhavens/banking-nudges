@@ -1,3 +1,5 @@
+import { ModalService } from '@/app/services/modal.service';
+import { PersonalizationService } from '@/app/services/personalization.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { AuthenticationService } from '@app/services';
@@ -5,7 +7,6 @@ import { LoggingService } from '@app/services/logging.service';
 import { Account } from '@models/account';
 import { Transaction } from '@models/transaction';
 import { User } from '@models/user';
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import * as text from '../../../helpers/text';
 
 @Component({
@@ -25,8 +26,9 @@ export class AccountsComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private modalService: NgbModal,
+    private modalService: ModalService,
     private auth: AuthenticationService,
+    private personalization: PersonalizationService,
     private logging: LoggingService) {
     this.auth.currentUserTopic.subscribe((user: User) => { this.accounts = this.auth.currentUser?.accounts });
 
@@ -44,7 +46,7 @@ export class AccountsComponent implements OnInit {
     this.txFilter.setValue('');
     this.currentAccount = account;
     this.filteredTransactions = this.currentAccount.transactions || []
-    this.modalService.open(modalContent, {
+    this.modalService.baseService.open(modalContent, {
       size: 'lg',
       fullscreen: 'md'
     }).result.finally(() => {
@@ -62,6 +64,16 @@ export class AccountsComponent implements OnInit {
     }
 
     this.logging.info(`Filtered using query "${this.txFilter.value}", showing ${this.filteredTransactions.length} accounts.`)
+  }
+
+  showCurrentTransactions() {
+    this.modalService.openConfirmation(
+      'Show Transactions',
+      `Are you sure you want to look at the details of ${this.personalization.oaString()}'s accounts? They will get a notifcation that you've elected to do so.`,
+      'Show Transactions', 'Cancel').
+      then(
+        () => { if (this.currentAccount) { this.currentAccount.showTransactions = true; } }
+      );
   }
 
   // Getter to expose library to templates.

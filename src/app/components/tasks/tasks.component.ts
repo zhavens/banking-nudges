@@ -1,3 +1,4 @@
+import { PersonalizationService } from '@/app/services/personalization.service';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { AlertService, AuthenticationService, UserService } from '@app/services';
@@ -27,6 +28,7 @@ export class TasksComponent implements OnInit {
     private alert: AlertService,
     private userService: UserService,
     private logging: LoggingService,
+    public personalization: PersonalizationService,
   ) {
     this.auth.currentUserTopic.subscribe((user: User) => {
       this.user = user;
