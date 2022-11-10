@@ -38,7 +38,8 @@
                             <span class="input-group-text" id="basic-addon1">$</span>
                             <input type="number" class="form-control" id="transferAmountInput" formControlName="amount"
                                 [value]="transferAmount" (change)="transferAmount=twoNumberDecimal($event)"
-                                [ngClass]="{'large-payment': largePayment}" aria-label="Transfer amount"
+                                [ngClass]="{'large-payment': largePayment}"
+                                [ngStyle]="{'background-color': amountInputColor}" aria-label="Transfer amount"
                                 placeholder="0.00" value="" step="0.01" min="0.01" required>
                         </div>
                     </div>

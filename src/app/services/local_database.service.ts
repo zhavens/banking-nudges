@@ -1,6 +1,6 @@
-import { User } from '../../models/user';
 import { Injectable } from '@angular/core';
 import { instanceToPlain, plainToClass } from 'class-transformer';
+import { User } from '../../models/user';
 import { DatabaseService } from './database.service';
 
 // array in local storage for registered users

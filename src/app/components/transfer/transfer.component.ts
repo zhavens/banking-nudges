@@ -43,6 +43,7 @@ export class TransferComponent implements OnInit {
   largePayment: boolean = false;
   missingReceipt: boolean = false;
   receiptUploaded: boolean = false;
+  amountInputColor: string = '#ffffff';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -104,6 +105,7 @@ export class TransferComponent implements OnInit {
     let amount = control.get('amount');
 
     this.largePayment = amount && amount.value && amount.value > 200.0;
+    this.amountInputColor = this.personalization.getGradientColor(amount?.value / 200.0)
 
     return null;
   };

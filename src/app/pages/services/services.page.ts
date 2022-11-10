@@ -33,7 +33,9 @@ export class ServicesPage implements OnInit {
     if (this.auth.isLoggedIn && this.user.personalization.tasksSelected && !this.user.personalization.tasks.manageServices) {
       this.modalService.openConfirmation(
         'Navigation Confirmation',
-        'When you selected the tasks you were going to perform today, you did not select service management. Would you like to continue, or turn back?')
+        'When you selected the tasks you were going to perform today, you did not select service management. Would you like to continue, or turn back?',
+        'Continue',
+        'Go Back')
         .catch(() => { history.back() })
         .finally(() => {
           this.pageConfirmed = true;

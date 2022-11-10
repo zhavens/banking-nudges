@@ -4,6 +4,11 @@ a {
 
 .dropdown-menu {
     display: none;
+    min-width: 200px;
+}
+
+.dropdown-menu form {
+    margin: 0.5rem 0.5rem;
 }
 
 .nav-item:hover .nav-link {}

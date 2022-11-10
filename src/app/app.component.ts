@@ -5,7 +5,7 @@ import { AuthenticationService } from '@app/services';
 import { filter } from 'rxjs';
 import { User } from '../models/user';
 import { LoggingService } from './services/logging.service';
-import { SidebarService } from './services/sidebar.service';
+import { PersonalizationService } from './services/personalization.service';
 
 @Component({ selector: 'app', templateUrl: 'app.component.html', styleUrls: ['app.component.css'] })
 export class AppComponent {
@@ -15,7 +15,7 @@ export class AppComponent {
     private router: Router,
     private logging: LoggingService,
     public auth: AuthenticationService,
-    private sidebar: SidebarService,
+    public personalization: PersonalizationService,
   ) {
     this.auth.currentUserTopic.subscribe(x => this.currentUserTopic = x);
     router.events.pipe(
@@ -35,5 +35,12 @@ export class AppComponent {
   logout() {
     this.auth.logout();
     this.router.navigate(['/login']);
+  }
+
+  reset() {
+    if (confirm('Are you sure you want to reset the app?')) {
+      localStorage.clear();
+      this.router.navigate(['/login']);
+    }
   }
 }

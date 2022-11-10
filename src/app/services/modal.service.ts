@@ -19,10 +19,14 @@ export class ModalService {
     return modalRef.result;
   }
 
-  openConfirmation(title: string, message: string): Promise<any> {
+
+
+  openConfirmation(title: string, message: string, confirmText: string = 'Confirm', cancelText = "Cancel"): Promise<any> {
     const modalRef = this.modalService.open(ConfirmDialogComponent, { backdrop: 'static', centered: true });
     modalRef.componentInstance.title = title;
     modalRef.componentInstance.message = message;
+    modalRef.componentInstance.confirmText = confirmText;
+    modalRef.componentInstance.cancelText = cancelText;
     return modalRef.result;
   }
 

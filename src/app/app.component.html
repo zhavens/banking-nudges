@@ -2,6 +2,13 @@
 <div class="flex-wrapper">
     <div class="jumbotron">
         <app-navbar></app-navbar>
+        <div class="row" id="proxy-banner" *ngIf="auth.isLoggedIn">
+            <div class="alert alert-warning text-bg-orange" role="alert">
+                <span class="align-middle">You are currently banking on behalf of
+                    {{personalization.oaFullName()}}.</span>
+                <button class="btn btn-sm btn-default" style="float: right;" disabled>Switch Accounts</button>
+            </div>
+        </div>
         <div class="container" id="content">
             <div class="row justify-content-center">
                 <app-alert></app-alert>
@@ -48,6 +55,8 @@
                     <p>Bank of Bank, &copy; 2022</p>
                 </div>
                 <div class="col-sm-6 text-end">
+                    <a class="link-danger" href="#" (click)="reset()">Reset Data</a>
+                    <div class="vr ms-1 me-1"></div>
                     <a href="assets/pdf/AppendixJ_Consent_Form_v5.pdf" target="_blank">Consent</a>
                     <div class="vr ms-1 me-1"></div>
                     <a href="assets/pdf/AppendixJ_Consent_Form_v5.pdf" target="_blank">Legal</a>

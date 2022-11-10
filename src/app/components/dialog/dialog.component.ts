@@ -34,14 +34,16 @@ export class NotificationDialogComponent {
 			<p>{{ message }}</p>
 		</div>
 		<div class="modal-footer">
-      <button type="button" class="btn btn-danger" (click)="activeModal.dismiss('cancel')">Cancel</button>
-      <button type="button" class="btn btn-primary" (click)="activeModal.close('confirm')">Confirm</button>
+      <button type="button" class="btn btn-danger" (click)="activeModal.dismiss('cancel')">{{cancelText}}</button>
+      <button type="button" class="btn btn-primary" (click)="activeModal.close('confirm')">{{confirmText}}</button>
 		</div>
 	`,
 })
 export class ConfirmDialogComponent {
 	@Input() title!: string;
 	@Input() message!: string;
+	@Input() confirmText: string = "Confirm";
+	@Input() cancelText: string = "Cancel";
 
 	constructor(public activeModal: NgbActiveModal) { }
 }

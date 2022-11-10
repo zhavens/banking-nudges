@@ -32,7 +32,9 @@ export class AccountsPage implements OnInit {
     if (this.auth.isLoggedIn && this.user.personalization.tasksSelected && !this.user.personalization.tasks.checkBalance) {
       this.modalService.openConfirmation(
         'Navigation Confirmation',
-        'When you selected the tasks you were going to perform today, you did not select balance checking. Would you like to continue, or turn back?')
+        'When you selected the tasks you were going to perform today, you did not select balance checking. Would you like to continue, or turn back?',
+        'Continue',
+        'Go Back')
         .catch(() => { history.back() })
         .finally(() => {
           this.pageConfirmed = true;

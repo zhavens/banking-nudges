@@ -6,6 +6,7 @@ canvas {
     border-color: var(--bs-border-color);
 }
 
-li>i {
+li>i,
+a>i {
     float: right;
 }

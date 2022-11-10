@@ -1,7 +1,6 @@
 <div class="row" *ngIf="pageConfirmed">
     <div class="col-2 vstack gap-3">
-        <app-sidebar [type]="SidebarType.CONSEQUENCES"></app-sidebar>
-        <app-sidebar [type]="SidebarType.SECURITY"></app-sidebar>
+        <app-sidebar [type]="SidebarType.DEFAULT"></app-sidebar>
     </div>
     <div class="col-8 vstack gap-5 mb-3">
 
@@ -45,6 +44,6 @@
 
     </div>
     <div class="col-2">
-        <app-sidebar [type]="SidebarType.DEFAULT"></app-sidebar>
+        <app-sidebar [type]="SidebarType.SECURITY"></app-sidebar>
     </div>
 </div>

@@ -1,5 +1,14 @@
+#proxy-banner {
+    margin: 0px;
+}
+
+#proxy-banner>.alert {
+    padding: 0.5rem 2rem;
+    margin-bottom: 0px;
+}
+
 #content {
-    margin-top: 50px !important;
+    margin-top: 2rem !important;
 }
 
 #footer {

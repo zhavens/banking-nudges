@@ -16,18 +16,18 @@
                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Admin</a>
                     <ul class="dropdown-menu">
                         <li>
-                            <form [formGroup]="personalizationForm">
+                            <form [formGroup]="personalizationForm" style="margin: 0rem 0.5rem">
                                 <div class="form-floating">
                                     <select class="form-select" id="personaliztionLevel" formControlName="level"
                                         (change)="updatePersonalizationLevel($any($event.target).value)">
                                         <option *ngFor="let level of levels" [value]="level">
                                             {{level}}</option>
                                     </select>
-                                    <label for="floatingSelect">Pesonalization Level</label>
+                                    <label for="personaliztionLevel">Personalization Level</label>
                                 </div>
                             </form>
                         </li>
-                        <li><a class="dropdown-item text-danger" (click)="admin.resetUser()">Reset
+                        <li><a class=" dropdown-item text-danger" (click)="admin.resetUser()">Reset
                                 User</a>
                         </li>
                         <li><a class="dropdown-item text-success" (click)="admin.testAlertSuccess()">Success Alert</a>

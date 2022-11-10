@@ -74,10 +74,12 @@ export class TaskSelection {
 export class PersonalizationConfig {
     level: PersonalizationLevel = PersonalizationLevel.NONE;
 
-    oaName: string = '';
+    oaFirstName: string = '';
+    oaLastName: string = '';
     oaRelation: string = '';
 
     showTasksModal: boolean = true;
+    showConsequencesBanner: boolean = false;
 
     loginCount: number = 0;
     txCount: number = 0;

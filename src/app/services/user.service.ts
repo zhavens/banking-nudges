@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { TEST_ACCOUNTS, TEST_CARDS, TEST_PAYEES } from '../../helpers/testdata';
+import { TEST_ACCOUNTS, TEST_CARDS, TEST_PAYEES, TEST_PERSONALIZATION } from '../../helpers/testdata';
 import { User } from '../../models/user';
 import { AuthenticationService } from './auth.service';
 import { LocalDatabaseService } from './local_database.service';
@@ -26,6 +26,8 @@ export class UserService {
         user.accounts = TEST_ACCOUNTS;
         user.cards = TEST_CARDS;
         user.payees = TEST_PAYEES;
+        user.payees[1].nickname = `${user.firstName}'s Account`
+        user.personalization = TEST_PERSONALIZATION;
         // Don't show task modal on first login!
         user.personalization.showTasksModal = false;
         return this.localdb.insertUser(user);

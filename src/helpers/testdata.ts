@@ -10,8 +10,8 @@ import * as uuid from "uuid";
 export const TEST_ACCOUNTS: Account[] = [
     {
         id: plainToClass(AccountId, { accountNum: 17654 }),
-        type: AccountType.CHEQUING,
-        name: "Account 1",
+        type: AccountType.SAVINGS,
+        name: "Account A",
         balance: new Decimal(876.55),
         transactions: [{
             type: TransactionType.ETRANSFER,
@@ -33,17 +33,17 @@ export const TEST_ACCOUNTS: Account[] = [
     },
     {
         id: plainToClass(AccountId, { accountNum: 22387 }),
-        type: AccountType.SAVINGS,
-        name: "Savings",
-        balance: new Decimal(67.89),
+        type: AccountType.CHEQUING,
+        name: "Account B",
+        balance: new Decimal(267.89),
         transactions: [
             {
                 type: TransactionType.ETRANSFER,
                 date: new Date(),
                 sender: new EtransferClient("test", "test@mail.com"),
                 recipient: plainToClass(AccountId, { accountNum: 22387 }),
-                amount: new Decimal(67.89),
-                balance: new Decimal(67.89),
+                amount: new Decimal(267.89),
+                balance: new Decimal(267.89),
             }
         ]
     }
@@ -103,7 +103,8 @@ export const TEST_PAYMENTS: Payment[] = [
 export const TEST_PERSONALIZATION: PersonalizationConfig = (() => {
     let config = new PersonalizationConfig();
     config.level = PersonalizationLevel.NAME;
-    config.oaName = "Maggie";
+    config.oaFirstName = "Maggie";
+    config.oaLastName = "Winters";
     config.oaRelation = "mother";
     config.showTasksModal = true;
     config.loginCount = 0;
