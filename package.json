@@ -3,11 +3,12 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "build": "tsc",
     "build-app": "ng build",
+    "deploy-app": "ng build && cp -R ./dist/banking-nudges/* /var/www/html/",
     "lint": "./node_modules/.bin/eslint -c .eslintrc.json 'src/**/**.ts'",
     "watch": "ng build --watch --configuration development",
-    "dev-app": "ng serve --proxy-config proxy.config.json --host $HOST --open --disable-host-check",
+    "dev-app": "ng serve --proxy-config proxy.config.json --host $HOST --disable-host-check",
+    "dev-app-static": "ng serve --proxy-config proxy.config.json --host $HOST --disable-host-check -c static",
     "dev-backend": "DEBUG=* nodemon --config nodemon.backend.json"
   },
   "private": true,

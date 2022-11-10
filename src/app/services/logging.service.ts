@@ -1,3 +1,4 @@
+import { environment } from '@/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { instanceToPlain, plainToInstance } from 'class-transformer';
@@ -16,7 +17,9 @@ export class LoggingService {
 
   private writeLog(entry: LogEntry) {
     console.log(entry.toShortString(), ...entry.objects);
-    return this.http.post('/api/logging', { log: JSON.stringify(instanceToPlain(entry)) });
+    if (!environment.static) {
+      this.http.post('/api/logging', { log: JSON.stringify(instanceToPlain(entry)) });
+    }
     // logs.push(entry);
     // localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
   }
