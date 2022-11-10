@@ -28,6 +28,7 @@ import { HomePage } from '@app/pages/home/home.page';
 import { PaymentsPage } from '@app/pages/payments/payments.page';
 import { ServicesPage } from '@app/pages/services/services.page';
 import { TransferPage } from '@app/pages/transfer/transfer.page';
+import { SplashPage } from './pages/splash/splash.page';
 
 @NgModule({
   imports: [
@@ -46,6 +47,7 @@ import { TransferPage } from '@app/pages/transfer/transfer.page';
     TransferPage,
     PaymentsPage,
     ServicesPage,
+    SplashPage,
     // Components
     AppComponent,
     LoginComponent,

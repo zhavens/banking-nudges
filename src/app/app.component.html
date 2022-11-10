@@ -18,8 +18,8 @@
             </div>
         </div>
     </div>
-    <footer *ngIf="auth.isLoggedIn" id="footer" class="text-bg-yellow">
-        <div class="container">
+    <footer id="footer" class="text-bg-yellow">
+        <div class="container" *ngIf="auth.isLoggedIn">
             <div class="row">
                 <div class=" col-sm-2"></div>
                 <div class="col-sm-2">

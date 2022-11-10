@@ -11,10 +11,12 @@ import { AccountsPage } from './pages/accounts/accounts.page';
 import { HomePage } from './pages/home/home.page';
 import { PaymentsPage } from './pages/payments/payments.page';
 import { ServicesPage } from './pages/services/services.page';
+import { SplashPage } from './pages/splash/splash.page';
 import { TransferPage } from './pages/transfer/transfer.page';
 
 const routes: Routes = [
-    { path: '', pathMatch: 'full', redirectTo: '/login' },
+    // { path: '', pathMatch: 'full', redirectTo: '/login' },
+    { path: '', component: SplashPage, title: "Welcome - Bank of Bank" },
     { path: 'login', component: LoginComponent, title: "Login - Bank of Bank" },
 
     { path: 'home', component: HomePage, title: "Home - Bank of Bank", canActivate: [LoggedInGuard] },
