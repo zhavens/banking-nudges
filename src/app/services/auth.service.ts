@@ -1,23 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 
 import { User } from '../../models/user';
-import { LocalDatabaseService } from './local_database.service';
+import { LocalCacheService } from './local_cache.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
   private currentUserSubject: BehaviorSubject<User>;
   public currentUserTopic: Observable<User>;
 
-  constructor(private localdb: LocalDatabaseService, private http: HttpClient) {
-    let storedUserId = parseInt(localStorage.getItem('currentUserId') || '-1');
-    let storedUser = this.localdb.findUser(storedUserId);
-    if (storedUser) {
-      this.currentUserSubject = new BehaviorSubject<User>(storedUser);
-    } else {
-      this.currentUserSubject = new BehaviorSubject<User>(new User());
-    }
+  constructor(private cache: LocalCacheService, private http: HttpClient) {
+    this.currentUserSubject = new BehaviorSubject<User>(new User());
     this.currentUserTopic = this.currentUserSubject.asObservable();
   }
 
@@ -30,9 +24,12 @@ export class AuthenticationService {
     return this.currentUserSubject.value && this.currentUserSubject.value.username != "";
   }
 
-  login(username: string, password: string): User | Error {
-    const user = this.localdb.findUserByUsername(username);
-    if (!user || user.password !== password) return Error('Username or password is incorrect.');
+  async login(username: string, password: string): Promise<User | Error> {
+    const user = await firstValueFrom(this.cache.findUserByUsername(username));
+    console.log(typeof user, user);
+    if (!user) return Error('Username or password is incorrect.');
+    else if (user.password !== password) return Error('Username or password is incorrect.');
+
     localStorage.setItem('currentUserId', JSON.stringify(user.id));
     this.currentUserSubject.next(user);
     return user;

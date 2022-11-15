@@ -22,12 +22,12 @@ import { RegisterComponent } from '@app/components/register/register.component';
 import { SidebarComponent } from '@app/components/sidebar/sidebar.component';
 import { TasksComponent } from '@app/components/tasks/tasks.component';
 import { TransferComponent } from '@app/components/transfer/transfer.component';
-import { fakeBackendProvider } from '@app/helpers/fake-backend';
 import { AccountsPage } from '@app/pages/accounts/accounts.page';
 import { HomePage } from '@app/pages/home/home.page';
 import { PaymentsPage } from '@app/pages/payments/payments.page';
 import { ServicesPage } from '@app/pages/services/services.page';
 import { TransferPage } from '@app/pages/transfer/transfer.page';
+import { staticBackendProvider } from './helpers/static-backend';
 import { SplashPage } from './pages/splash/splash.page';
 
 @NgModule({
@@ -68,8 +68,8 @@ import { SplashPage } from './pages/splash/splash.page';
     NotificationDialogComponent,
   ],
   providers: [
-    // provider used to create fake backend
-    fakeBackendProvider
+    // provider used to create static backend when in static mode
+    staticBackendProvider
   ],
   bootstrap: [AppComponent]
 })

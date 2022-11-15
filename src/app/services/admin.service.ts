@@ -33,7 +33,7 @@ export class AdminService {
         user.payees = TEST_PAYEES;
         user.payments = TEST_PAYMENTS;
         user.personalization = TEST_PERSONALIZATION;
-        this.users.updateUser(user);
+        this.users.updateUser(user).subscribe();
       }
     }
   }
@@ -44,7 +44,7 @@ export class AdminService {
       if (user) {
         user.accounts = TEST_ACCOUNTS;
         user.cards = TEST_CARDS;
-        this.users.updateUser(user);
+        this.users.updateUser(user).subscribe();
       }
     }
   }
@@ -54,7 +54,7 @@ export class AdminService {
       let user = this.auth.currentUser;
       if (user) {
         user.payees = TEST_PAYEES;
-        this.users.updateUser(user);
+        this.users.updateUser(user).subscribe();
       }
     }
   }
@@ -64,7 +64,7 @@ export class AdminService {
       let user = this.auth.currentUser;
       if (user) {
         user.payments = TEST_PAYMENTS;
-        this.users.updateUser(user);
+        this.users.updateUser(user).subscribe();
       }
     }
   }
@@ -74,7 +74,7 @@ export class AdminService {
       let user = this.auth.currentUser;
       if (user) {
         user.personalization = new PersonalizationConfig();
-        this.users.updateUser(user);
+        this.users.updateUser(user).subscribe();
       }
     }
   }
@@ -85,5 +85,12 @@ export class AdminService {
 
   testAlertError() {
     this.alert.error('Error alert.')
+  }
+
+  testLoggingRequest() {
+    // this.logging.info('test').subscribe(
+    //   { complete: console.log, error: console.error }
+    // );
+    this.logging.info('test');
   }
 }

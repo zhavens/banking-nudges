@@ -81,7 +81,7 @@ export class PayeesComponent implements OnInit {
       this.logging.info(`Adding payee: ${JSON.stringify(payee)}`)
 
       this.user.payees.push(payee);
-      this.userService.updateUser(this.user);
+      this.userService.updateUser(this.user).subscribe();
       console.log(this.user);
       this.modalService.dismissAll();
       form.reset();

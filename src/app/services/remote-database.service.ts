@@ -1,33 +1,75 @@
-import { User } from '../../models/user';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { isHttpError } from '@helpers/error_typing';
+import { instanceToPlain, plainToInstance } from 'class-transformer';
+import { map, Observable } from 'rxjs';
+import { User } from '../../models/user';
 import { DatabaseService } from './database.service';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class RemoteDatabaseService implements DatabaseService {
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
-  getNextId(): number {
+  getNextId(): Observable<number> {
+    return this.http.get(`/api/users/nextid`, {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    }).pipe(map((resp) => {
+      console.log(`getNextId response:`, resp);
+      return parseInt(resp.toString());
+    }));
+  }
+
+  getAllUsers(): Observable<User[]> {
+    return this.http.get(`/api/users`, {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    }).pipe(map((resp: any) => {
+      console.log(`getAllUsers response:`, resp);
+      return plainToInstance(User, <any[]>JSON.parse(resp));
+    }));
+  }
+
+  findUser(id: number): Observable<User | undefined> {
+    return this.http.get(`/api/user?id=${id}`, {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    }).pipe(map((resp: any) => {
+      resp = JSON.parse(resp);
+      console.log(`findUser response:`, resp);
+      if (isHttpError(resp)) {
+        return undefined;
+      } else {
+        return plainToInstance(User, resp);
+      };
+    }));
+  }
+
+  findUserByUsername(username: string): Observable<User | undefined> {
+    return this.http.get(`/api/user?name=${username}`, {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    }).pipe(map((resp: any) => {
+      resp = JSON.parse(resp);
+      if (typeof resp === 'object' && isHttpError(resp)) {
+        return undefined;
+      } else {
+        return plainToInstance(User, resp);
+      };
+    }));
+  }
+
+  deleteUser(id: number): Observable<boolean> {
     throw new Error('Method not implemented.');
   }
-  getAllUsers(): User[] {
-    throw new Error('Method not implemented.');
-  }
-  findUser(id: number): User | undefined {
-    throw new Error('Method not implemented.');
-  }
-  findUserByUsername(username: string): User | undefined {
-    throw new Error('Method not implemented.');
-  }
-  insertUser(user: User): User {
-    throw new Error('Method not implemented.');
-  }
-  deleteUser(id: number): boolean {
-    throw new Error('Method not implemented.');
-  }
-  updateUser(user: User): boolean {
-    throw new Error('Method not implemented.');
+
+  updateUser(user: User): Observable<boolean> {
+    return this.http.post(`/api/user?id=${user.id}`, JSON.stringify(instanceToPlain(user)), {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    }).pipe(map((resp: any) => {
+      resp = JSON.parse(resp);
+      console.log(`updateUser response:`, resp);
+      return !isHttpError(resp)
+    }));
   }
 }

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { instanceToPlain, plainToClass } from 'class-transformer';
+import { Observable, of } from 'rxjs';
 import { User } from '../../models/user';
 import { DatabaseService } from './database.service';
 
@@ -13,20 +14,20 @@ let nextId = 1;
 export class LocalDatabaseService implements DatabaseService {
     constructor() { }
 
-    getNextId(): number {
-        return users.reduce((a: User, b: User) => a.id > b.id ? a : b).id + 1;
+    getNextId(): Observable<number> {
+        return of(users.reduce((a: User, b: User) => a.id > b.id ? a : b).id + 1);
     }
 
-    getAllUsers(): User[] {
-        return users;
+    getAllUsers(): Observable<User[]> {
+        return of(users);
     }
 
-    findUser(id: number): User | undefined {
-        return users.find((x: any) => x.id === id);
+    findUser(id: number): Observable<User | undefined> {
+        return of(users.find((x: any) => x.id === id));
     }
 
-    findUserByUsername(username: string): User | undefined {
-        return users.find((x: any) => x.username === username);
+    findUserByUsername(username: string): Observable<User | undefined> {
+        return of(users.find((x: any) => x.username === username));
     }
 
     insertUser(user: User): User {
@@ -36,20 +37,20 @@ export class LocalDatabaseService implements DatabaseService {
         return user;
     }
 
-    deleteUser(id: number): boolean {
+    deleteUser(id: number): Observable<boolean> {
         users = users.filter((x: any) => x.id !== id);
         this.writeUsers();
-        return true;
+        return of(true);
     }
 
-    updateUser(user: User): boolean {
+    updateUser(user: User): Observable<boolean> {
         let idx = users.findIndex((x: User) => x.id == user.id)
         if (idx == -1) {
-            return false;
+            return of(false);
         }
         users[idx] = user;
         this.writeUsers();
-        return true;
+        return of(true);
     }
 
     private writeUsers() {

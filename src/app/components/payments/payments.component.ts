@@ -102,7 +102,7 @@ export class PaymentsComponent implements OnInit {
     }
     this.logging.info(`Added new payment: ${JSON.stringify(payment)}`)
     this.user?.payments.push(payment);
-    this.userService.updateUser(this.user);
+    this.userService.updateUser(this.user).subscribe();
     this.modalService.dismissAll();
     this.paymentForm.reset();
   }
