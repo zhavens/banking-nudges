@@ -6,7 +6,7 @@ import path from "path";
 import prompt_sync from "prompt-sync";
 import { sys } from "typescript";
 
-import { TEST_ACCOUNTS, TEST_CARDS, TEST_PAYEES, TEST_PERSONALIZATION } from "@/helpers/testdata";
+import { TEST_ACCOUNTS, TEST_CARDS, TEST_PAYEES, TEST_PAYMENTS, TEST_PERSONALIZATION } from "@/helpers/testdata";
 import { User } from "@/models/user";
 
 const USER_DIRECTORY = "/var/log/www/banking-nudges/users"
@@ -40,6 +40,7 @@ function getUserFromStdin(): User {
     user.accounts = TEST_ACCOUNTS;
     user.cards = TEST_CARDS;
     user.payees = TEST_PAYEES;
+    user.payments = TEST_PAYMENTS;
     user.personalization = TEST_PERSONALIZATION;
 
     user.username = prompt("Enter username: ");
