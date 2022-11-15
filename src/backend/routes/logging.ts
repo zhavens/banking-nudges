@@ -19,7 +19,7 @@ loggingRoute.get('/logging', (req, res, next) => {
         try {
             res.status(200).json(ndjson.parseToInstance(LogEntry, contents));
         } catch (e) {
-            next(createError(500, `Parsing error: ${e}`))
+            next(createError(500, `Parsing error: ${e}`));
         }
     } else {
         console.log('Log file missing!');
@@ -29,10 +29,11 @@ loggingRoute.get('/logging', (req, res, next) => {
 
 loggingRoute.post('/logging', (req, res, next) => {
     if (typeof req.body == 'object') {
-        dlog(`Log Posted: ${JSON.stringify(req.body)}`)
+        dlog(`Log Posted: ${JSON.stringify(req.body)}`);
         let entry = plainToInstance(LogEntry, req.body);
         fs.appendFileSync(LOG_FILE_PATH, `${JSON.stringify(instanceToPlain(entry))}\n`, 'utf-8');
-        res.status(200);
+        res.status(200).send();
+        dlog(`Set status`);
     } else {
         next(createError(500, `Invalid log type.`));
     }
