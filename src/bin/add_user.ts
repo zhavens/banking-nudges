@@ -6,6 +6,7 @@ import path from "path";
 import prompt_sync from "prompt-sync";
 import { sys } from "typescript";
 
+import { TEST_ACCOUNTS, TEST_CARDS, TEST_PAYEES, TEST_PERSONALIZATION } from "@/helpers/testdata";
 import { User } from "@/models/user";
 
 const USER_DIRECTORY = "/var/log/www/banking-nudges/users"
@@ -36,6 +37,11 @@ function getUserFromStdin(): User {
     var prompt = prompt_sync({})
     let user = new User();
 
+    user.accounts = TEST_ACCOUNTS;
+    user.cards = TEST_CARDS;
+    user.payees = TEST_PAYEES;
+    user.personalization = TEST_PERSONALIZATION;
+
     user.username = prompt("Enter username: ");
     console.log("Enter pasword: ");
     user.password = prompt({ echo: "*" });
@@ -46,6 +52,8 @@ function getUserFromStdin(): User {
     user.personalization.oaRelation = prompt("Enter OA's relation: ");
     user.personalization.level = parseInt(prompt("Enter personalization level (0-2): "));
     user.admin = prompt("Is the user an admin? (y/n): ").toLowerCase().startsWith("y");
+
+    user.payees[1].nickname = `${user.firstName}'s Account`
 
     return user;
 }
