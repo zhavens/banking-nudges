@@ -42,7 +42,7 @@ export class AccountsComponent implements OnInit {
   }
 
   selectAccount(account: Account, modalContent: any) {
-    this.logging.info(`Showing account modal for ${JSON.stringify(account.id)}`);
+    this.logging.info(`Showing account modal for ${account.name}`);
     this.txFilter.setValue('');
     this.currentAccount = account;
     this.filteredTransactions = this.currentAccount.transactions || []
@@ -50,7 +50,7 @@ export class AccountsComponent implements OnInit {
       size: 'lg',
       fullscreen: 'md'
     }).result.finally(() => {
-      this.logging.info(`Closed account modal.`);
+      this.logging.info(`Closed account modal for ${account.name}.`);
       this.currentAccount = null;
       this.filteredTransactions = [];
     });
@@ -72,7 +72,12 @@ export class AccountsComponent implements OnInit {
       `Are you sure you want to look at the details of ${this.personalization.oaString()}'s accounts? They will get a notifcation that you've elected to do so.`,
       'Show Transactions', 'Cancel').
       then(
-        () => { if (this.currentAccount) { this.currentAccount.showTransactions = true; } }
+        () => {
+          if (this.currentAccount) {
+            this.logging.info(`Showing transactions for account ${this.currentAccount.name}`)
+            this.currentAccount.showTransactions = true;
+          }
+        }
       );
   }
 

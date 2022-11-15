@@ -1,24 +1,34 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import Cookies from 'js-cookie';
+import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 
 import { User } from '../../models/user';
-import { LocalDatabaseService } from './local_database.service';
+import { LocalCacheService } from './local_cache.service';
+import { LoggingService } from './logging.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
   private currentUserSubject: BehaviorSubject<User>;
   public currentUserTopic: Observable<User>;
 
-  constructor(private localdb: LocalDatabaseService, private http: HttpClient) {
-    let storedUserId = parseInt(localStorage.getItem('currentUserId') || '-1');
-    let storedUser = this.localdb.findUser(storedUserId);
-    if (storedUser) {
-      this.currentUserSubject = new BehaviorSubject<User>(storedUser);
-    } else {
-      this.currentUserSubject = new BehaviorSubject<User>(new User());
-    }
+  constructor(
+    private http: HttpClient,
+    private cache: LocalCacheService,
+    private logging: LoggingService) {
+    this.currentUserSubject = new BehaviorSubject<User>(new User());
     this.currentUserTopic = this.currentUserSubject.asObservable();
+
+    var loggedId = Cookies.get('currentUserId');
+    if (loggedId) {
+      cache.findUser(parseInt(loggedId))?.subscribe(
+        (value) => {
+          if (value) {
+            this.currentUserSubject.next(value);
+          }
+        }
+      );
+    }
   }
 
   public get currentUser(): User | undefined {
@@ -30,17 +40,21 @@ export class AuthenticationService {
     return this.currentUserSubject.value && this.currentUserSubject.value.username != "";
   }
 
-  login(username: string, password: string): User | Error {
-    const user = this.localdb.findUserByUsername(username);
-    if (!user || user.password !== password) return Error('Username or password is incorrect.');
-    localStorage.setItem('currentUserId', JSON.stringify(user.id));
+  async login(username: string, password: string): Promise<User | Error> {
+    const user = await firstValueFrom(this.cache.findUserByUsername(username));
+    console.log(typeof user, user);
+    if (!user) return Error('Username or password is incorrect.');
+    else if (user.password !== password) return Error('Username or password is incorrect.');
+
+    this.logging.info(`Logging in user ${user.username}.`)
+    Cookies.set('currentUserId', JSON.stringify(user.id));
     this.currentUserSubject.next(user);
     return user;
   }
 
   logout() {
-    // remove user from local storage and set current user to null
-    localStorage.removeItem('currentUserId');
+    this.logging.info(`Logging out user ${this.currentUserSubject.value.username}.`);
+    Cookies.remove('currentUserId');
     this.currentUserSubject.next(new User());
   }
 

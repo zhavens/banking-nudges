@@ -29,7 +29,7 @@ export class AlertService {
   }
 
   success(message: string, keepAfterRouteChange = false) {
-    this.logging.info(`Alert: ${message}`);
+    this.logging.info(`Alert: (success) ${message}`);
     this.keepAfterRouteChange = keepAfterRouteChange;
     this.subject.next({ type: 'success', text: message });
   }
@@ -37,12 +37,12 @@ export class AlertService {
   error(error: Error | string, keepAfterRouteChange = false) {
     this.keepAfterRouteChange = keepAfterRouteChange;
     let message = error instanceof Error ? error.message : error;
-    this.logging.error(`Alert: ${message}`);
+    this.logging.error(`Alert: (error) ${message}`);
     this.subject.next({ type: 'error', text: message });
   }
 
   clear() {
-    // this.logging.info(`Clearing alert.`);
+    this.logging.info(`Alert: (clearing)`);
     this.subject.next("");
   }
 }

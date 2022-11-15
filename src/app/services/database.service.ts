@@ -1,17 +1,16 @@
+import { Observable } from "rxjs";
 import { User } from "../../models/user";
 
 export interface DatabaseService {
-    getNextId(): number;
+    getNextId(): Observable<number>;
 
-    getAllUsers(): User[];
+    getAllUsers(): Observable<User[]>;
 
-    findUser(id: number): User | undefined;
+    findUser(id: number): Observable<User | undefined>;
 
-    findUserByUsername(username: string): User | undefined;
+    findUserByUsername(username: string): Observable<User | undefined>;
 
-    insertUser(user: User): User;
+    deleteUser(id: number): Observable<boolean>;
 
-    deleteUser(id: number): boolean;
-
-    updateUser(user: User): boolean;
+    updateUser(user: User): Observable<boolean>;
 }

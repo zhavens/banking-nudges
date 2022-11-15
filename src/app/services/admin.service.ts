@@ -28,12 +28,13 @@ export class AdminService {
     if (confirm("Are you sure you want to reset the user?")) {
       let user = this.auth.currentUser;
       if (user) {
+        this.logging.warning("Resetting user via admin service.");
         user.accounts = TEST_ACCOUNTS;
         user.cards = TEST_CARDS;
         user.payees = TEST_PAYEES;
         user.payments = TEST_PAYMENTS;
         user.personalization = TEST_PERSONALIZATION;
-        this.users.updateUser(user);
+        this.users.updateUser(user).subscribe();
       }
     }
   }
@@ -42,9 +43,10 @@ export class AdminService {
     if (confirm("Are you sure you want to reset the user's accounts?")) {
       let user = this.auth.currentUser;
       if (user) {
+        this.logging.warning("Resetting accounts via admin service.");
         user.accounts = TEST_ACCOUNTS;
         user.cards = TEST_CARDS;
-        this.users.updateUser(user);
+        this.users.updateUser(user).subscribe();
       }
     }
   }
@@ -53,8 +55,9 @@ export class AdminService {
     if (confirm("Are you sure you want to reset the user's payees?")) {
       let user = this.auth.currentUser;
       if (user) {
+        this.logging.warning("Resetting payees via admin service.");
         user.payees = TEST_PAYEES;
-        this.users.updateUser(user);
+        this.users.updateUser(user).subscribe();
       }
     }
   }
@@ -63,8 +66,9 @@ export class AdminService {
     if (confirm("Are you sure you want to reset the user's payments?")) {
       let user = this.auth.currentUser;
       if (user) {
+        this.logging.warning("Resetting payments via admin service.");
         user.payments = TEST_PAYMENTS;
-        this.users.updateUser(user);
+        this.users.updateUser(user).subscribe();
       }
     }
   }
@@ -73,8 +77,9 @@ export class AdminService {
     if (confirm("Are you sure you want to reset the user's personalization?")) {
       let user = this.auth.currentUser;
       if (user) {
+        this.logging.warning("Resetting personalization via admin service.");
         user.personalization = new PersonalizationConfig();
-        this.users.updateUser(user);
+        this.users.updateUser(user).subscribe();
       }
     }
   }
@@ -85,5 +90,9 @@ export class AdminService {
 
   testAlertError() {
     this.alert.error('Error alert.')
+  }
+
+  testLoggingRequest() {
+    this.logging.info('test');
   }
 }

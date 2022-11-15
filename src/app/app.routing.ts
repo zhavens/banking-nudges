@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminComponent } from '@app/components/admin/admin.component';
 import { LoginComponent } from '@app/components/login/login.component';
 import { PageNotFoundComponent } from '@app/components/page-not-found/page-not-found.component';
-import { ProfileComponent } from '@app/components/profile/profile.component';
 import { RegisterComponent } from '@app/components/register/register.component';
 import { AdminGuard } from './guard/admin.guard';
 import { LoggedInGuard } from './guard/logged-in.guard';
@@ -20,7 +19,6 @@ const routes: Routes = [
     { path: 'login', component: LoginComponent, title: "Login - Bank of Bank" },
 
     { path: 'home', component: HomePage, title: "Home - Bank of Bank", canActivate: [LoggedInGuard] },
-    { path: 'profile', component: ProfileComponent, title: "Edit Profile - Bank of Bank", canActivate: [LoggedInGuard] },
     { path: 'accounts', component: AccountsPage, title: "Accounts - Bank of Bank", canActivate: [LoggedInGuard] },
     { path: 'transfer', component: TransferPage, title: "Transfer - Bank of Bank", canActivate: [LoggedInGuard] },
     { path: 'payments', component: PaymentsPage, title: "Payments - Bank of Bank", canActivate: [LoggedInGuard] },

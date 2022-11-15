@@ -1,9 +1,9 @@
 import { AuthenticationService } from '@/app/services';
+import { LoggingService } from '@/app/services/logging.service';
 import { ModalService } from '@/app/services/modal.service';
 import { SidebarType } from '@/models/sidebar';
 import { User } from '@/models/user';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 
 @Component({
   templateUrl: './services.page.html',
@@ -19,8 +19,8 @@ export class ServicesPage implements OnInit {
 
   constructor(
     private auth: AuthenticationService,
-    private router: Router,
     private modalService: ModalService,
+    private logging: LoggingService,
   ) {
     this.auth.currentUserTopic.subscribe((user: User) => {
       this.user = user;
@@ -36,9 +36,13 @@ export class ServicesPage implements OnInit {
         'When you selected the tasks you were going to perform today, you did not select service management. Would you like to continue, or turn back?',
         'Continue',
         'Go Back')
-        .catch(() => { history.back() })
-        .finally(() => {
+        .then(() => {
+          this.logging.info(`Page confirmed.`);
           this.pageConfirmed = true;
+        })
+        .catch(() => {
+          this.logging.info(`Page declined.`);
+          history.back();
         })
     } else {
       this.pageConfirmed = true;

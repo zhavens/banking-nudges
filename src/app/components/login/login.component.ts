@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
   // convenience getter for easy access to form fields
   get f() { return this.loginForm.controls; }
 
-  onSubmit() {
+  async onSubmit() {
     this.submitted = true;
 
     // reset alerts on submit
@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit {
     }
 
     this.loading = true;
-    var resp = this.authenticationService.login(this.f['username'].value, this.f['password'].value)
+    var resp = await this.authenticationService.login(this.f['username'].value, this.f['password'].value)
     if (resp instanceof User) {
       resp.personalization.loginCount += 1;
       this.userService.updateUser(resp);

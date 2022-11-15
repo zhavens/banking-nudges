@@ -36,7 +36,7 @@ export const TEST_ACCOUNTS: Account[] = [
         id: plainToClass(AccountId, { accountNum: 22387 }),
         type: AccountType.CHEQUING,
         name: "Account B",
-        balance: new Decimal(267.89),
+        balance: new Decimal(13267.89),
         showTransactions: false,
         transactions: [
             {

@@ -42,7 +42,7 @@ export class CcComponent implements OnInit {
   }
 
   selectCard(card: CreditCard, modalContent: any) {
-    this.logging.info(`Showing card modal for ${JSON.stringify(card.id)}`);
+    this.logging.info(`Showing card modal for ${card.name}`);
     this.txFilter.setValue('');
     this.currentCard = card;
     this.filteredTransactions = this.currentCard.transactions || []
@@ -50,7 +50,7 @@ export class CcComponent implements OnInit {
       size: 'lg',
       fullscreen: 'md'
     }).result.finally(() => {
-      this.logging.info(`Closed card modal.`);
+      this.logging.info(`Closed card modal for ${card.name}.`);
       this.currentCard = null;
       this.filteredTransactions = [];
     });
@@ -72,7 +72,12 @@ export class CcComponent implements OnInit {
       `Are you sure you want to look at the details of ${this.personalization.oaString()}'s accounts? They will get a notifcation that you've elected to do so.`,
       'Show Transactions', 'Cancel').
       then(
-        () => { if (this.currentCard) { this.currentCard.showTransactions = true; } }
+        () => {
+          if (this.currentCard) {
+            this.logging.info(`Showing transactions for card ${this.currentCard.name}`)
+            this.currentCard.showTransactions = true;
+          }
+        }
       );
   }
 
