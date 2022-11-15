@@ -37,16 +37,23 @@ export class LocalCacheService implements DatabaseService {
 
         this.initalizing = true;
 
-        let remoteUsers = await firstValueFrom(this.remoteDb.getAllUsers())
-        for (let rUser of remoteUsers) {
-            if (this.users.findIndex((value) => { return value.id === rUser.id }) == -1) {
-                this.users.push(rUser);
+        try {
+            let remoteUsers = await firstValueFrom(this.remoteDb.getAllUsers())
+            for (let rUser of remoteUsers) {
+                if (this.users.findIndex((value) => { return value.id === rUser.id }) == -1) {
+                    this.users.push(rUser);
+                }
             }
-        }
-        this.updateLocal();
+            this.updateLocal();
 
-        this.initialized = true;
-        this.initalizing = false;
+            this.initialized = true;
+            this.initalizing = false;
+        } catch {
+            // May run into issues with service lifetime? Should be a singleton,
+            // but I'm not gonna try to debug this too closely right now.
+            this.initialized = false;
+            this.initalizing = false;
+        }
     }
 
     async reset() {

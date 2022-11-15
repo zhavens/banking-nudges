@@ -82,7 +82,6 @@ export class PayeesComponent implements OnInit {
 
       this.user.payees.push(payee);
       this.userService.updateUser(this.user).subscribe();
-      console.log(this.user);
       this.modalService.dismissAll();
       form.reset();
       this.nickname = '';
@@ -97,14 +96,18 @@ export class PayeesComponent implements OnInit {
   }
 
   removePayee(payee: Payee) {
+    this.logging.info(`Showing delete confirmation for payee`, [payee.id])
     this.modalService.openConfirmation('Delete Payee', 'Are you sure you want to delete this payee?').then(() => {
       if (this.user) {
         let idx = this.user.payees.findIndex((p: Payee) => p == payee);
-        if (idx > -1) {
-          this.user.payees?.splice(idx, 1);
-          this.userService.updateUser(this.user);
+        if (idx == -1) {
+          this.logging.error(`Error finding payee`, [payee.id]);
+          return;
         }
+        this.logging.error(`Removing payee`, [payee.id]);
+        this.user.payees?.splice(idx, 1);
+        this.userService.updateUser(this.user);
       }
-    });
+    }).finally(() => { this.logging.info(`Delete confirmation for payee closed`, [payee.id]) });
   }
 }

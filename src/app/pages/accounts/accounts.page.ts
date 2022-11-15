@@ -1,9 +1,9 @@
 import { AuthenticationService } from '@/app/services';
+import { LoggingService } from '@/app/services/logging.service';
 import { ModalService } from '@/app/services/modal.service';
 import { SidebarType } from '@/models/sidebar';
 import { User } from '@/models/user';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 
 @Component({
   templateUrl: './accounts.page.html',
@@ -18,7 +18,7 @@ export class AccountsPage implements OnInit {
   constructor(
     private auth: AuthenticationService,
     private modalService: ModalService,
-    private router: Router,
+    private logging: LoggingService,
   ) {
     this.auth.currentUserTopic.subscribe((user: User) => {
       this.user = user;
@@ -35,9 +35,13 @@ export class AccountsPage implements OnInit {
         'When you selected the tasks you were going to perform today, you did not select balance checking. Would you like to continue, or turn back?',
         'Continue',
         'Go Back')
-        .catch(() => { history.back() })
-        .finally(() => {
+        .then(() => {
+          this.logging.info(`Page confirmed.`);
           this.pageConfirmed = true;
+        })
+        .catch(() => {
+          this.logging.info(`Page declined.`);
+          history.back()
         })
     } else {
       this.pageConfirmed = true;

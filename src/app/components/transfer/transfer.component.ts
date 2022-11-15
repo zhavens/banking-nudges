@@ -93,10 +93,17 @@ export class TransferComponent implements OnInit {
     let recipient = control.get('recipient');
     let amount = control.get('amount');
 
-    this.unusualPayment = recipient && amount
+    let unusualPayment = recipient && amount
       && recipient.touched && recipient.value && isEntity(recipient.value)
       && recipient.value.equals(TEST_PAYEES[0].id)
       && amount.value > 0.0 && amount.value != 46.45;
+
+    if (unusualPayment && !this.unusualPayment) {
+      this.logging.info(`Showing unusual payment value nudge.`);
+    } else if (this.unusualPayment && !unusualPayment) {
+      this.logging.info(`Hiding unusual payment value nudge.`);
+    }
+    this.unusualPayment = unusualPayment;
 
     return null;
   };
@@ -104,8 +111,15 @@ export class TransferComponent implements OnInit {
   largePaymentValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
     let amount = control.get('amount');
 
-    this.largePayment = amount && amount.value && amount.value > 200.0;
     this.amountInputColor = this.personalization.getGradientColor(amount?.value / 200.0)
+
+    let largePayment = amount && amount.value && amount.value > 200.0;
+    if (largePayment && !this.largePayment) {
+      this.logging.info(`Showing large payment value nudge.`);
+    } else if (this.largePayment && !largePayment) {
+      this.logging.info(`Hiding large payment value nudge.`);
+    }
+    this.largePayment = largePayment;
 
     return null;
   };
@@ -113,7 +127,13 @@ export class TransferComponent implements OnInit {
   missingReceiptValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
     let recipient = control.get('recipient');
 
-    this.missingReceipt = recipient && recipient.value && isEntity(recipient.value) && recipient.value.equals(TEST_PAYEES[1].id);
+    const missingReceipt = recipient && recipient.value && isEntity(recipient.value) && recipient.value.equals(TEST_PAYEES[1].id);
+    if (missingReceipt && !this.missingReceipt) {
+      this.logging.info(`Showing missing receipt nudge.`);
+    } else if (this.missingReceipt && !missingReceipt) {
+      this.logging.info(`Hiding missing receipt nudge.`);
+    }
+    this.missingReceipt = missingReceipt;
 
     return null;
   }
@@ -139,8 +159,6 @@ export class TransferComponent implements OnInit {
           this.submitTransfer();
           this.transferForm.reset();
           this.etransferForm.reset();
-        }).finally(() => {
-          this.modalService.dismissAll();
         });
       }
     }

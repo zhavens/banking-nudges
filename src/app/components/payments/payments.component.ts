@@ -60,16 +60,19 @@ export class PaymentsComponent implements OnInit {
   }
 
   removePayment(payment: Payment) {
-    this.modalService.openConfirmation('Remove Payment', 'Are you sure you want to delete this payment?').then(() => {
+    const payment_string = payment.description || payment.id
+    this.logging.info(`Showing delete confirmation for payment`, [payment_string])
+    this.modalService.openConfirmation('Remove Payment', 'Are you sure you want to delete this payment?').then((value) => {
+      console.log(value);
       let idx = this.user.payments.findIndex((p: Payment) => { return p.id == payment.id });
       if (idx == -1) {
-        this.logging.error(`Error removing payment with ID: ${payment.id}`);
+        this.logging.error(`Error finding payment`, [payment.id]);
         return;
       }
-      this.logging.info(`Removing payment:`, [payment]);
+      this.logging.info(`Removing payment:`, [payment_string]);
       this.user.payments.splice(idx, 1);
       this.userService.updateUser(this.user);
-    });
+    }).finally(() => { this.logging.info(`Delete confirmation for payment closed`, [payment_string]) });
   }
 
   showPaymentModal() {

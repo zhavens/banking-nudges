@@ -18,7 +18,6 @@ export class RemoteDatabaseService implements DatabaseService {
     return this.http.get(`/api/users/nextid`, {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' })
     }).pipe(map((resp) => {
-      console.log(`getNextId response:`, resp);
       return parseInt(resp.toString());
     }));
   }
@@ -27,7 +26,6 @@ export class RemoteDatabaseService implements DatabaseService {
     return this.http.get(`/api/users`, {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' })
     }).pipe(map((resp: any) => {
-      console.log(`getAllUsers response:`, resp);
       return plainToInstance(User, <any[]>JSON.parse(resp));
     }));
   }
@@ -37,7 +35,6 @@ export class RemoteDatabaseService implements DatabaseService {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' })
     }).pipe(map((resp: any) => {
       resp = JSON.parse(resp);
-      console.log(`findUser response:`, resp);
       if (isHttpError(resp)) {
         return undefined;
       } else {
@@ -68,7 +65,6 @@ export class RemoteDatabaseService implements DatabaseService {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' })
     }).pipe(map((resp: any) => {
       resp = JSON.parse(resp);
-      console.log(`updateUser response:`, resp);
       return !isHttpError(resp)
     }));
   }

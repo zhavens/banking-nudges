@@ -17,7 +17,6 @@ import { NavbarComponent } from '@app/components/navbar/navbar.component';
 import { PageNotFoundComponent } from '@app/components/page-not-found/page-not-found.component';
 import { PayeesComponent } from '@app/components/payees/payees.component';
 import { PaymentsComponent } from '@app/components/payments/payments.component';
-import { ProfileComponent } from '@app/components/profile/profile.component';
 import { RegisterComponent } from '@app/components/register/register.component';
 import { SidebarComponent } from '@app/components/sidebar/sidebar.component';
 import { TasksComponent } from '@app/components/tasks/tasks.component';
@@ -58,7 +57,6 @@ import { SplashPage } from './pages/splash/splash.page';
     NavbarComponent,
     AccountsComponent,
     PageNotFoundComponent,
-    ProfileComponent,
     TransferComponent,
     PayeesComponent,
     CcComponent,
