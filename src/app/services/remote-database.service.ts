@@ -6,13 +6,14 @@ import { map, Observable } from 'rxjs';
 import { User } from '../../models/user';
 import { DatabaseService } from './database.service';
 
-
 @Injectable({
   providedIn: 'root'
 })
 export class RemoteDatabaseService implements DatabaseService {
-
   constructor(private http: HttpClient) { }
+
+  initialize(): void { }
+  reset(): void { }
 
   getNextId(): Observable<number> {
     return this.http.get(`/api/users/nextid`, {

@@ -14,8 +14,11 @@ let nextId = 1;
 export class LocalDatabaseService implements DatabaseService {
     constructor() { }
 
+    initialize(): void { }
+    reset(): void { }
+
     getNextId(): Observable<number> {
-        return of(users.reduce((a: User, b: User) => a.id > b.id ? a : b).id + 1);
+        return of(users.length > 0 ? users.reduce((a: User, b: User) => a.id > b.id ? a : b).id + 1 : 0);
     }
 
     getAllUsers(): Observable<User[]> {
@@ -46,9 +49,10 @@ export class LocalDatabaseService implements DatabaseService {
     updateUser(user: User): Observable<boolean> {
         let idx = users.findIndex((x: User) => x.id == user.id)
         if (idx == -1) {
-            return of(false);
+            users.push(user);
+        } else {
+            users[idx] = user;
         }
-        users[idx] = user;
         this.writeUsers();
         return of(true);
     }

@@ -42,7 +42,6 @@ export class AlertService {
   }
 
   clear() {
-    this.logging.info(`Alert: (clearing)`);
     this.subject.next("");
   }
 }

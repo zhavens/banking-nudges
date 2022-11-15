@@ -4,7 +4,7 @@ import { AuthenticationService } from '@app/services';
 
 import { filter } from 'rxjs';
 import { User } from '../models/user';
-import { LocalCacheService } from './services/local_cache.service';
+import { DatabaseService } from './services/database.service';
 import { LoggingService } from './services/logging.service';
 import { PersonalizationService } from './services/personalization.service';
 
@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
     private router: Router,
     private logging: LoggingService,
     public auth: AuthenticationService,
-    private cache: LocalCacheService,
+    private db: DatabaseService,
     public personalization: PersonalizationService,
   ) {
     this.auth.currentUserTopic.subscribe(x => this.currentUserTopic = x);
@@ -35,7 +35,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.cache.initialize();
+    this.db.initialize();
   }
 
   logout() {
@@ -45,8 +45,9 @@ export class AppComponent implements OnInit {
 
   reset() {
     if (confirm('Are you sure you want to reset the app?')) {
+      this.auth.logout();
+      this.db.reset();
       localStorage.clear();
-      this.cache.reset();
       this.router.navigate(['/login']);
     }
   }

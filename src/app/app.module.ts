@@ -1,3 +1,5 @@
+import { environment } from '@/environments/environment';
+
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -26,8 +28,11 @@ import { HomePage } from '@app/pages/home/home.page';
 import { PaymentsPage } from '@app/pages/payments/payments.page';
 import { ServicesPage } from '@app/pages/services/services.page';
 import { TransferPage } from '@app/pages/transfer/transfer.page';
-import { staticBackendProvider } from './helpers/static-backend';
 import { SplashPage } from './pages/splash/splash.page';
+
+import { DatabaseService } from './services/database.service';
+import { LocalCacheService } from './services/local_cache.service';
+import { LocalDatabaseService } from './services/local_database.service';
 
 @NgModule({
   imports: [
@@ -67,7 +72,10 @@ import { SplashPage } from './pages/splash/splash.page';
   ],
   providers: [
     // provider used to create static backend when in static mode
-    staticBackendProvider
+    // staticBackendProvider,
+    {
+      provide: DatabaseService, useExisting: environment.static ? LocalDatabaseService : LocalCacheService
+    }
   ],
   bootstrap: [AppComponent]
 })

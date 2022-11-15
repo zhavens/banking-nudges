@@ -4,8 +4,9 @@
   "scripts": {
     "ng": "ng",
     "build-app": "ng build",
-    "deploy-app": "ng build && cp -R ./dist/banking-nudges/* /var/www/html/",
+    "build-app-static": "ng build -c static",
     "lint": "./node_modules/.bin/eslint -c .eslintrc.json 'src/**/**.ts'",
+    "deploy-app": "cp -R ./dist/banking-nudges/* /var/www/html/",
     "watch": "ng build --watch --configuration development",
     "dev-app": "ng serve --proxy-config proxy.config.json --host $HOST --disable-host-check",
     "dev-app-static": "ng serve --proxy-config proxy.config.json --host $HOST --disable-host-check -c static",

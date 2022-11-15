@@ -1,20 +1,13 @@
+
 import { Injectable } from '@angular/core';
 import { instanceToPlain, plainToClass } from 'class-transformer';
-import { firstValueFrom, from, Observable } from 'rxjs';
+import { firstValueFrom, from, Observable, of } from 'rxjs';
 import { User } from '../../models/user';
 import { DatabaseService } from './database.service';
 import { RemoteDatabaseService } from './remote-database.service';
 
 // let lastFetch: Date = new Date(localStorage.getItem('lastFetch') || 0)
 // let nextId = 1;
-
-
-function localObservable<T>(val: T): Observable<T> {
-    return new Observable((subscriber) => {
-        subscriber.next(val);
-        subscriber.complete();
-    });
-}
 
 @Injectable({
     providedIn: 'root'
@@ -25,7 +18,7 @@ export class LocalCacheService implements DatabaseService {
 
     private users: User[];
 
-    constructor(private remoteDb: RemoteDatabaseService) {
+    constructor(private db: RemoteDatabaseService) {
         this.users = JSON.parse(localStorage.getItem('users') || "[]").map((x: any) => plainToClass(User, x)) || [];
     }
 
@@ -38,7 +31,7 @@ export class LocalCacheService implements DatabaseService {
         this.initalizing = true;
 
         try {
-            let remoteUsers = await firstValueFrom(this.remoteDb.getAllUsers())
+            let remoteUsers = await firstValueFrom(this.db.getAllUsers())
             for (let rUser of remoteUsers) {
                 if (this.users.findIndex((value) => { return value.id === rUser.id }) == -1) {
                     this.users.push(rUser);
@@ -65,7 +58,11 @@ export class LocalCacheService implements DatabaseService {
 
     getNextId(): Observable<number> {
         if (!this.initialized) this.initialize();
-        return from([this.users.reduce((a: User, b: User) => a.id > b.id ? a : b).id + 1]);
+        let next_id = 0;
+        if (this.users.length > 0) {
+            next_id = this.users.reduce((a: User, b: User) => a.id > b.id ? a : b).id + 1;
+        }
+        return of(next_id);
     }
 
     getAllUsers(): Observable<User[]> {

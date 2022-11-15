@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 
 import { User } from '../../models/user';
-import { LocalCacheService } from './local_cache.service';
+import { DatabaseService } from './database.service';
 import { LoggingService } from './logging.service';
 
 @Injectable({ providedIn: 'root' })
@@ -14,14 +14,14 @@ export class AuthenticationService {
 
   constructor(
     private http: HttpClient,
-    private cache: LocalCacheService,
+    private db: DatabaseService,
     private logging: LoggingService) {
     this.currentUserSubject = new BehaviorSubject<User>(new User());
     this.currentUserTopic = this.currentUserSubject.asObservable();
 
     var loggedId = Cookies.get('currentUserId');
     if (loggedId) {
-      cache.findUser(parseInt(loggedId))?.subscribe(
+      db.findUser(parseInt(loggedId))?.subscribe(
         (value) => {
           if (value) {
             this.currentUserSubject.next(value);
@@ -41,7 +41,7 @@ export class AuthenticationService {
   }
 
   async login(username: string, password: string): Promise<User | Error> {
-    const user = await firstValueFrom(this.cache.findUserByUsername(username));
+    const user = await firstValueFrom(this.db.findUserByUsername(username));
     console.log(typeof user, user);
     if (!user) return Error('Username or password is incorrect.');
     else if (user.password !== password) return Error('Username or password is incorrect.');

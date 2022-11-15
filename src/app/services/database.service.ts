@@ -1,16 +1,20 @@
 import { Observable } from "rxjs";
 import { User } from "../../models/user";
 
-export interface DatabaseService {
-    getNextId(): Observable<number>;
+export abstract class DatabaseService {
+    abstract initialize(): void;
 
-    getAllUsers(): Observable<User[]>;
+    abstract reset(): void;
 
-    findUser(id: number): Observable<User | undefined>;
+    abstract getNextId(): Observable<number>;
 
-    findUserByUsername(username: string): Observable<User | undefined>;
+    abstract getAllUsers(): Observable<User[]>;
 
-    deleteUser(id: number): Observable<boolean>;
+    abstract findUser(id: number): Observable<User | undefined>;
 
-    updateUser(user: User): Observable<boolean>;
+    abstract findUserByUsername(username: string): Observable<User | undefined>;
+
+    abstract deleteUser(id: number): Observable<boolean>;
+
+    abstract updateUser(user: User): Observable<boolean>;
 }
