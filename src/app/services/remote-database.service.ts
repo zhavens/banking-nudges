@@ -5,14 +5,17 @@ import { instanceToPlain, plainToInstance } from 'class-transformer';
 import { map, Observable } from 'rxjs';
 import { User } from '../../models/user';
 import { DatabaseService } from './database.service';
+import { LoggingService } from './logging.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RemoteDatabaseService implements DatabaseService {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private logging: LoggingService) { }
 
-  initialize(): void { }
+  initialize(): void {
+    this.logging.info('Initializing remote database service.');
+  }
   reset(): void { }
 
   getNextId(): Observable<number> {

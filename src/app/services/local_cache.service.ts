@@ -4,6 +4,7 @@ import { instanceToPlain, plainToClass } from 'class-transformer';
 import { firstValueFrom, from, Observable, of } from 'rxjs';
 import { User } from '../../models/user';
 import { DatabaseService } from './database.service';
+import { LoggingService } from './logging.service';
 import { RemoteDatabaseService } from './remote-database.service';
 
 // let lastFetch: Date = new Date(localStorage.getItem('lastFetch') || 0)
@@ -18,7 +19,9 @@ export class LocalCacheService implements DatabaseService {
 
     private users: User[];
 
-    constructor(private db: RemoteDatabaseService) {
+    constructor(
+        private db: RemoteDatabaseService,
+        private logging: LoggingService) {
         this.users = JSON.parse(localStorage.getItem('users') || "[]").map((x: any) => plainToClass(User, x)) || [];
     }
 
@@ -29,6 +32,7 @@ export class LocalCacheService implements DatabaseService {
         if (this.initialized) return;
 
         this.initalizing = true;
+        this.logging.info('Initializing local cache service.');
 
         try {
             let remoteUsers = await firstValueFrom(this.db.getAllUsers())

@@ -3,6 +3,7 @@ import { instanceToPlain, plainToClass } from 'class-transformer';
 import { Observable, of } from 'rxjs';
 import { User } from '../../models/user';
 import { DatabaseService } from './database.service';
+import { LoggingService } from './logging.service';
 
 // array in local storage for registered users
 let users: User[] = JSON.parse(localStorage.getItem('users') || "[]").map((x: any) => plainToClass(User, x)) || [];
@@ -12,9 +13,11 @@ let nextId = 1;
     providedIn: 'root'
 })
 export class LocalDatabaseService implements DatabaseService {
-    constructor() { }
+    constructor(private logging: LoggingService) { }
 
-    initialize(): void { }
+    initialize(): void {
+        this.logging.info('Initializing local database service.');
+    }
     reset(): void { }
 
     getNextId(): Observable<number> {
