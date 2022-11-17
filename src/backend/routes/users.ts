@@ -27,9 +27,20 @@ function usersRoute(): Router {
     }
 
 
-    function getUserById(id: string): User | undefined {
+    function getUserById(id: number): User | undefined {
         dlog(`Loading user ${id}`);
-        const userPath = path.join(USER_DIRECTORY, `${id}.json`);
+        const users = getUsers();
+        for (let user of users) {
+            if (user.id == id) {
+                return user;
+            }
+        }
+        return undefined;
+    }
+
+    function getUserByUsername(username: string): User | undefined {
+        dlog(`Loading user ${username}`);
+        const userPath = path.join(USER_DIRECTORY, `${username}.json`);
         if (fs.existsSync(userPath)) {
             return plainToInstance(User, JSON.parse(fs.readFileSync(userPath, 'utf-8')));
         }
@@ -47,24 +58,19 @@ function usersRoute(): Router {
             return next(createError(400, 'Missing user ID.'));
         }
 
-        if (req.query.id) {
-            const user = getUserById(req.query.id);
-            if (user) {
-                res.status(200).json(JSON.stringify(instanceToPlain(user)));
-                return
-            }
-        } else {
-            const users = getUsers();
-            for (let user of users) {
-                if (user.username == req.query.name) {
-                    res.status(200).json(JSON.stringify(instanceToPlain(user)));
-                    return;
-                }
-            }
+        let user = undefined;
 
+        if (req.query.id) {
+            user = getUserById(parseInt(req.query.id));
+        } else {
+            user = getUserByUsername(req.query.name);
         }
 
-        next(createError(404, 'User not found.'));
+        if (user) {
+            res.status(200).json(JSON.stringify(instanceToPlain(user)));
+        } else {
+            next(createError(404, 'User not found.'));
+        }
     });
 
     router.post('/user', (req, res, next) => {
@@ -79,14 +85,14 @@ function usersRoute(): Router {
             }
 
             dlog(`Updating user ${user.id}`);
-            const userPath = path.join(USER_DIRECTORY, `${user.id}.json`);
+            const userPath = path.join(USER_DIRECTORY, `${user.username}.json`);
             try {
                 fs.writeFileSync(userPath, JSON.stringify(instanceToPlain(user)));
             } catch (e) {
                 dlog(`Error writing user file: ${e}`);
                 return next(createError(500));
             }
-            dlog(`User ${user.id} updated.`)
+            dlog(`User ${user.username} updated.`)
             res.status(200);
         } else {
             return next(createError(400, 'Missing user data.'))

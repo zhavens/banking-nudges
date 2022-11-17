@@ -62,7 +62,7 @@ function getUserFromStdin(): User {
 function writeUser(user: User): void {
     user.id = getNextId();
     console.log(`Updating user ${user.id}`);
-    const userPath = path.join(USER_DIRECTORY, `${user.id}.json`);
+    const userPath = path.join(USER_DIRECTORY, `${user.username}.json`);
     try {
         fs.writeFileSync(userPath, JSON.stringify(instanceToPlain(user)));
     } catch (e) {
