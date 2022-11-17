@@ -15,7 +15,8 @@
                 [title]="LoggingStatus[loggingStatus]"></i>
             <ng-template [ngIf]=" auth.currentUser?.admin">
                 <div class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Admin</a>
+                    <a class="nav-link dropdown-toggle" routerLink="/admin" routerLinkActive="active"
+                        data-bs-toggle="dropdown">Admin</a>
                     <ul class="dropdown-menu">
                         <li>
                             <form [formGroup]="personalizationForm">
@@ -31,11 +32,6 @@
                         </li>
                         <li><a class=" dropdown-item text-danger" (click)="admin.resetUser()">Reset
                                 User</a>
-                        </li>
-                        <li><a class="dropdown-item text-success" (click)="admin.testAlertSuccess()">Success Alert</a>
-                        </li>
-                        <li><a class="dropdown-item text-primary" (click)="admin.testLoggingRequest()">Test
-                                Logging</a>
                         </li>
                     </ul>
                 </div>

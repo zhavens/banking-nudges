@@ -10,7 +10,6 @@ import { NgChartsModule } from 'ng2-charts';
 import { AppComponent } from '@app/app.component';
 import { appRoutingModule } from '@app/app.routing';
 import { AccountsComponent } from '@app/components/accounts/accounts.component';
-import { AdminComponent } from '@app/components/admin/admin.component';
 import { AlertComponent } from '@app/components/alert/alert.component';
 import { CcComponent } from '@app/components/cc/cc.component';
 import { ConfirmDialogComponent, NotificationDialogComponent } from '@app/components/dialog/dialog.component';
@@ -24,6 +23,7 @@ import { SidebarComponent } from '@app/components/sidebar/sidebar.component';
 import { TasksComponent } from '@app/components/tasks/tasks.component';
 import { TransferComponent } from '@app/components/transfer/transfer.component';
 import { AccountsPage } from '@app/pages/accounts/accounts.page';
+import { AdminPage } from '@app/pages/admin/admin.page';
 import { HomePage } from '@app/pages/home/home.page';
 import { PaymentsPage } from '@app/pages/payments/payments.page';
 import { ServicesPage } from '@app/pages/services/services.page';
@@ -48,6 +48,7 @@ import { LocalDatabaseService } from './services/local_database.service';
     // Pages
     HomePage,
     AccountsPage,
+    AdminPage,
     TransferPage,
     PaymentsPage,
     ServicesPage,
@@ -58,7 +59,6 @@ import { LocalDatabaseService } from './services/local_database.service';
     AlertComponent,
     RegisterComponent,
     SidebarComponent,
-    AdminComponent,
     NavbarComponent,
     AccountsComponent,
     PageNotFoundComponent,

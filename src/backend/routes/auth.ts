@@ -24,14 +24,14 @@ function authRoute(): Router {
             dlog(`(${username}: Found`)
             if (user.password == password) {
                 dlog(`(${username}): Password match. Auth successful.`)
-                res.status(200).json(JSON.stringify(instanceToPlain(user)));
+                res.status(200).json(instanceToPlain(user));
             } else {
                 dlog(`(${username}): Password mismatch.`)
-                res.status(401).send();
+                res.status(401).send('Invalid username or password.');
             }
         } else {
             dlog(`(${username}): Not found.`)
-            res.status(401).send();
+            res.status(401).send('Invalid username or password.');
         }
     })
 

@@ -1,6 +1,9 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { plainToInstance } from 'class-transformer';
+import { catchError, map, of, tap } from 'rxjs';
 import { TEST_ACCOUNTS, TEST_CARDS, TEST_PAYEES, TEST_PAYMENTS, TEST_PERSONALIZATION } from '../../helpers/testdata';
-import { PersonalizationConfig } from '../../models/user';
+import { PersonalizationConfig, User } from '../../models/user';
 import { AlertService } from './alert.service';
 import { AuthenticationService } from './auth.service';
 import { LoggingService } from './logging.service';
@@ -15,7 +18,8 @@ export class AdminService {
     private auth: AuthenticationService,
     private alert: AlertService,
     private logging: LoggingService,
-    private users: UserService
+    private users: UserService,
+    private http: HttpClient,
   ) { }
 
   clearLogs() {
@@ -94,5 +98,19 @@ export class AdminService {
 
   testLoggingRequest() {
     this.logging.info('test');
+  }
+
+  testAuthRequest() {
+    this.http.post('/api/auth', { username: 'test', password: 'test' }, { headers: { responseType: 'json' } })
+      .pipe(
+        catchError((err: any) => {
+          console.log(err.error)
+          return of(undefined);
+        }),
+        map((val) => {
+          return plainToInstance(User, val)
+        }),
+        tap(console.log))
+      .subscribe();
   }
 }

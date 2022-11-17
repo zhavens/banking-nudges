@@ -1,0 +1,14 @@
+<div class="vstack gap-2">
+    <div class="btn-group" role="group">
+        <button type="button" class="btn btn-success" (click)="alert.success('Test Success')">Success Alert</button>
+        <button type="button" class="btn btn-danger" (click)="alert.error('Test error')">Error Alert</button>
+    </div>
+    <div>
+        <button type="button" class="btn btn-primary" (click)="admin.testLoggingRequest()">Test
+            Logging</button>
+    </div>
+    <div>
+        <button type="button" class="btn btn-outline-primary" (click)="admin.testAuthRequest()">Test
+            Auth</button>
+    </div>
+</div>
