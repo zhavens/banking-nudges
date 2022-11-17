@@ -113,4 +113,18 @@ export class AdminService {
         tap(console.log))
       .subscribe();
   }
+
+  testLogin() {
+    this.auth.login('zh', 'password')
+      .pipe(
+        catchError((err: any) => {
+          console.log(err.error)
+          return of(undefined);
+        }),
+        map((val) => {
+          return plainToInstance(User, val)
+        }),
+        tap(console.log))
+      .subscribe();
+  }
 }

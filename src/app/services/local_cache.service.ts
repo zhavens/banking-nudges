@@ -1,7 +1,7 @@
 
 import { Injectable } from '@angular/core';
 import { instanceToPlain, plainToClass } from 'class-transformer';
-import { firstValueFrom, from, Observable, of } from 'rxjs';
+import { Observable, of, tap, throwError } from 'rxjs';
 import { User } from '../../models/user';
 import { DatabaseService } from './database.service';
 import { LoggingService } from './logging.service';
@@ -25,33 +25,7 @@ export class LocalCacheService implements DatabaseService {
         this.users = JSON.parse(localStorage.getItem('users') || "[]").map((x: any) => plainToClass(User, x)) || [];
     }
 
-    async initialize() {
-        if (this.initalizing) {
-            setTimeout(this.initialize, 100);
-        }
-        if (this.initialized) return;
-
-        this.initalizing = true;
-        if (this.logging) this.logging.info('Initializing local cache service.');
-
-        try {
-            let remoteUsers = await firstValueFrom(this.db.getAllUsers())
-            for (let rUser of remoteUsers) {
-                if (this.users.findIndex((value) => { return value.id === rUser.id }) == -1) {
-                    this.users.push(rUser);
-                }
-            }
-            this.updateLocal();
-
-            this.initialized = true;
-            this.initalizing = false;
-        } catch {
-            // May run into issues with service lifetime? Should be a singleton,
-            // but I'm not gonna try to debug this too closely right now.
-            this.initialized = false;
-            this.initalizing = false;
-        }
-    }
+    async initialize() { }
 
     async reset() {
         this.users = [];
@@ -60,46 +34,34 @@ export class LocalCacheService implements DatabaseService {
         this.initialize();
     }
 
-    getNextId(): Observable<number> {
-        if (!this.initialized) this.initialize();
-        let next_id = 0;
-        if (this.users.length > 0) {
-            next_id = this.users.reduce((a: User, b: User) => a.id > b.id ? a : b).id + 1;
-        }
-        return of(next_id);
-    }
-
-    getAllUsers(): Observable<User[]> {
-        if (!this.initialized) this.initialize();
-        return from([this.users]);
-    }
-
-    findUser(id: number): Observable<User | undefined> {
-        if (!this.initialized) this.initialize();
-        return from([this.users.find((x: any) => x.id === id)]);
-    }
-
-    findUserByUsername(username: string): Observable<User | undefined> {
-        if (!this.initialized) this.initialize();
-        return from([this.users.find((x: any) => x.username === username)]);
-    }
-
-    deleteUser(id: number): Observable<boolean> {
-        if (!this.initialized) this.initialize();
-        this.users = this.users.filter((x: any) => x.id !== id);
+    private cacheUser(user: User) {
+        console.log(`Caching user ${user.username}`, this);
+        this.users.push(user);
         this.updateLocal();
-        return from([true]);
     }
+
+    authUser(username: string, password: string): Observable<User> {
+        for (let user of this.users) {
+            if (user.username == username && (password.length == 0 || user.password == password)) {
+                return of(user);
+            }
+        }
+        return this.db.authUser(username, password)
+            .pipe(tap(this.cacheUser.bind(this)));
+    }
+
+    registerUser(user: User): Observable<User> {
+        return throwError(() => new Error("Not yet implemented."));
+    };
 
     updateUser(user: User): Observable<boolean> {
-        if (!this.initialized) this.initialize();
-        let idx = this.users.findIndex((x: User) => x.id == user.id)
+        let idx = this.users.findIndex((x: User) => x.username == user.username)
         if (idx == -1) {
-            return from([false]);
+            return of(false);
         }
         this.users[idx] = user;
         this.updateLocal();
-        return from([true]);
+        return of(true);
     }
 
     private updateLocal() {

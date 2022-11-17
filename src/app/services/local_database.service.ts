@@ -1,66 +1,58 @@
 import { Injectable } from '@angular/core';
 import { instanceToPlain, plainToClass } from 'class-transformer';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { User } from '../../models/user';
 import { DatabaseService } from './database.service';
 import { LoggingService } from './logging.service';
 
 // array in local storage for registered users
-let users: User[] = JSON.parse(localStorage.getItem('users') || "[]").map((x: any) => plainToClass(User, x)) || [];
-let nextId = 1;
 
 @Injectable({
     providedIn: 'root'
 })
 export class LocalDatabaseService implements DatabaseService {
-    constructor(private logging: LoggingService) { }
+    private users: User[];
+
+    constructor(private logging: LoggingService) {
+        this.users = JSON.parse(localStorage.getItem('users') || "[]").map((x: any) => plainToClass(User, x)) || []
+    }
 
     initialize(): void {
         this.logging.info('Initializing local database service.');
     }
+
     reset(): void { }
 
-    getNextId(): Observable<number> {
-        return of(users.length > 0 ? users.reduce((a: User, b: User) => a.id > b.id ? a : b).id + 1 : 0);
+    authUser(username: string, password: string): Observable<User> {
+        let idx = this.users.findIndex((x: User) => x.username == username)
+        if (idx > -1 && this.users[idx].password == password) {
+            return of(this.users[idx]);
+        }
+        return throwError(() => new Error('Invalid username or password.'));
     }
 
-    getAllUsers(): Observable<User[]> {
-        return of(users);
-    }
-
-    findUser(id: number): Observable<User | undefined> {
-        return of(users.find((x: any) => x.id === id));
-    }
-
-    findUserByUsername(username: string): Observable<User | undefined> {
-        return of(users.find((x: any) => x.username === username));
-    }
-
-    insertUser(user: User): User {
-        user.id = users.length ? Math.max(...users.map((x: any) => x.id)) + 1 : 1;
-        users.push(user);
+    registerUser(user: User): Observable<User> {
+        let idx = this.users.findIndex((x: User) => x.username == user.username)
+        if (idx > -1) {
+            return throwError(() => new Error("User already registered."));
+        }
+        this.users.push(user);
         this.writeUsers();
-        return user;
-    }
-
-    deleteUser(id: number): Observable<boolean> {
-        users = users.filter((x: any) => x.id !== id);
-        this.writeUsers();
-        return of(true);
-    }
+        return of(user);
+    };
 
     updateUser(user: User): Observable<boolean> {
-        let idx = users.findIndex((x: User) => x.id == user.id)
+        let idx = this.users.findIndex((x: User) => x.username == user.username)
         if (idx == -1) {
-            users.push(user);
+            this.users.push(user);
         } else {
-            users[idx] = user;
+            this.users[idx] = user;
         }
         this.writeUsers();
         return of(true);
     }
 
     private writeUsers() {
-        localStorage.setItem('users', JSON.stringify(instanceToPlain(users)));
+        localStorage.setItem('users', JSON.stringify(instanceToPlain(this.users)));
     }
 }

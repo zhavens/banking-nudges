@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { AlertService, AuthenticationService, UserService } from '@app/services';
 import { User } from '@models/user';
+import { catchError, of } from 'rxjs';
 
 @Component({ templateUrl: 'login.component.html' })
 export class LoginComponent implements OnInit {
@@ -41,7 +42,18 @@ export class LoginComponent implements OnInit {
   // convenience getter for easy access to form fields
   get f() { return this.loginForm.controls; }
 
-  async onSubmit() {
+  private finalizeLogin(user: User | undefined) {
+    if (user) {
+      user.personalization.loginCount += 1;
+      this.userService.updateUser(user);
+      this.router.navigate([this.returnUrl]);
+    } else {
+      // this.loginForm.reset();
+      this.loading = false;
+    }
+  }
+
+  onSubmit() {
     this.submitted = true;
 
     // reset alerts on submit
@@ -53,15 +65,22 @@ export class LoginComponent implements OnInit {
     }
 
     this.loading = true;
-    var resp = await this.authenticationService.login(this.f['username'].value, this.f['password'].value)
-    if (resp instanceof User) {
-      resp.personalization.loginCount += 1;
-      this.userService.updateUser(resp);
-      this.router.navigate([this.returnUrl]);
-    } else {
-      this.alertService.error(resp);
-      this.loading = false;
-    }
-    this.loginForm.reset();
+    this.authenticationService.login(this.f['username'].value, this.f['password'].value)
+      .pipe(catchError((err) => {
+        console.log(err)
+        this.alertService.error(err)
+        return of(undefined)
+      }))
+      .subscribe(this.finalizeLogin.bind(this));
+
+    // if (resp instanceof User) {
+    //   resp.personalization.loginCount += 1;
+    //   this.userService.updateUser(resp);
+    //   this.router.navigate([this.returnUrl]);
+    // } else {
+    //   this.alertService.error(resp);
+    //   this.loading = false;
+    // }
+    // this.loginForm.reset();
   }
 }

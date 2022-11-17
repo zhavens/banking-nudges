@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { plainToInstance } from 'class-transformer';
 import Cookies from 'js-cookie';
-import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
 
 import { User } from '../../models/user';
 import { DatabaseService } from './database.service';
@@ -19,15 +20,10 @@ export class AuthenticationService {
     this.currentUserSubject = new BehaviorSubject<User>(new User());
     this.currentUserTopic = this.currentUserSubject.asObservable();
 
-    var loggedId = Cookies.get('currentUserId');
-    if (loggedId) {
-      db.findUser(parseInt(loggedId))?.subscribe(
-        (value) => {
-          if (value) {
-            this.currentUserSubject.next(value);
-          }
-        }
-      );
+    var loggedUser = Cookies.get('currentUser');
+    if (loggedUser) {
+      this.currentUserSubject.next(plainToInstance(User, JSON.parse(loggedUser)));
+      this.logging.info(`User ${this.currentUser?.username} reauthed`)
     }
   }
 
@@ -40,21 +36,36 @@ export class AuthenticationService {
     return this.currentUserSubject.value && this.currentUserSubject.value.username != "";
   }
 
-  async login(username: string, password: string): Promise<User | Error> {
-    const user = await firstValueFrom(this.db.findUserByUsername(username));
-    console.log(typeof user, user);
-    if (!user) return Error('Username or password is incorrect.');
-    else if (user.password !== password) return Error('Username or password is incorrect.');
-
+  private updateUserLogin(user: User) {
     this.logging.info(`Logging in user ${user.username}.`)
-    Cookies.set('currentUserId', JSON.stringify(user.id));
+    Cookies.set('currentUser', JSON.stringify(user));
     this.currentUserSubject.next(user);
-    return user;
+  }
+
+  login(username: string, password: string): Observable<User> {
+    return this.db.authUser(username, password)
+      .pipe(
+        catchError((err) => {
+          this.logging.warning(`Failed to auth user ${username}: ${err.error}`)
+          return throwError(() => new Error('Username or password is incorrect'))
+        }),
+        tap(this.updateUserLogin.bind(this)));
+
+
+    // const user = await firstValueFrom(this.db.findUserByUsername(username));
+    // console.log(typeof user, user);
+    // if (!user) return Error('Username or password is incorrect.');
+    // else if (user.password !== password) return Error('Username or password is incorrect.');
+
+    // this.logging.info(`Logging in user ${user.username}.`)
+    // Cookies.set('currentUserId', JSON.stringify(user.id));
+    // this.currentUserSubject.next(user);
+    // return user;
   }
 
   logout() {
     this.logging.info(`Logging out user ${this.currentUserSubject.value.username}.`);
-    Cookies.remove('currentUserId');
+    Cookies.remove('currentUser');
     this.currentUserSubject.next(new User());
   }
 

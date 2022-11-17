@@ -6,15 +6,9 @@ export abstract class DatabaseService {
 
     abstract reset(): void;
 
-    abstract getNextId(): Observable<number>;
+    abstract authUser(username: string, password: string): Observable<User>;
 
-    abstract getAllUsers(): Observable<User[]>;
-
-    abstract findUser(id: number): Observable<User | undefined>;
-
-    abstract findUserByUsername(username: string): Observable<User | undefined>;
-
-    abstract deleteUser(id: number): Observable<boolean>;
+    abstract registerUser(user: User): Observable<User>;
 
     abstract updateUser(user: User): Observable<boolean>;
 }

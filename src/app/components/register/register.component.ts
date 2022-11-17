@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AlertService, AuthenticationService, UserService } from '@app/services';
 import { User } from '@models/user';
 import { plainToClass } from 'class-transformer';
+import { catchError, of } from 'rxjs';
 
 @Component({
   templateUrl: 'register.component.html',
@@ -38,6 +39,14 @@ export class RegisterComponent implements OnInit {
   // convenience getter for easy access to form fields
   get f() { return this.registerForm.controls; }
 
+  private finalizeRegistration(user: User | undefined) {
+    if (user) {
+      this.alertService.success('Registration successful', true);
+      this.router.navigate(['/login'])
+    }
+    this.loading = false;
+  }
+
   async onSubmit() {
     this.submitted = true;
 
@@ -51,17 +60,11 @@ export class RegisterComponent implements OnInit {
 
     this.loading = true;
     let user = plainToClass(User, this.registerForm.value);
-    let resp$ = await this.userService.register(user)
-    resp$.subscribe((val) => {
-      if (val instanceof Error) {
-        this.alertService.error(JSON.stringify(val));
-      } else if (!val) {
-        this.alertService.error("Unknown error!");
-      } else {
-        this.alertService.success('Registration successful', true);
-        this.router.navigate(['/login'])
-      }
-      this.loading = false;
-    });
+    this.userService.register(user)
+      .pipe(catchError((err) => {
+        this.alertService.error(err.error);
+        return of(undefined);
+      }))
+      .subscribe(this.finalizeRegistration.bind(this));
   }
 }
