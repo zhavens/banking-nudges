@@ -20,3 +20,8 @@ a {
 .nav-item .dropdown-menu {
     margin-top: 0;
 }
+
+#conn-icon {
+    /* background: var(--e-bg-grey);
+    border-radius: 50%; */
+}

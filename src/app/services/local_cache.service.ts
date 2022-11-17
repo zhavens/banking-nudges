@@ -32,7 +32,7 @@ export class LocalCacheService implements DatabaseService {
         if (this.initialized) return;
 
         this.initalizing = true;
-        this.logging.info('Initializing local cache service.');
+        if (this.logging) this.logging.info('Initializing local cache service.');
 
         try {
             let remoteUsers = await firstValueFrom(this.db.getAllUsers())

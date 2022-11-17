@@ -5,7 +5,8 @@ import expressWs from 'express-ws';
 import http from 'http';
 import createError, { HttpError } from 'http-errors';
 
-import routes from '@backend/routes';
+import getApiRouter from '@backend/routes';
+
 
 export default class BackendApp {
     app: Express;
@@ -64,7 +65,7 @@ export default class BackendApp {
         this.dlog(`Initializing routes.`);
 
         // all app routes defined within
-        this.app.use('/api', routes);
+        this.app.use('/api', getApiRouter());
 
         // expose server running status
         this.app.get('/api/status', function (req: any, res: any) {

@@ -11,7 +11,9 @@
             <a class="nav-item nav-link" routerLink="/services" routerLinkActive="active">Add Services</a>
         </div>
         <div class="navbar-nav navbar-right d-flex ms-auto me-3">
-            <ng-template [ngIf]="auth.currentUser?.admin">
+            <i id="conn-icon" class="nav-item nav-link bi bi-hdd-rack-fill" [ngClass]="loggingStatusClass"
+                [title]="LoggingStatus[loggingStatus]"></i>
+            <ng-template [ngIf]=" auth.currentUser?.admin">
                 <div class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Admin</a>
                     <ul class="dropdown-menu">
@@ -35,8 +37,6 @@
                         <li><a class="dropdown-item text-primary" (click)="admin.testLoggingRequest()">Test
                                 Logging</a>
                         </li>
-                        <!-- <li><a class="dropdown-item text-danger" (click)="admin.clearLogs()">Clear Logs</a>
-                        </li> -->
                     </ul>
                 </div>
             </ng-template>

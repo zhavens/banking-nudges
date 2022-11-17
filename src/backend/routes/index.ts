@@ -1,10 +1,17 @@
 import express from 'express';
+import expressWs from 'express-ws';
 import loggingRoute from './logging';
-import { usersRoute } from './users';
+import usersRoute from './users';
 
-const routes = express.Router();
 
-routes.use(usersRoute);
-routes.use(loggingRoute);
+function getApiRouter(): express.Router {
+    let routes = express.Router() as expressWs.Router;
 
-export default routes;
+    routes.use(usersRoute());
+    routes.use(loggingRoute());
+
+    return routes;
+}
+
+
+export default getApiRouter;

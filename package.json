@@ -29,6 +29,7 @@
     "@types/js-cookie": "^3.0.2",
     "@types/log4js": "^2.3.5",
     "@types/ndjson": "^2.0.1",
+    "@types/ws": "^8.5.3",
     "@typescript-eslint/parser": "^5.40.1",
     "body-parser": "^1.20.1",
     "bootstrap": "^5.2.0",
