@@ -1,4 +1,4 @@
-import { AuthenticationService } from '@/app/services';
+import { AuthenticationService } from '@/app/services/auth.service';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -12,10 +12,10 @@ export class SplashPage {
 
   constructor(
     private router: Router,
-    private authenticationService: AuthenticationService
+    private auth: AuthenticationService
   ) {
     // redirect to home if already logged in
-    if (this.authenticationService.isLoggedIn) {
+    if (this.auth.isLoggedIn) {
       this.router.navigate(['/home']);
     }
   }

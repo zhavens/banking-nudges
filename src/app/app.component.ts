@@ -1,25 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { Event, NavigationEnd, Router } from '@angular/router';
-import { AuthenticationService } from '@app/services';
 
+import { User } from '@/models/user';
+import { AuthenticationService } from '@app/services/auth.service';
+import { LoggingService } from '@app/services/logging.service';
+import { PersonalizationService } from '@app/services/personalization.service';
 import { filter } from 'rxjs';
-import { User } from '../models/user';
-import { DatabaseService } from './services/database.service';
-import { LoggingService } from './services/logging.service';
-import { PersonalizationService } from './services/personalization.service';
 
 @Component({ selector: 'app', templateUrl: 'app.component.html', styleUrls: ['app.component.css'] })
 export class AppComponent implements OnInit {
-  currentUserTopic: User = new User();
+  currentUserObs: User = new User();
 
   constructor(
     private router: Router,
     private logging: LoggingService,
     public auth: AuthenticationService,
-    private db: DatabaseService,
     public personalization: PersonalizationService,
   ) {
-    this.auth.currentUserTopic.subscribe(x => this.currentUserTopic = x);
+    this.auth.currentUserObs.subscribe(x => this.currentUserObs = x);
     router.events.pipe(
       filter((e: Event): e is NavigationEnd => e instanceof NavigationEnd)
     ).subscribe((e: NavigationEnd) => {
@@ -35,7 +33,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.db.initialize();
+
   }
 
   logout() {
@@ -46,8 +44,7 @@ export class AppComponent implements OnInit {
   reset() {
     if (confirm('Are you sure you want to reset the app?')) {
       this.auth.logout();
-      this.db.reset();
-      localStorage.clear();
+      this.auth.reset();
       this.router.navigate(['/login']);
     }
   }

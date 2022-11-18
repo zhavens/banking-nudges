@@ -2,7 +2,7 @@ import { environment } from '@/environments/environment';
 
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { AuthenticationService } from '@app/services';
+import { AuthenticationService } from '@app/services/auth.service';
 import { Observable } from 'rxjs';
 
 @Injectable({

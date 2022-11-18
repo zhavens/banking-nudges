@@ -1,26 +1,33 @@
+import { environment } from '@/environments/environment';
+import { TEST_ACCOUNTS, TEST_CARDS, TEST_PAYEES, TEST_PAYMENTS, TEST_PERSONALIZATION } from '@/helpers/testdata';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { plainToInstance } from 'class-transformer';
+import { instanceToPlain, plainToClass, plainToInstance } from 'class-transformer';
 import Cookies from 'js-cookie';
-import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
+import { BehaviorSubject, map, Observable, of, tap, throwError } from 'rxjs';
 
 import { User } from '../../models/user';
-import { DatabaseService } from './database.service';
 import { LoggingService } from './logging.service';
+
+const LOCAL_STORAGE_USER_KEY: string = 'users';
+const COOKIE_CURRENT_USER_KEY: string = 'current_user';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
+  private localUsers: User[] = [];
   private currentUserSubject: BehaviorSubject<User>;
-  public currentUserTopic: Observable<User>;
+  public currentUserObs: Observable<User>;
 
   constructor(
     private http: HttpClient,
-    private db: DatabaseService,
     private logging: LoggingService) {
-    this.currentUserSubject = new BehaviorSubject<User>(new User());
-    this.currentUserTopic = this.currentUserSubject.asObservable();
 
-    var loggedUser = Cookies.get('currentUser');
+    this.localUsers = JSON.parse(localStorage.getItem(LOCAL_STORAGE_USER_KEY) || "[]").map((x: any) => plainToClass(User, x)) || [];
+
+    this.currentUserSubject = new BehaviorSubject<User>(new User());
+    this.currentUserObs = this.currentUserSubject.asObservable();
+
+    var loggedUser = Cookies.get(COOKIE_CURRENT_USER_KEY);
     if (loggedUser) {
       this.currentUserSubject.next(plainToInstance(User, JSON.parse(loggedUser)));
       this.logging.info(`User ${this.currentUser?.username} reauthed`)
@@ -38,42 +45,79 @@ export class AuthenticationService {
 
   private updateUserLogin(user: User) {
     this.logging.info(`Logging in user ${user.username}.`)
-    Cookies.set('currentUser', JSON.stringify(user));
+    Cookies.set(COOKIE_CURRENT_USER_KEY, JSON.stringify(user));
     this.currentUserSubject.next(user);
   }
 
   login(username: string, password: string): Observable<User> {
-    return this.db.authUser(username, password)
-      .pipe(
-        catchError((err) => {
-          this.logging.warning(`Failed to auth user ${username}: ${err.error}`)
-          return throwError(() => new Error('Username or password is incorrect'))
-        }),
-        tap(this.updateUserLogin.bind(this)));
-
-
-    // const user = await firstValueFrom(this.db.findUserByUsername(username));
-    // console.log(typeof user, user);
-    // if (!user) return Error('Username or password is incorrect.');
-    // else if (user.password !== password) return Error('Username or password is incorrect.');
-
-    // this.logging.info(`Logging in user ${user.username}.`)
-    // Cookies.set('currentUserId', JSON.stringify(user.id));
-    // this.currentUserSubject.next(user);
-    // return user;
+    for (let user of this.localUsers) {
+      if (user.username == username && (password.length == 0 || user.password == password)) {
+        this.updateUserLogin(user);
+        return of(user);
+      }
+    }
+    if (!environment.static) {
+      return this.http.post('/api/auth', { username: username, password: password }, { headers: { responseType: 'json' } })
+        .pipe(
+          map((value) => {
+            return plainToInstance(User, value)
+          }),
+          tap(this.updateUserLogin.bind(this)));
+    }
+    return throwError(() => new Error('Invalid username or password.'));
   }
 
   logout() {
     this.logging.info(`Logging out user ${this.currentUserSubject.value.username}.`);
-    Cookies.remove('currentUser');
+    Cookies.remove(COOKIE_CURRENT_USER_KEY);
     this.currentUserSubject.next(new User());
   }
 
-  updateUser(user: User): boolean {
-    if (this.currentUser?.id != user.id) {
-      return false;
+  register(user: User): Observable<User> {
+    user.accounts = TEST_ACCOUNTS;
+    user.cards = TEST_CARDS;
+    user.payees = TEST_PAYEES;
+    user.payments = TEST_PAYMENTS;
+    user.payees[1].nickname = `${user.firstName}'s Account`
+    user.personalization = TEST_PERSONALIZATION;
+    // Don't show task modal on first login!
+    user.personalization.showTasksModal = false;
+
+    let idx = this.localUsers.findIndex((x: User) => x.username == user.username)
+    if (idx > -1) {
+      return throwError(() => new Error("User already registered."));
     }
-    this.currentUserSubject.next(user);
-    return true;
+    this.localUsers.push(user);
+    this.updateLocal();
+    return of(user);
+  }
+
+  updateUser(user: User): Observable<User> {
+    if (user.username != this.currentUser?.username) {
+      return throwError(() => new Error('May only modify current user.'));
+    }
+
+    for (let account of user.accounts) {
+      account.transactions.sort((a, b) => { return b.date.valueOf() - a.date.valueOf() });
+    }
+    for (let card of user.cards) {
+      card.transactions.sort((a, b) => { return b.date.valueOf() - a.date.valueOf() });
+    }
+
+    let idx = this.localUsers.findIndex((x: User) => x.username == user.username)
+    if (idx == -1) {
+      throwError(() => new Error('User can\'t be found.'));
+    }
+    this.localUsers[idx] = user;
+    this.updateLocal();
+    return of(user);
+  }
+
+  private updateLocal() {
+    localStorage.setItem(LOCAL_STORAGE_USER_KEY, JSON.stringify(instanceToPlain(this.localUsers)));
+  }
+
+  reset() {
+    localStorage.clear();
   }
 }

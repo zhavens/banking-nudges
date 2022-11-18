@@ -1,8 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { AuthenticationService } from '@app/services';
+import { AuthenticationService } from '@app/services/auth.service';
 import { LoggingService } from '@app/services/logging.service';
-import { SidebarService } from '@app/services/sidebar.service';
 import { SidebarLocation, SidebarType } from '@models/sidebar';
 import { ChartConfiguration, ChartData, ChartOptions } from 'chart.js';
 
@@ -98,6 +97,7 @@ export class SidebarComponent implements OnInit {
       }
     }
   }
+
   public doughnutChartData: ChartData<'doughnut'> = {
     labels: ['Groceries', 'Utilities', 'Personal Care', 'Other'],
     datasets: [
@@ -109,7 +109,7 @@ export class SidebarComponent implements OnInit {
 
   @Input('type') sidebarType!: SidebarType;
 
-  constructor(private sidebarService: SidebarService,
+  constructor(
     public auth: AuthenticationService,
     private logging: LoggingService) { }
 

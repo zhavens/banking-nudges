@@ -1,13 +1,15 @@
-import { ModalService } from '@/app/services/modal.service';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import * as uuid from "uuid";
+
+import { ModalService } from '@/app/services/modal.service';
 import { conditionalValidator, futureDateValidator } from '@app/helpers/validators';
-import { AlertService, AuthenticationService, UserService } from '@app/services';
+import { AlertService } from '@app/services/alert.service';
+import { AuthenticationService } from '@app/services/auth.service';
 import { LoggingService } from '@app/services/logging.service';
 import { EtransferClient } from '@models/entities';
 import { Payment } from '@models/payment';
 import { Payee, User } from '@models/user';
-import * as uuid from "uuid";
 
 @Component({
   selector: 'app-payments',
@@ -30,13 +32,12 @@ export class PaymentsComponent implements OnInit {
     private modalService: ModalService,
     public auth: AuthenticationService,
     private alert: AlertService,
-    private userService: UserService,
     private logging: LoggingService,
   ) {
     if (auth.currentUser) {
       this.user = auth.currentUser;
     }
-    this.auth.currentUserTopic.subscribe((user: User) => {
+    this.auth.currentUserObs.subscribe((user: User) => {
       this.user = user;
     })
     this.paymentForm = formBuilder.group({
@@ -54,7 +55,7 @@ export class PaymentsComponent implements OnInit {
 
   ngOnInit(): void {
     // this.user = this.auth.currentUser;
-    this.auth.currentUserTopic.subscribe((user: User) => {
+    this.auth.currentUserObs.subscribe((user: User) => {
       this.user = user;
     })
   }
@@ -71,7 +72,7 @@ export class PaymentsComponent implements OnInit {
       }
       this.logging.info(`Removing payment:`, [payment_string]);
       this.user.payments.splice(idx, 1);
-      this.userService.updateUser(this.user);
+      this.auth.updateUser(this.user);
     }).finally(() => { this.logging.info(`Delete confirmation for payment closed`, [payment_string]) });
   }
 
@@ -105,7 +106,7 @@ export class PaymentsComponent implements OnInit {
     }
     this.logging.info(`Added new payment: ${JSON.stringify(payment)}`)
     this.user?.payments.push(payment);
-    this.userService.updateUser(this.user).subscribe();
+    this.auth.updateUser(this.user).subscribe();
     this.modalService.dismissAll();
     this.paymentForm.reset();
   }

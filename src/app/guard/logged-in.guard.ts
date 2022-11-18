@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { AuthenticationService } from '@app/services';
+import { AuthenticationService } from '@app/services/auth.service';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -14,6 +14,7 @@ export class LoggedInGuard implements CanActivate {
     if (this.auth.isLoggedIn) {
       return true;
     } else {
+      console.log('Rejecting: not logged in.')
       let urltree = this.router.parseUrl('/login');
       urltree.queryParams['returnUrl'] = route.url;
       return urltree;

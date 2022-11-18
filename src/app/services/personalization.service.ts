@@ -4,7 +4,6 @@ import Gradient from 'javascript-color-gradient';
 import { PersonalizationLevel, User } from '../../models/user';
 import { AuthenticationService } from './auth.service';
 import { LoggingService } from './logging.service';
-import { UserService } from './user.service';
 
 
 // const gradient: Gradient = new Gradient().setColorGradient('#b2f2bb', '#ffd8a8');
@@ -19,11 +18,10 @@ export class PersonalizationService {
   user: User = new User();
 
   constructor(
-    private authService: AuthenticationService,
-    private userService: UserService,
+    private auth: AuthenticationService,
     private logging: LoggingService,
   ) {
-    this.authService.currentUserTopic.subscribe((user: User) => {
+    this.auth.currentUserObs.subscribe((user: User) => {
       this.user = user;
     })
   }
@@ -31,7 +29,7 @@ export class PersonalizationService {
   setShownTaskModal() {
     this.logging.info(`Marking task modal as shown.`);
     this.user.personalization.showTasksModal = false;
-    this.userService.updateUser(this.user);
+    this.auth.updateUser(this.user);
   }
 
   doLogoutUpdate() {
@@ -44,7 +42,7 @@ export class PersonalizationService {
     for (let card of this.user.cards) {
       card.showTransactions = false;
     }
-    this.userService.updateUser(this.user);
+    this.auth.updateUser(this.user);
   }
 
   oaString() {

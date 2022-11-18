@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { AlertService, AuthenticationService, UserService } from '@app/services';
+import { AlertService } from '@app/services/alert.service';
+import { AuthenticationService } from '@app/services/auth.service';
 import { User } from '@models/user';
 import { plainToClass } from 'class-transformer';
 import { catchError, of } from 'rxjs';
@@ -19,8 +20,7 @@ export class RegisterComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private authenticationService: AuthenticationService,
-    private userService: UserService,
+    private auth: AuthenticationService,
     private alertService: AlertService
   ) {
     this.registerForm = new FormGroup([]);
@@ -60,7 +60,7 @@ export class RegisterComponent implements OnInit {
 
     this.loading = true;
     let user = plainToClass(User, this.registerForm.value);
-    this.userService.register(user)
+    this.auth.register(user)
       .pipe(catchError((err) => {
         this.alertService.error(err.error);
         return of(undefined);

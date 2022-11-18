@@ -1,4 +1,3 @@
-import { environment } from '@/environments/environment';
 
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
@@ -30,9 +29,6 @@ import { ServicesPage } from '@app/pages/services/services.page';
 import { TransferPage } from '@app/pages/transfer/transfer.page';
 import { SplashPage } from './pages/splash/splash.page';
 
-import { DatabaseService } from './services/database.service';
-import { LocalCacheService } from './services/local_cache.service';
-import { LocalDatabaseService } from './services/local_database.service';
 
 @NgModule({
   imports: [
@@ -73,9 +69,6 @@ import { LocalDatabaseService } from './services/local_database.service';
   providers: [
     // provider used to create static backend when in static mode
     // staticBackendProvider,
-    {
-      provide: DatabaseService, useExisting: environment.static ? LocalDatabaseService : LocalCacheService
-    }
   ],
   bootstrap: [AppComponent]
 })

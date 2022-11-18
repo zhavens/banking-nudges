@@ -1,7 +1,7 @@
 import { PersonalizationService } from '@/app/services/personalization.service';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { AlertService, AuthenticationService, UserService } from '@app/services';
+import { AuthenticationService } from '@app/services/auth.service';
 import { LoggingService } from '@app/services/logging.service';
 import { TaskSelection, User } from '@models/user';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -25,12 +25,10 @@ export class TasksComponent implements OnInit {
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
     public auth: AuthenticationService,
-    private alert: AlertService,
-    private userService: UserService,
     private logging: LoggingService,
     public personalization: PersonalizationService,
   ) {
-    this.auth.currentUserTopic.subscribe((user: User) => {
+    this.auth.currentUserObs.subscribe((user: User) => {
       this.user = user;
     })
     this.taskSelection = new TaskSelection();
@@ -63,7 +61,7 @@ export class TasksComponent implements OnInit {
     this.logging.info(`Submitted tasks`, [this.taskSelection]);
     this.user.personalization.tasksSelected = true;
     this.user.personalization.tasks = this.taskSelection;
-    this.userService.updateUser(this.user);
+    this.auth.updateUser(this.user);
     this.modalService.dismissAll();
   }
 }

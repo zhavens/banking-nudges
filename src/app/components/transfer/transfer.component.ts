@@ -2,7 +2,8 @@ import { ModalService } from '@/app/services/modal.service';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { atLeastOne } from '@app/helpers/validators';
-import { AlertService, AuthenticationService, UserService } from '@app/services';
+import { AlertService } from '@app/services/alert.service';
+import { AuthenticationService } from '@app/services/auth.service';
 import { LoggingService } from '@app/services/logging.service';
 import { PersonalizationService } from '@app/services/personalization.service';
 import { Account, CreditCard } from '@models/account';
@@ -52,13 +53,12 @@ export class TransferComponent implements OnInit {
     public personaliztion: PersonalizationService,
     private alert: AlertService,
     private logging: LoggingService,
-    private userService: UserService,
     public personalization: PersonalizationService,
   ) {
     if (auth.currentUser) {
       this.user = auth.currentUser;
     }
-    this.auth.currentUserTopic.subscribe((user: User) => {
+    this.auth.currentUserObs.subscribe((user: User) => {
       this.user = user;
     })
 
@@ -252,7 +252,7 @@ export class TransferComponent implements OnInit {
         }
       }
       this.user.personalization.txCount += 1;
-      this.userService.updateUser(this.user);
+      this.auth.updateUser(this.user);
       this.alert.success('Transfer successful!');
       this.transferForm.reset();
       this.etransferForm.reset();

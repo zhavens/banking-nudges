@@ -1,13 +1,14 @@
-import { ModalService } from '@/app/services/modal.service';
-import { PersonalizationService } from '@/app/services/personalization.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { AuthenticationService } from '@app/services';
+
+import { ModalService } from '@/app/services/modal.service';
+import { PersonalizationService } from '@/app/services/personalization.service';
+import * as text from '@/helpers/text';
+import { AuthenticationService } from '@app/services/auth.service';
 import { LoggingService } from '@app/services/logging.service';
 import { Account } from '@models/account';
 import { Transaction } from '@models/transaction';
 import { User } from '@models/user';
-import * as text from '../../../helpers/text';
 
 @Component({
   selector: 'app-accounts',
@@ -30,7 +31,7 @@ export class AccountsComponent implements OnInit {
     private auth: AuthenticationService,
     private personalization: PersonalizationService,
     private logging: LoggingService) {
-    this.auth.currentUserTopic.subscribe((user: User) => { this.accounts = this.auth.currentUser?.accounts });
+    this.auth.currentUserObs.subscribe((user: User) => { this.accounts = this.auth.currentUser?.accounts });
 
     this.txFilter = new FormControl('');
     this.txSearchForm = new FormGroup([]);

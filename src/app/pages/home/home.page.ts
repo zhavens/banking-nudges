@@ -2,7 +2,7 @@ import { AfterContentInit, AfterViewInit, Component, OnInit, ViewChild } from '@
 
 import { Router } from '@angular/router';
 import { TasksComponent } from '@app/components/tasks/tasks.component';
-import { AuthenticationService, UserService } from '@app/services';
+import { AuthenticationService } from '@app/services/auth.service';
 import { PersonalizationService } from '@app/services/personalization.service';
 import { SidebarType } from '@models/sidebar';
 import { User } from '@models/user';
@@ -22,11 +22,10 @@ export class HomePage implements OnInit, AfterViewInit, AfterContentInit {
 
   constructor(
     private auth: AuthenticationService,
-    private userService: UserService,
     private router: Router,
     private personalization: PersonalizationService
   ) {
-    this.auth.currentUserTopic.subscribe((user: User) => {
+    this.auth.currentUserObs.subscribe((user: User) => {
       this.user = user;
     })
     if (!this.auth.isLoggedIn) {

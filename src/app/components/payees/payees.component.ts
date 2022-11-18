@@ -1,13 +1,14 @@
-import { ModalService } from '@/app/services/modal.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { plainToInstance } from 'class-transformer';
+
+import { ModalService } from '@/app/services/modal.service';
 import { atLeastOne } from '@app/helpers/validators';
-import { AuthenticationService, UserService } from '@app/services';
+import { AuthenticationService } from '@app/services/auth.service';
 import { LoggingService } from '@app/services/logging.service';
 import { PersonalizationService } from '@app/services/personalization.service';
 import { AccountId, AchAccount, Entity, EtransferClient, OtherEntity } from '@models/entities';
 import { Payee, User } from '@models/user';
-import { plainToInstance } from 'class-transformer';
 
 @Component({
   selector: 'app-payees',
@@ -30,12 +31,11 @@ export class PayeesComponent implements OnInit {
     private formBuilder: FormBuilder,
     private modalService: ModalService,
     public auth: AuthenticationService,
-    private userService: UserService,
     public personalization: PersonalizationService,
     private logging: LoggingService,
   ) {
     this.user = auth.currentUser;
-    this.auth.currentUserTopic.subscribe((user: User) => {
+    this.auth.currentUserObs.subscribe((user: User) => {
       this.user = user;
     })
     this.accountPayeeForm = this.formBuilder.group({
@@ -81,7 +81,7 @@ export class PayeesComponent implements OnInit {
       this.logging.info(`Adding payee: ${JSON.stringify(payee)}`)
 
       this.user.payees.push(payee);
-      this.userService.updateUser(this.user).subscribe();
+      this.auth.updateUser(this.user).subscribe();
       this.modalService.dismissAll();
       form.reset();
       this.nickname = '';
@@ -106,7 +106,7 @@ export class PayeesComponent implements OnInit {
         }
         this.logging.error(`Removing payee`, [payee.id]);
         this.user.payees?.splice(idx, 1);
-        this.userService.updateUser(this.user);
+        this.auth.updateUser(this.user);
       }
     }).finally(() => { this.logging.info(`Delete confirmation for payee closed`, [payee.id]) });
   }

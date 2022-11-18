@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthenticationService, UserService } from '@app/services';
 
 import { LoggingService, LoggingStatus } from '@/app/services/logging.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AdminService } from '@app/services/admin.service';
+import { AuthenticationService } from '@app/services/auth.service';
 import { PersonalizationService } from '@app/services/personalization.service';
 import { PersonalizationLevel, User } from '@models/user';
 
@@ -29,11 +29,10 @@ export class NavbarComponent {
     private formBuilder: FormBuilder,
     public auth: AuthenticationService,
     public admin: AdminService,
-    private userService: UserService,
     private personalization: PersonalizationService,
     private logging: LoggingService,
   ) {
-    this.auth.currentUserTopic.subscribe(x => this.user = x);
+    this.auth.currentUserObs.subscribe(x => this.user = x);
     this.personalizationForm = this.formBuilder.group({
       level: [PersonalizationLevel[this.user.personalization.level]],
     })
@@ -51,7 +50,7 @@ export class NavbarComponent {
 
   updatePersonalizationLevel(level: string) {
     this.user.personalization.level = (<any>PersonalizationLevel)[level];
-    this.userService.updateUser(this.user).subscribe();
+    this.auth.updateUser(this.user).subscribe();
   }
 
   logout() {

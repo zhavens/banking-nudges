@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-
-import { AlertService, AuthenticationService, UserService } from '@app/services';
-import { User } from '@models/user';
 import { catchError, of } from 'rxjs';
+
+import { AlertService } from '@app/services/alert.service';
+import { AuthenticationService } from '@app/services/auth.service';
+import { User } from '@models/user';
 
 @Component({ templateUrl: 'login.component.html' })
 export class LoginComponent implements OnInit {
@@ -17,12 +18,11 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private authenticationService: AuthenticationService,
-    private userService: UserService,
+    private auth: AuthenticationService,
     private alertService: AlertService
   ) {
     // redirect to home if already logged in
-    if (this.authenticationService.isLoggedIn) {
+    if (this.auth.isLoggedIn) {
       this.router.navigate(['/home']);
     }
     this.loginForm = new FormGroup([]);
@@ -45,10 +45,9 @@ export class LoginComponent implements OnInit {
   private finalizeLogin(user: User | undefined) {
     if (user) {
       user.personalization.loginCount += 1;
-      this.userService.updateUser(user);
+      this.auth.updateUser(user);
       this.router.navigate([this.returnUrl]);
     } else {
-      // this.loginForm.reset();
       this.loading = false;
     }
   }
@@ -65,22 +64,12 @@ export class LoginComponent implements OnInit {
     }
 
     this.loading = true;
-    this.authenticationService.login(this.f['username'].value, this.f['password'].value)
+    this.auth.login(this.f['username'].value, this.f['password'].value)
       .pipe(catchError((err) => {
         console.log(err)
-        this.alertService.error(err)
+        this.alertService.error(typeof err === 'string' ? err : err.error)
         return of(undefined)
       }))
       .subscribe(this.finalizeLogin.bind(this));
-
-    // if (resp instanceof User) {
-    //   resp.personalization.loginCount += 1;
-    //   this.userService.updateUser(resp);
-    //   this.router.navigate([this.returnUrl]);
-    // } else {
-    //   this.alertService.error(resp);
-    //   this.loading = false;
-    // }
-    // this.loginForm.reset();
   }
 }

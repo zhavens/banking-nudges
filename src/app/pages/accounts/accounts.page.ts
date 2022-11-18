@@ -1,4 +1,4 @@
-import { AuthenticationService } from '@/app/services';
+import { AuthenticationService } from '@/app/services/auth.service';
 import { LoggingService } from '@/app/services/logging.service';
 import { ModalService } from '@/app/services/modal.service';
 import { SidebarType } from '@/models/sidebar';
@@ -20,7 +20,7 @@ export class AccountsPage implements OnInit {
     private modalService: ModalService,
     private logging: LoggingService,
   ) {
-    this.auth.currentUserTopic.subscribe((user: User) => {
+    this.auth.currentUserObs.subscribe((user: User) => {
       this.user = user;
     })
   }
