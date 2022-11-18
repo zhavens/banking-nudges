@@ -1,3 +1,4 @@
+
 import { environment } from '@/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -7,7 +8,7 @@ import { LogEntry } from '../../models/log';
 
 const STORAGE_KEY = 'log';
 
-let logs = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]").map((x: any) => plainToInstance(LogEntry, x)) || [];
+let logs = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]').map((x: any) => plainToInstance(LogEntry, x)) || [];
 
 export enum LoggingStatus {
   UNKNOWN,
@@ -23,6 +24,7 @@ export enum LoggingStatus {
 export class LoggingService {
   private socket?: WebSocket;
   public status: Subject<number> = new Subject<number>();
+  private initialized: boolean = false;
 
   constructor(private http: HttpClient) {
     if (!environment.static) {
@@ -34,16 +36,21 @@ export class LoggingService {
   }
 
   private connect(): void {
-    this.socket = new WebSocket(`ws://${window.location.host}/api/logging`);
+    const protocol = environment.secure ? 'wss' : 'ws'
+    this.socket = new WebSocket(`${protocol}://${window.location.host}/api/logging`);
     this.socket.onopen = (event) => {
       console.log('Logging socket connected.')
+      this.initialized = true;
       this.status.next(LoggingStatus.CONNECTED);
     }
     this.socket.onerror = (event) => {
-      console.log('Logging socket error:', event);
-      this.status.next(LoggingStatus.CONNECTING);
+      console.error('Logging socket error:', event);
       // If error and connection is closed, attempt to reconnect.
-      if (this.socket?.readyState != 1) {
+      if (!this.initialized) {
+        this.status.next(LoggingStatus.DISCONNECTED);
+        console.error('Unable to initialize socket.')
+      } else if (this.socket?.readyState != 1) {
+        this.status.next(LoggingStatus.CONNECTING);
         this.connect();
       }
     }

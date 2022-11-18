@@ -8,9 +8,10 @@
     "lint": "./node_modules/.bin/eslint -c .eslintrc.json 'src/**/**.ts'",
     "deploy-app": "cp -R ./dist/banking-nudges/* /var/www/html/",
     "watch": "ng build --watch --configuration development",
-    "dev-app": "ng serve --proxy-config proxy.config.json --host $HOST --disable-host-check",
-    "dev-app-static": "ng serve --proxy-config proxy.config.json --host $HOST --disable-host-check -c static",
-    "dev-backend": "DEBUG=* nodemon --config nodemon.backend.json"
+    "dev-app": "ng serve --proxy-config proxy.config.json --host $HOST --disable-host-check -c development",
+    "dev-app-static": "ng serve --proxy-config proxy.config.json --host $HOST --disable-host-check -c development-static",
+    "dev-backend": "DEBUG=* nodemon --config nodemon.backend.json",
+    "add-user": "node -r tsconfig-paths/register -r ts-node/register src/bin/add_user.ts"
   },
   "private": true,
   "dependencies": {
