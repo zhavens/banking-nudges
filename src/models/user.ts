@@ -60,6 +60,12 @@ export enum PersonalizationLevel {
     RELATIONSHIP,
 }
 
+export enum NudgeOnLogin {
+    NONE,
+    ADD_CO,
+    TASKS,
+}
+
 export class TaskSelection {
     checkBalance: boolean = false;
     payBills: boolean = false;
@@ -79,6 +85,8 @@ export class PersonalizationConfig {
     oaRelation: string = '';
 
     showTasksModal: boolean = true;
+    nudgeOnLogin: NudgeOnLogin = NudgeOnLogin.NONE;
+
     showConsequencesBanner: boolean = false;
 
     loginCount: number = 0;

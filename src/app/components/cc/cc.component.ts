@@ -70,7 +70,7 @@ export class CcComponent implements OnInit {
   showCurrentTransactions() {
     this.modalService.openConfirmation(
       'Show Transactions',
-      `Are you sure you want to look at the details of ${this.personalization.oaString()}'s accounts? They will get a notifcation that you've elected to do so.`,
+      `Are you sure you want to look at the details of ${this.personalization.personalString()}'s accounts? They will get a notificiation that you've elected to do so.`,
       'Show Transactions', 'Cancel').
       then(
         () => {

@@ -12,7 +12,6 @@ import { AccountsComponent } from '@app/components/accounts/accounts.component';
 import { AlertComponent } from '@app/components/alert/alert.component';
 import { CcComponent } from '@app/components/cc/cc.component';
 import { ConfirmDialogComponent, NotificationDialogComponent } from '@app/components/dialog/dialog.component';
-import { LoginComponent } from '@app/components/login/login.component';
 import { NavbarComponent } from '@app/components/navbar/navbar.component';
 import { PageNotFoundComponent } from '@app/components/page-not-found/page-not-found.component';
 import { PayeesComponent } from '@app/components/payees/payees.component';
@@ -27,6 +26,8 @@ import { HomePage } from '@app/pages/home/home.page';
 import { PaymentsPage } from '@app/pages/payments/payments.page';
 import { ServicesPage } from '@app/pages/services/services.page';
 import { TransferPage } from '@app/pages/transfer/transfer.page';
+import { AddCoComponent } from './components/add-co/add-co.component';
+import { LoginPage } from './pages/login/login.page';
 import { SplashPage } from './pages/splash/splash.page';
 
 
@@ -45,13 +46,13 @@ import { SplashPage } from './pages/splash/splash.page';
     HomePage,
     AccountsPage,
     AdminPage,
+    LoginPage,
     TransferPage,
     PaymentsPage,
     ServicesPage,
     SplashPage,
     // Components
     AppComponent,
-    LoginComponent,
     AlertComponent,
     RegisterComponent,
     SidebarComponent,
@@ -65,6 +66,7 @@ import { SplashPage } from './pages/splash/splash.page';
     TasksComponent,
     ConfirmDialogComponent,
     NotificationDialogComponent,
+    AddCoComponent,
   ],
   providers: [
     // provider used to create static backend when in static mode

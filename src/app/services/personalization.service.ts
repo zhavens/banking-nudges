@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import Gradient from 'javascript-color-gradient';
 
-import { PersonalizationLevel, User } from '../../models/user';
+import { NudgeOnLogin, PersonalizationLevel, User } from '../../models/user';
 import { AuthenticationService } from './auth.service';
 import { LoggingService } from './logging.service';
 
 
 // const gradient: Gradient = new Gradient().setColorGradient('#b2f2bb', '#ffd8a8');
 const MIN_GRADIENT = '#ffffff';
-const MAX_GRADIENT = '#ffd8a8'
+const MAX_GRADIENT = '#ffc9c9'
 const gradient: Gradient = new Gradient().setColorGradient(MIN_GRADIENT, MAX_GRADIENT);
 
 @Injectable({
@@ -32,6 +32,16 @@ export class PersonalizationService {
     this.auth.updateUser(this.user);
   }
 
+  setShownLogin() {
+    // Cycle through the login options.
+    if (this.user.personalization.nudgeOnLogin != NudgeOnLogin.NONE) {
+      this.user.personalization.nudgeOnLogin =
+        Math.min(1, (this.user.personalization.nudgeOnLogin + 1) % (Object.keys(NudgeOnLogin).length / 2));
+      this.logging.info(`Updating shown login to ${NudgeOnLogin[this.user.personalization.nudgeOnLogin]}.`);
+      this.auth.updateUser(this.user);
+    }
+  }
+
   doLogoutUpdate() {
     this.logging.info(`Updating personalization on logout.`)
     this.user.personalization.showTasksModal = true;
@@ -45,7 +55,7 @@ export class PersonalizationService {
     this.auth.updateUser(this.user);
   }
 
-  oaString() {
+  personalString() {
     switch (this.user.personalization.level) {
       case (PersonalizationLevel.NAME):
         return this.user.personalization.oaFirstName;

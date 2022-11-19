@@ -1,14 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, of } from 'rxjs';
 
+import { AddCoComponent } from '@/app/components/add-co/add-co.component';
+import { TasksComponent } from '@/app/components/tasks/tasks.component';
+import { PersonalizationService } from '@/app/services/personalization.service';
 import { AlertService } from '@app/services/alert.service';
 import { AuthenticationService } from '@app/services/auth.service';
-import { User } from '@models/user';
+import { NudgeOnLogin, User } from '@models/user';
 
-@Component({ templateUrl: 'login.component.html' })
-export class LoginComponent implements OnInit {
+@Component({ templateUrl: 'login.page.html' })
+export class LoginPage implements OnInit {
+  @ViewChild(TasksComponent)
+  private tasksModal!: TasksComponent;
+  @ViewChild(AddCoComponent)
+  private addCoModal!: AddCoComponent;
+
   loginForm: FormGroup;
   loading = false;
   submitted = false;
@@ -18,8 +26,9 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private auth: AuthenticationService,
-    private alertService: AlertService
+    public auth: AuthenticationService,
+    private alertService: AlertService,
+    private personalization: PersonalizationService,
   ) {
     // redirect to home if already logged in
     if (this.auth.isLoggedIn) {
@@ -42,23 +51,46 @@ export class LoginComponent implements OnInit {
   // convenience getter for easy access to form fields
   get f() { return this.loginForm.controls; }
 
-  private finalizeLogin(user: User | undefined) {
-    if (user) {
-      user.personalization.loginCount += 1;
-      this.auth.updateUser(user);
-      this.router.navigate([this.returnUrl]);
-    } else {
+  private finalizeLogin(user: User) {
+    this.loading = false;
+    this.loginForm.reset();
+    this.personalization.setShownLogin();
+    this.auth.updateUser(user);
+    this.router.navigate([this.returnUrl]);
+  }
+
+  private handleAuth(user: User | undefined) {
+    if (!user) {
       this.loading = false;
+      return;
+    }
+
+    user.personalization.loginCount += 1;
+
+    switch (user.personalization.nudgeOnLogin) {
+      case NudgeOnLogin.TASKS: {
+        this.tasksModal.openTasksModal(() => {
+          this.finalizeLogin(user);
+        })
+        break;
+      }
+      case NudgeOnLogin.ADD_CO: {
+        this.addCoModal.openAddCoModal(() => {
+          this.finalizeLogin(user);
+        })
+        break;
+      }
+      default: {
+        this.finalizeLogin(user);
+        break;
+      }
     }
   }
 
   onSubmit() {
     this.submitted = true;
-
-    // reset alerts on submit
     this.alertService.clear();
 
-    // stop here if form is invalid
     if (this.loginForm.invalid) {
       return;
     }
@@ -70,6 +102,6 @@ export class LoginComponent implements OnInit {
         this.alertService.error(typeof err === 'string' ? err : err.error)
         return of(undefined)
       }))
-      .subscribe(this.finalizeLogin.bind(this));
+      .subscribe(this.handleAuth.bind(this));
   }
 }

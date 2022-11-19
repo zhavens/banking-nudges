@@ -1,4 +1,4 @@
-<div id="loginContainer">
+<div id="loginContainer" *ngIf="!auth.isLoggedIn">
     <h2>Login</h2>
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <div class="form-group">
@@ -26,3 +26,6 @@
         </div>
     </form>
 </div>
+
+<app-tasks></app-tasks>
+<app-add-co></app-add-co>

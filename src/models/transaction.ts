@@ -22,6 +22,8 @@ export class Transaction {
     recipient?: Entity;
 
     description?: string;
+    note?: string;
+
     @DecimalTransform()
     amount: Decimal = new Decimal(0);
     @DecimalTransform()

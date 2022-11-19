@@ -13,16 +13,17 @@
                         <label for="transferFromInput" class="form-label">From:</label>
                         <select class="form-select" id="transferFromInput" formControlName="sender"
                             aria-label="From Account" required>
-                            <option *ngFor="let account of user?.accounts" [ngValue]="account.id"> {{account.name}} -
-                                {{account.id.safeString()}} ({{account.balance.currencyString()}})</option>
+                            <option *ngFor="let account of user?.accounts" [ngValue]="account.id"> {{account.name}}
+                                ({{AccountType[account.type]}}) - {{account.id.safeString()}}
+                                ({{account.balance.currencyString()}})</option>
                         </select>
                     </div>
                     <div>
                         <label for="transferToInput" class="form-label">To:</label>
                         <select class="form-select" id="transferToInput" formControlName="recipient"
                             aria-label="To recipient" required>
-                            <option *ngFor="let account of user?.accounts" [ngValue]="account.id"> {{account.name}} -
-                                {{account.id.safeString()}}</option>
+                            <option *ngFor="let account of user?.accounts" [ngValue]="account.id"> {{account.name}}
+                                ({{AccountType[account.type]}}) - {{account.id.safeString()}}</option>
                             <option *ngIf="user?.cards?.length" disabled>--------</option>
                             <option *ngFor="let card of user?.cards" [ngValue]="card.id"> {{card.name}} -
                                 {{card.id.safeString()}} (${{card.balance.toDecimalPlaces(2)}})</option>
@@ -40,42 +41,44 @@
                                 [value]="transferAmount" (change)="transferAmount=twoNumberDecimal($event)"
                                 [ngClass]="{'large-payment': largePayment}"
                                 [ngStyle]="{'background-color': amountInputColor}" aria-label="Transfer amount"
-                                placeholder="0.00" value="" step="0.01" min="0.01" required>
+                                placeholder="0.00" value="" step="0.01" min="0.01" value="0.00" required>
                         </div>
                     </div>
                     <div class="text-center mt-3">
                         <div class="card mb-3" *ngIf="largePayment && transferForm.valid">
                             <div class="card-body text-bg-orange">
-                                This payment is large enough (>$200) that a notification will be sent to
-                                {{personaliztion.oaString()}}.
+                                This payment is large enough that a notification will be sent to
+                                {{personaliztion.personalString()}}.
                             </div>
                         </div>
                         <div class="card" *ngIf="unusualPayment && transferForm.valid">
                             <div class="card-body text-bg-yellow">
-                                <p> The value of the payment to this account is different from your usual amount. Would
+                                <p> The value of the payment to this payee is different from your usual amount. Would
                                     you
                                     like
-                                    to reset this to the usual amount, or continue as usual?</p>
+                                    to reset this to the usual amount, or submit with this new amount?</p>
                                 <button type="submit" class="btn btn-primary me-3">Submit</button>
                                 <button type="button" class="btn btn-success"
                                     (click)="transferForm.controls['amount'].setValue(46.45)">Reset</button>
                             </div>
                         </div>
-                        <div class="card mb-3" *ngIf="transferForm.valid && missingReceipt">
-                            <div class="card-body text-bg-orange">
-                                <div class="row">
+                        <div class="card mb-3" *ngIf="transferForm.valid && suggestReceipt">
+                            <div class="card-body" [ngClass]="receiptUploaded ? 'text-bg-green' :  'text-bg-orange'">
+                                <div class="row" *ngIf="!receiptUploaded; else uploaded">
                                     <div class="col-9">If you are reimbursing yourself for a purchase, would you
                                         consider
                                         uploading a receipt?</div>
                                     <div class="col-3">
                                         <input type="file" (change)="receiptUploaded = true" hidden #fileChooser>
-                                        <button type="button" class="btn btn-success" *ngIf="!receiptUploaded"
+                                        <button type="button" class="btn btn-success"
                                             (click)="fileChooser.click()">Attach Receipt</button>
-                                        <button type="button" class="btn btn-success" disabled *ngIf="receiptUploaded">
-                                            Thank You!
-                                        </button>
                                     </div>
                                 </div>
+                                <ng-template #uploaded>
+                                    <div class="col-12">
+                                        Thank you for uploading a receipt!
+                                    </div>
+                                </ng-template>
                             </div>
                         </div>
                         <div *ngIf="!unusualPayment">
@@ -141,7 +144,7 @@
                         <div class="row">
                             <div class="card" *ngIf="etransferForm.valid && etransferForm.get('savePayee')?.value">
                                 <div class="card-body text-bg-red">
-                                    Notifiation of this new payee will be sent to {{personalization.oaString()}}.
+                                    Notification of this new payee will be sent to {{personalization.personalString()}}.
                                 </div>
                             </div>
                         </div>
@@ -163,5 +166,4 @@
         <h2>Transfer Successful</h2>
         <button class="btn btn-primary" (click)="modal.close()">Continue</button>
     </div>
-
 </ng-template>

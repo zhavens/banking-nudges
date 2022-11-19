@@ -6,11 +6,12 @@ import { AlertService } from '@app/services/alert.service';
 import { AuthenticationService } from '@app/services/auth.service';
 import { LoggingService } from '@app/services/logging.service';
 import { PersonalizationService } from '@app/services/personalization.service';
-import { Account, CreditCard } from '@models/account';
+import { Account, AccountType, CreditCard } from '@models/account';
 import { AccountId, AchAccount, CreditCardId, EtransferClient, isEntity } from '@models/entities';
 import { Transaction, TransactionType } from '@models/transaction';
 import { Payee, User } from '@models/user';
 import { NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
+import { Observable, of } from 'rxjs';
 import { TEST_PAYEES } from '../../../helpers/testdata';
 
 
@@ -27,6 +28,8 @@ const srcDestValidator: ValidatorFn = (control: AbstractControl): ValidationErro
   styleUrls: ['./transfer.component.css']
 })
 export class TransferComponent implements OnInit {
+  AccountType = AccountType;
+
   @ViewChild('etransferClientModal') etransferClientModal: ElementRef = new ElementRef(null);
   @ViewChild('transferSuccessModal') transferSuccessModal: ElementRef = new ElementRef(null);
   successModal?: NgbModalRef;
@@ -42,7 +45,7 @@ export class TransferComponent implements OnInit {
 
   unusualPayment: boolean = false;
   largePayment: boolean = false;
-  missingReceipt: boolean = false;
+  suggestReceipt: boolean = false;
   receiptUploaded: boolean = false;
   amountInputColor: string = '#ffffff';
 
@@ -64,14 +67,14 @@ export class TransferComponent implements OnInit {
 
     this.transferForm = this.formBuilder.group({
       sender: ['', Validators.required],
-      recipient: ['', Validators.required],
+      recipient: ['', Validators.required, this.ccPaymentValidator],
       amount: [0.0, [Validators.required, Validators.min(0.01)]],
     }, {
       validators: [
         srcDestValidator,
         this.unusualPaymentValidator,
         this.largePaymentValidator,
-        this.missingReceiptValidator,
+        this.suggestReceiptValidator,
       ]
     })
 
@@ -88,6 +91,19 @@ export class TransferComponent implements OnInit {
 
   ngOnInit(): void { }
 
+  ccPaymentValidator: ValidatorFn = (control: AbstractControl): Observable<ValidationErrors | null> => {
+    let recipient = control.value;
+
+    if (recipient instanceof CreditCardId && !control.parent?.get('value')?.touched) {
+      const cc = this.user.cards.find((val) => val.id.equals(recipient));
+      if (cc) {
+        this.logging.info(`Setting full balance amount for card ${recipient.safeString()}`);
+        control.parent?.get('amount')?.setValue(cc.balance);
+      }
+    }
+
+    return of(null);
+  }
 
   unusualPaymentValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
     let recipient = control.get('recipient');
@@ -124,16 +140,16 @@ export class TransferComponent implements OnInit {
     return null;
   };
 
-  missingReceiptValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+  suggestReceiptValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
     let recipient = control.get('recipient');
 
-    const missingReceipt = recipient && recipient.value && isEntity(recipient.value) && recipient.value.equals(TEST_PAYEES[1].id);
-    if (missingReceipt && !this.missingReceipt) {
+    const suggestReceipt = recipient && recipient.value && isEntity(recipient.value) && recipient.value.equals(TEST_PAYEES[1].id);
+    if (suggestReceipt && !this.suggestReceipt) {
       this.logging.info(`Showing missing receipt nudge.`);
-    } else if (this.missingReceipt && !missingReceipt) {
+    } else if (this.suggestReceipt && !suggestReceipt) {
       this.logging.info(`Hiding missing receipt nudge.`);
     }
-    this.missingReceipt = missingReceipt;
+    this.suggestReceipt = suggestReceipt;
 
     return null;
   }
@@ -177,7 +193,9 @@ export class TransferComponent implements OnInit {
     this.tx.recipient = client;
 
     if (this.etransferForm.value['savePayee']) {
-      this.user.payees.push(new Payee(client, nickname));
+      let payee = new Payee(client, nickname);
+      this.user.payees.push(payee);
+      this.logging.info(`Adding payee from etransfer: `, [payee])
     }
     this.confirmTransfer().then(() => {
       this.submitTransfer();

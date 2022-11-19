@@ -53,6 +53,12 @@
     color: black;
 }
 
+.text-bg-green {
+    background-color: var(--e-bg-green);
+    color: black;
+}
+
+
 .bg-grey {
     background-color: var(--e-bg-grey);
 }

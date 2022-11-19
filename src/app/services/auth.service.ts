@@ -46,6 +46,12 @@ export class AuthenticationService {
 
   private updateUserLogin(user: User) {
     this.logging.info(`Logging in user ${user.username}.`)
+    let idx = this.localUsers.findIndex((x: User) => x.username == user.username)
+    if (idx == -1) {
+      this.localUsers.push(user);
+      this.updateLocal();
+    }
+
     Cookies.set(COOKIE_CURRENT_USER_KEY, JSON.stringify(user));
     this.currentUserSubject.next(user);
   }
@@ -111,6 +117,8 @@ export class AuthenticationService {
     }
     this.localUsers[idx] = user;
     this.updateLocal();
+    this.currentUserSubject.next(user);
+    Cookies.set(COOKIE_CURRENT_USER_KEY, JSON.stringify(user));
     return of(user);
   }
 

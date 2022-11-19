@@ -78,7 +78,7 @@ export class PayeesComponent implements OnInit {
   private addPayee<T extends Entity>(type: new () => T, form: FormGroup) {
     if (this.user && form.valid) {
       let payee = new Payee(plainToInstance(type, <T>form.value), this.nickname);
-      this.logging.info(`Adding payee: ${JSON.stringify(payee)}`)
+      this.logging.info(`Adding payee: `, [payee])
 
       this.user.payees.push(payee);
       this.auth.updateUser(this.user).subscribe();

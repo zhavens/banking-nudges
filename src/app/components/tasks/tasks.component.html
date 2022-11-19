@@ -3,7 +3,7 @@
         <h5 class="card-header">Today's Tasks</h5>
         <div class=" card-body">
             <p class="mb-3"><b>Hello {{user.firstName}}! What tasks will you be performing today on behalf of
-                    {{personalization.oaString()}}?</b></p>
+                    {{personalization.personalString()}}?</b></p>
             <form (submit)="submitTasks()">
                 <div class="vstack gap-1">
                     <div class="form-check">

@@ -1,5 +1,4 @@
-<div class="row" *ngIf="!loading">
-    <app-alert></app-alert>
+<div class="row">
     <h1>Hi {{user.firstName}}! <i *ngIf="user.admin" class="bi bi-cup-hot-fill"></i></h1>
     <div class="col-sm-8">
         <div class="vstack gap-3">
@@ -19,5 +18,3 @@
         <app-sidebar [type]="SidebarType.QUICKLINKS"></app-sidebar>
     </div>
 </div>
-
-<app-tasks></app-tasks>

@@ -1,3 +1,5 @@
+import { environment } from '@/environments/environment';
+
 import { AuthenticationService } from '@/app/services/auth.service';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
@@ -9,6 +11,8 @@ import { Router } from '@angular/router';
 })
 export class SplashPage {
   returnUrl: string = '';
+
+  environment = environment;
 
   constructor(
     private router: Router,

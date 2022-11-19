@@ -1,6 +1,5 @@
 import { RouterModule, Routes } from '@angular/router';
 
-import { LoginComponent } from '@app/components/login/login.component';
 import { PageNotFoundComponent } from '@app/components/page-not-found/page-not-found.component';
 import { RegisterComponent } from '@app/components/register/register.component';
 import { AdminGuard } from './guard/admin.guard';
@@ -8,6 +7,7 @@ import { LoggedInGuard } from './guard/logged-in.guard';
 import { AccountsPage } from './pages/accounts/accounts.page';
 import { AdminPage } from './pages/admin/admin.page';
 import { HomePage } from './pages/home/home.page';
+import { LoginPage } from './pages/login/login.page';
 import { PaymentsPage } from './pages/payments/payments.page';
 import { ServicesPage } from './pages/services/services.page';
 import { SplashPage } from './pages/splash/splash.page';
@@ -16,7 +16,7 @@ import { TransferPage } from './pages/transfer/transfer.page';
 const routes: Routes = [
     // { path: '', pathMatch: 'full', redirectTo: '/login' },
     { path: '', component: SplashPage, title: "Welcome - Bank of Bank" },
-    { path: 'login', component: LoginComponent, title: "Login - Bank of Bank" },
+    { path: 'login', component: LoginPage, title: "Login - Bank of Bank" },
 
     { path: 'home', component: HomePage, title: "Home - Bank of Bank", canActivate: [LoggedInGuard] },
     { path: 'accounts', component: AccountsPage, title: "Accounts - Bank of Bank", canActivate: [LoggedInGuard] },

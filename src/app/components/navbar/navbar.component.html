@@ -39,7 +39,7 @@
             <div *ngIf="auth.isLoggedIn; then thenLogout else elseLogin"></div>
             <ng-template #thenLogout>
                 <a class="nav-item nav-link" (click)="logout()">Logout</a>
-                <a class="navbar-brand ms-1" routerLink="/profile">
+                <a class="navbar-brand ms-1">
                     <img src="assets/img/profile.png" width="30" height="30" alt="">
                 </a>
             </ng-template>
