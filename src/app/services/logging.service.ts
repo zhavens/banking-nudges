@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import { instanceToPlain, plainToInstance } from 'class-transformer';
 import { Subject } from 'rxjs';
 import { LogEntry } from '../../models/log';
+import { AuthenticationService } from './auth.service';
 
 const STORAGE_KEY = 'log';
 
@@ -21,7 +22,7 @@ export enum LoggingStatus {
 @Injectable({
   providedIn: 'root'
 })
-export class LoggingService {
+export class LoggingSocket {
   private socket?: WebSocket;
   public status: Subject<number> = new Subject<number>();
   private initialized: boolean = false;
@@ -74,10 +75,21 @@ export class LoggingService {
       }, 5); // wait 5 milisecond for the connection...
   }
 
-  private writeLog(entry: LogEntry) {
+  send(data: string) {
+    this.waitForSocketConnection(() => { this.socket?.send(data) });
+  }
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class LoggingBaseService {
+  constructor(private http: HttpClient, public socket: LoggingSocket) { }
+
+  protected writeLog(entry: LogEntry) {
     console.log(entry.toShortString(), ...entry.objects);
     if (!environment.static) {
-      this.waitForSocketConnection(() => { this.socket?.send(JSON.stringify(instanceToPlain(entry))) });
+      this.socket.send(JSON.stringify(instanceToPlain(entry)));
     } else {
       logs.push(entry);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
@@ -105,5 +117,23 @@ export class LoggingService {
 
   verbose(message: string, objects: Object[] = []) {
     this.writeLog(LogEntry.verbose(message, objects));
+  }
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class LoggingService extends LoggingBaseService {
+  constructor(http: HttpClient,
+    socket: LoggingSocket,
+    private auth: AuthenticationService) {
+    super(http, socket);
+  }
+
+  protected override writeLog(entry: LogEntry) {
+    if (this.auth.isLoggedIn && this.auth.currentUser) {
+      entry.username = this.auth.currentUser.username;
+    }
+    super.writeLog(entry);
   }
 }

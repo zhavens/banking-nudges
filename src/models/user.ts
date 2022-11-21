@@ -7,7 +7,6 @@ import { Entity, OtherEntity } from "./entities";
 import { Payment } from "./payment";
 
 export class User {
-    id: number = 0;
     username: string = "";
     password: string = "";
     firstName: string = "";
@@ -19,6 +18,7 @@ export class User {
     home_phone?: string;
     work_phone?: string;
     emails: string[] = [];
+
 
     @Type(() => Account)
     accounts: Account[] = [];

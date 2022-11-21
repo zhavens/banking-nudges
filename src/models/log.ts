@@ -12,6 +12,7 @@ export enum LogLevel {
 export class LogEntry {
     @Type(() => Date)
     date: Date = new Date();
+    username: string = '';
 
     constructor(public level: LogLevel = LogLevel.INFO,
         public message: string = '',

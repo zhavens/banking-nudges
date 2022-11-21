@@ -36,7 +36,7 @@ export class NavbarComponent {
     this.personalizationForm = this.formBuilder.group({
       level: [PersonalizationLevel[this.user.personalization.level]],
     })
-    this.logging.status.subscribe((val: number) => {
+    this.logging.socket.status.subscribe((val: number) => {
       this.loggingStatus = val;
       if (val == LoggingStatus.CONNECTED) {
         this.loggingStatusClass = 'text-success';

@@ -26,18 +26,6 @@ function usersRoute(): Router {
         return users;
     }
 
-
-    function getUserById(id: number): User | undefined {
-        dlog(`Loading user ${id}`);
-        const users = getUsers();
-        for (let user of users) {
-            if (user.id == id) {
-                return user;
-            }
-        }
-        return undefined;
-    }
-
     function getUserByUsername(username: string): User | undefined {
         dlog(`Loading user ${username}`);
         const userPath = path.join(USER_DIRECTORY, `${username}.json`);
@@ -54,17 +42,11 @@ function usersRoute(): Router {
 
     router.get('/user', (req: TypedRequestQuery<{ id: string, name: string }>, res, next) => {
         dlog(`Getting user: ${JSON.stringify(req.query)}`);
-        if (!req.query.id && !req.query.name) {
-            return next(createError(400, 'Missing user ID.'));
+        if (!req.query.name) {
+            return next(createError(400, 'Missing username.'));
         }
 
-        let user = undefined;
-
-        if (req.query.id) {
-            user = getUserById(parseInt(req.query.id));
-        } else {
-            user = getUserByUsername(req.query.name);
-        }
+        let user = getUserByUsername(req.query.name);
 
         if (user) {
             res.status(200).json(JSON.stringify(instanceToPlain(user)));
@@ -84,7 +66,7 @@ function usersRoute(): Router {
                 return next(createError(400, 'Invalid user object.'));
             }
 
-            dlog(`Updating user ${user.id}`);
+            dlog(`Updating user ${user.username}`);
             const userPath = path.join(USER_DIRECTORY, `${user.username}.json`);
             try {
                 fs.writeFileSync(userPath, JSON.stringify(instanceToPlain(user)));
@@ -98,16 +80,6 @@ function usersRoute(): Router {
             return next(createError(400, 'Missing user data.'))
         }
     });
-
-    router.get('/users/nextid', (req, res, next) => {
-        const users = getUsers();
-
-        let id = 0;
-        for (let user of users) {
-            id = Math.max(id, user.id + 1);
-        }
-        res.status(200).send(id.toString());
-    })
 
     return router;
 }

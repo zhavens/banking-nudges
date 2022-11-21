@@ -8,7 +8,7 @@ import Cookies from 'js-cookie';
 import { BehaviorSubject, map, Observable, of, tap, throwError } from 'rxjs';
 
 import { User } from '../../models/user';
-import { LoggingService } from './logging.service';
+import { LoggingBaseService } from './logging.service';
 
 const LOCAL_STORAGE_USER_KEY: string = 'users';
 const COOKIE_CURRENT_USER_KEY: string = 'current_user';
@@ -21,7 +21,7 @@ export class AuthenticationService {
 
   constructor(
     private http: HttpClient,
-    private logging: LoggingService) {
+    private logging: LoggingBaseService) {
 
     this.localUsers = JSON.parse(localStorage.getItem(LOCAL_STORAGE_USER_KEY) || "[]").map((x: any) => plainToClass(User, x)) || [];
 
