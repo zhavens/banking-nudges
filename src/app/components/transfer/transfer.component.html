@@ -121,16 +121,6 @@
                             <input type="text" class="form-control" placeholder="Phone" id="etransferPhoneInput"
                                 formControlName="phoneNum">
                         </div>
-                        <!-- <div>
-                            <label for="transferAmountInput" class="form-label">Amount:</label>
-                            <div class="input-group">
-                                <span class="input-group-text" id="basic-addon1">$</span>
-                                <input type="number" class="form-control" id="transferAmountInput"
-                                    formControlName="amount" [value]="transferAmount"
-                                    (change)="transferAmount=twoNumberDecimal($event)" aria-label="Transfer amount"
-                                    placeholder="0.00" value="" step="0.01" min="0.01" required>
-                            </div>
-                        </div> -->
                         <div class="form-check">
                             <label for="etransferSavePayee" class="form-check-label">Save as new payee?</label>
                             <input type="checkbox" class="form-check-input" id="etransferSavePayee"
@@ -159,11 +149,21 @@
     </div>
 </ng-template>
 
+<ng-template #confirmDetails>
+    <div class="row">
+        <p><b>Do you want to confirm the following transaction?</b></p>
+        <p><b>From:</b> {{tx.sender?.safeString()}}</p>
+        <p><b>To:</b> {{tx.recipient?.safeString()}}</p>
+        <p><b>Amount:</b> {{tx.amount.currencyString()}}</p>
+    </div>
+</ng-template>
 
-<ng-template #transferSuccessModal let-modal>
-    <div class="modal-body">
-        <!-- MAKE THIS PRETTY -->
-        <h2>Transfer Successful</h2>
-        <button class="btn btn-primary" (click)="modal.close()">Continue</button>
+<ng-template #successDetails>
+    <div class="row">
+        <p><b>The transfer has been completed successfully!</b></p>
+        <p><b>From:</b> {{tx.sender?.safeString()}}</p>
+        <p><b>To:</b> {{tx.recipient?.safeString()}}</p>
+        <p><b>Amount:</b> {{tx.amount.currencyString()}}</p>
+        <p><b>Date:</b> {{currentDate | date : 'long'}} </p>
     </div>
 </ng-template>

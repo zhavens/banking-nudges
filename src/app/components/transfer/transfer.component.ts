@@ -1,5 +1,5 @@
 import { ModalService } from '@/app/services/modal.service';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { atLeastOne } from '@app/helpers/validators';
 import { AlertService } from '@app/services/alert.service';
@@ -32,10 +32,14 @@ export class TransferComponent implements OnInit {
 
   @ViewChild('etransferClientModal') etransferClientModal: ElementRef = new ElementRef(null);
   @ViewChild('transferSuccessModal') transferSuccessModal: ElementRef = new ElementRef(null);
+  @ViewChild('confirmDetails') confirmDetails!: TemplateRef<any>;
+  @ViewChild('successDetails') successDetails!: TemplateRef<any>;
+
   successModal?: NgbModalRef;
 
   user: User = new User();
   tx = new Transaction();
+  currentDate = new Date();
 
   transferForm: FormGroup;
   transferAmount: string = '';
@@ -207,7 +211,7 @@ export class TransferComponent implements OnInit {
   }
 
   confirmTransfer(): Promise<any> {
-    return this.modalService.openConfirmation('Confirm Transaction', 'Are you sure you want to confirm this transaction?')
+    return this.modalService.openConfirmation('Confirm Transaction', this.confirmDetails);
   }
 
   cancelTransfer() {
@@ -274,7 +278,7 @@ export class TransferComponent implements OnInit {
       this.alert.success('Transfer successful!');
       this.transferForm.reset();
       this.etransferForm.reset();
-      this.modalService.openNotification('Transfer Successful', 'The transfer has been completed successfully!');
+      this.modalService.openNotification('Transfer Successful', this.successDetails);
     }
   }
 

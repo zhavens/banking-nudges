@@ -11,7 +11,6 @@ import { appRoutingModule } from '@app/app.routing';
 import { AccountsComponent } from '@app/components/accounts/accounts.component';
 import { AlertComponent } from '@app/components/alert/alert.component';
 import { CcComponent } from '@app/components/cc/cc.component';
-import { ConfirmDialogComponent, NotificationDialogComponent } from '@app/components/dialog/dialog.component';
 import { NavbarComponent } from '@app/components/navbar/navbar.component';
 import { PageNotFoundComponent } from '@app/components/page-not-found/page-not-found.component';
 import { PayeesComponent } from '@app/components/payees/payees.component';
@@ -27,8 +26,10 @@ import { PaymentsPage } from '@app/pages/payments/payments.page';
 import { ServicesPage } from '@app/pages/services/services.page';
 import { TransferPage } from '@app/pages/transfer/transfer.page';
 import { AddCoComponent } from './components/add-co/add-co.component';
+import { TypeofPipe } from './helpers/pipe';
 import { LoginPage } from './pages/login/login.page';
 import { SplashPage } from './pages/splash/splash.page';
+import { ConfirmDialogComponent, NotificationDialogComponent } from './services/modal.service';
 
 
 @NgModule({
@@ -67,6 +68,8 @@ import { SplashPage } from './pages/splash/splash.page';
     ConfirmDialogComponent,
     NotificationDialogComponent,
     AddCoComponent,
+    // Pipes
+    TypeofPipe,
   ],
   providers: [
     // provider used to create static backend when in static mode

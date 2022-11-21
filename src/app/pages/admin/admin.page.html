@@ -17,7 +17,24 @@
         <button type="button" class="btn btn-primary" (click)="tasksModal.openTasksModal()">Task Modal</button>
         <button type="button" class="btn btn-primary" (click)="addCoModal.openAddCoModal()">Add CO Modal</button>
     </div>
+
+    <div class="btn-group" role="group">
+        <button type="button" class="btn btn-primary"
+            (click)="modal.openNotification('Notification', 'Test notification.')">Test Notification</button>
+        <button type="button" class="btn btn-primary"
+            (click)="modal.openNotification('Notification', complexContent)">Test Complex Notification</button>
+        <button type="button" class="btn btn-primary"
+            (click)="modal.openConfirmation('Text Confirm', 'Test confirm')">Test Confirmation</button>
+        <button type="button" class="btn btn-primary"
+            (click)="modal.openConfirmation('Test Confirmation', complexContent)">Test Complex Confirmation</button>
+    </div>
 </div>
+
+<ng-template #complexContent>
+    <div class="row">
+        <p>This is <a href="#">complex</a> <em> content</em>. <i class=" bi bi-check2-all"></i></p>
+    </div>
+</ng-template>
 
 <app-tasks></app-tasks>
 <app-add-co></app-add-co>
