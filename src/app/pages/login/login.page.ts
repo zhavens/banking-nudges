@@ -6,6 +6,7 @@ import { catchError, of } from 'rxjs';
 import { AddCoComponent } from '@/app/components/add-co/add-co.component';
 import { TasksComponent } from '@/app/components/tasks/tasks.component';
 import { PersonalizationService } from '@/app/services/personalization.service';
+import { isHttpError } from '@/helpers/error_typing';
 import { AlertService } from '@app/services/alert.service';
 import { AuthenticationService } from '@app/services/auth.service';
 import { NudgeOnLogin, User } from '@models/user';
@@ -98,8 +99,8 @@ export class LoginPage implements OnInit {
     this.loading = true;
     this.auth.login(this.f['username'].value, this.f['password'].value)
       .pipe(catchError((err) => {
-        console.log(err)
-        this.alertService.error(typeof err === 'string' ? err : err.error)
+        const msg = err instanceof Error ? err.message : isHttpError(err) ? err.error : err;
+        this.alertService.error(msg)
         return of(undefined)
       }))
       .subscribe(this.handleAuth.bind(this));
