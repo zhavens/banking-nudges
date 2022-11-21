@@ -109,10 +109,13 @@
               "browserTarget": "banking-nudges:build:production"
             },
             "static": {
-              "browserTarget": "banking-nudges:build:development-static"
+              "browserTarget": "banking-nudges:build:static"
             },
             "development": {
               "browserTarget": "banking-nudges:build:development"
+            },
+            "development-static": {
+              "browserTarget": "banking-nudges:build:development-static"
             }
           },
           "defaultConfiguration": "development"
