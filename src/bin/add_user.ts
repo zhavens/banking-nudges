@@ -1,6 +1,6 @@
 // $ node -r tsconfig-paths/register -r ts-node/register src/bin/add_user.ts
 
-import { instanceToPlain, plainToInstance } from "class-transformer";
+import { instanceToPlain } from "class-transformer";
 import fs from "fs";
 import path from "path";
 import prompt_sync from "prompt-sync";
@@ -10,28 +10,6 @@ import { TEST_ACCOUNTS, TEST_CARDS, TEST_PAYEES, TEST_PAYMENTS, TEST_PERSONALIZA
 import { User } from "@/models/user";
 
 const USER_DIRECTORY = "/var/log/www/banking-nudges/users"
-
-function getUsers(): User[] {
-    const userfiles = fs.readdirSync(USER_DIRECTORY);
-    console.log(`Loading users: ${userfiles}`)
-    let users: User[] = [];
-
-    for (let userfile of userfiles) {
-        users.push(plainToInstance(User, JSON.parse(fs.readFileSync(path.join(USER_DIRECTORY, userfile), 'utf8'))));
-    }
-
-    return users;
-}
-
-function getNextId(): number {
-    const users = getUsers();
-
-    let id = 0;
-    for (let user of users) {
-        id = Math.max(id, user.id + 1);
-    }
-    return id;
-}
 
 function getUserFromStdin(): User {
     var prompt = prompt_sync({})
@@ -60,8 +38,7 @@ function getUserFromStdin(): User {
 }
 
 function writeUser(user: User): void {
-    user.id = getNextId();
-    console.log(`Updating user ${user.id}`);
+    console.log(`Updating user ${user.username}`);
     const userPath = path.join(USER_DIRECTORY, `${user.username}.json`);
     try {
         fs.writeFileSync(userPath, JSON.stringify(instanceToPlain(user)));
@@ -69,7 +46,7 @@ function writeUser(user: User): void {
         console.log(`Error writing user file: ${e}`);
         sys.exit(1);
     }
-    console.log(`User ${user.id} written.`)
+    console.log(`User ${user.username} written.`)
 }
 
 let user = getUserFromStdin();
