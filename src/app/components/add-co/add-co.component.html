@@ -5,15 +5,17 @@
 
             <div class="vstack gap-1 text-center" *ngIf="!addingCo; else addCoForm">
                 <p>Welcome {{user.firstName}}! We've noticed that you're the only one who has proxy access to
-                    {{personalization.personalString()}} accounts. </p>
+                    {{personalization.personalString()}} accounts.
+                </p>
                 <p>Having multiple people performing banking tasks on behalf of an older adults can reduce the burden
                     put on you and help foster trust within your friends and family. This can also help provide
                     accountability and transparency to give {{personalization.personalString()}} better peace of mind.
                 </p>
-                <p>Would you consider starting the process of adding another proxy user to Alice's accounts before you
+                <p>Would you consider starting the process of adding another proxy user to
+                    {{personalization.personalString()}}'s accounts before you
                     bank today? ({{personalization.personalString()}} will need to approve any additional accounts
-                    before they take effect.)</p>
-
+                    before they take effect.)
+                </p>
                 <div class="d-flex" style="width: 100%;">
                     <div class="my-auto hstack gap-3">
                         <button type="button" class="btn btn-danger" (click)="openModal?.dismiss('no')">No
