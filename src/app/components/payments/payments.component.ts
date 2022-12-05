@@ -105,6 +105,7 @@ export class PaymentsComponent implements OnInit {
       }
     }
     this.logging.info(`Added new payment: ${JSON.stringify(payment)}`)
+    this.alert.success('Payment added!');
     this.user?.payments.push(payment);
     this.auth.updateUser(this.user).subscribe();
     this.modalService.dismissAll();
