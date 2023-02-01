@@ -36,7 +36,7 @@ export class PersonalizationService {
     // Cycle through the login options.
     if (this.user.personalization.nudgeOnLogin != NudgeOnLogin.NONE) {
       this.user.personalization.nudgeOnLogin =
-        Math.min(1, (this.user.personalization.nudgeOnLogin + 1) % (Object.keys(NudgeOnLogin).length / 2));
+        Math.max(1, (this.user.personalization.nudgeOnLogin + 1) % ((Object.keys(NudgeOnLogin).length - 1) / 2));
       this.logging.info(`Updating shown login to ${NudgeOnLogin[this.user.personalization.nudgeOnLogin]}.`);
       this.auth.updateUser(this.user);
     }
@@ -44,7 +44,7 @@ export class PersonalizationService {
 
   doLogoutUpdate() {
     this.logging.info(`Updating personalization on logout.`)
-    this.user.personalization.showTasksModal = true;
+    // this.user.personalization.showTasksModal = true;
     this.user.personalization.showConsequencesBanner = !this.user.personalization.showConsequencesBanner;
     for (let account of this.user.accounts) {
       account.showTransactions = false;
