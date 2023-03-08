@@ -17,7 +17,7 @@ export const atLeastOne = (validator: ValidatorFn, controls: string[] = []) => (
 
 export function futureDateValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-        return new Date(control.value) <= new Date() ? { futureDate: { value: control.value } } : null;
+        return new Date(control.value) < new Date() ? { futureDate: { value: control.value } } : null;
     };
 }
 
