@@ -114,7 +114,20 @@
                 </div>
             </div>
             <div>
-                <button type="submit" class="btn btn-primary" [disabled]="!paymentForm.valid">Submit</button>
+                <div class="card" *ngIf="unusualPayment && paymentForm.valid; else normalSubmit">
+                    <div class="card-body text-bg-yellow">
+                        <p> The value of the payment to this payee is different from your usual amount. Would
+                            you
+                            like
+                            to reset this to the usual amount, or submit with this new amount?</p>
+                        <button type="submit" class="btn btn-primary me-3">Submit</button>
+                        <button type="button" class="btn btn-success"
+                            (click)="paymentForm.controls['amount'].setValue(46.45)">Reset</button>
+                    </div>
+                </div>
+                <ng-template #normalSubmit>
+                    <button type="submit" class="btn btn-primary" [disabled]="!paymentForm.valid">Submit</button>
+                </ng-template>
             </div>
         </form>
     </div>

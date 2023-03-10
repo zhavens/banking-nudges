@@ -1,13 +1,14 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import * as uuid from "uuid";
 
 import { ModalService } from '@/app/services/modal.service';
+import { TEST_PAYEES } from '@/helpers/testdata';
 import { conditionalValidator, futureDateValidator } from '@app/helpers/validators';
 import { AlertService } from '@app/services/alert.service';
 import { AuthenticationService } from '@app/services/auth.service';
 import { LoggingService } from '@app/services/logging.service';
-import { EtransferClient } from '@models/entities';
+import { EtransferClient, isEntity } from '@models/entities';
 import { Payment } from '@models/payment';
 import { Payee, User } from '@models/user';
 
@@ -22,6 +23,7 @@ export class PaymentsComponent implements OnInit {
   user: User = new User();
 
   paymentAmount: string = '';
+  unusualPayment: boolean = false;
 
   paymentForm: FormGroup;
 
@@ -49,6 +51,10 @@ export class PaymentsComponent implements OnInit {
       permanent: [false],
       frequency: [''],
       duration: [{ value: 0 }, conditionalValidator({ 'permanent': false, 'onetime': false }, [Validators.required, Validators.min(1)])],
+    }, {
+      validators: [
+        this.unusualPaymentValidator,
+      ]
     })
 
   }
@@ -59,6 +65,25 @@ export class PaymentsComponent implements OnInit {
       this.user = user;
     })
   }
+
+  unusualPaymentValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    let recipient = control.get('to');
+    let amount = control.get('amount');
+
+    let unusualPayment = recipient && amount
+      && recipient.touched && recipient.value && isEntity(recipient.value)
+      && recipient.value.id.equals(TEST_PAYEES[0].id)
+      && amount.value > 0.0 && amount.value != 46.45;
+
+    if (unusualPayment && !this.unusualPayment) {
+      this.logging.info(`Showing unusual payment value nudge.`);
+    } else if (this.unusualPayment && !unusualPayment) {
+      this.logging.info(`Hiding unusual payment value nudge.`);
+    }
+    this.unusualPayment = unusualPayment;
+
+    return null;
+  };
 
   removePayment(payment: Payment) {
     const payment_string = payment.description || payment.id
