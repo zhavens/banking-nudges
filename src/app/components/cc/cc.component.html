@@ -12,7 +12,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let card of cards" (click)="selectCard(card, cardDetails)"
+                        <tr *ngFor="let card of cards" (click)="showDetails(card)"
                             [class.bg-light]="currentCard === card">
                             <td>
                                 {{card.name}} ({{textlib.cardTypeString(card.type)}})
@@ -29,89 +29,4 @@
     </div>
 </div>
 
-<ng-template #cardDetails let-modal>
-    <div class="modal-header">
-        <div class="">
-            <h5 class="modal-title">{{currentCard?.name}}</h5>
-        </div>
-        <div class="d-flex ms-auto me-3">
-            <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
-        </div>
-    </div>
-    <div class="modal-body vstack gap-3">
-        <div class="card">
-            <h5 class="card-header">Card Details</h5>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-12">
-                        Card ID:
-                        <br>
-                        <i>{{textlib.cardTypeString(currentCard?.type)}} - {{currentCard?.id?.safeStringLong()}}</i>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-4">Current Balance<br>${{currentCard?.balance?.toFixed(2)}}</div>
-                    <div class="col-sm-4">Available Balance<br>${{currentCard?.limit?.minus(currentCard?.balance ||
-                        0)?.toFixed(2)}}
-                    </div>
-                    <div class="col-sm-4"></div>
-                </div>
-            </div>
-        </div>
-        <div class="card" id="transaction-card">
-            <h5 class="card-header">Recent Transactions</h5>
-            <div class="card-body position-relative">
-                <div class="col-sm-12">
-                    Transactions as of {{today | date}}:
-                </div>
-                <div class="col-sm-6">
-                    <form [formGroup]="txSearchForm" (ngSubmit)="filterTx()">
-                        <div class="input-group">
-                            <input type="text" class="form-control" [formControl]="txFilter"
-                                placeholder="Search by keyword">
-                            <button class="btn btn-primary" type="submit">Search</button>
-                        </div>
-                    </form>
-                </div>
-                <div class="col-sm-12">
-                    Showing {{filteredTransactions.length}} transaction{{filteredTransactions.length > 1 ? "s" : ""}}
-                </div>
-                <div class="col-sm-12">
-                    <table class="table table-striped table-hover" id="transaction_table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Date</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Debits</th>
-                                <th scope="col">Credits</th>
-                                <th scope="col">Balance</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let tx of filteredTransactions">
-                                <td>{{tx.date.toDateString()}}</td>
-                                <ng-template [ngIf]="currentCard && tx.recipient" [ngIfElse]="showDeposit">
-                                    <td>{{tx.recipient.safeString()}}</td>
-                                    <td></td>
-                                    <td>{{tx.amount.currencyString()}}</td>
-                                    <td>{{tx.balance?.currencyString()}}</td>
-                                </ng-template>
-                                <ng-template #showDeposit>
-                                    <td class=>{{tx.sender?.safeString()}}</td>
-                                    <td class="text-success">+{{tx.amount.currencyString()}}</td>
-                                    <td></td>
-                                    <td>{{tx.balance?.currencyString()}}</td>
-                                </ng-template>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <!-- TODO@: ADD PAGINATION -->
-                </div>
-                <div class="blur-overlay" *ngIf=" !currentCard?.showTransactions">
-                    <button class="btn btn-warning" (click)="showCurrentTransactions()">Show
-                        Transactions</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</ng-template>
+<app-card-details [(card)]="currentCard"></app-card-details>

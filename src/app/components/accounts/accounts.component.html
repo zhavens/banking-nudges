@@ -11,7 +11,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let account of accounts" (click)="selectAccount(account, accountDetails)"
+                        <tr *ngFor="let account of accounts" (click)="showDetails(account)"
                             [class.bg-light]="currentAccount === account">
                             <td>
                                 {{account.name}} ({{textlib.accountTypeString(account.type)}})
@@ -27,90 +27,4 @@
     </div>
 </div>
 
-<ng-template #accountDetails let-modal>
-    <div class="modal-header">
-
-        <div class="">
-            <h5 class="modal-title">{{currentAccount?.name}}</h5>
-        </div>
-        <div class="d-flex ms-auto me-3">
-            <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
-        </div>
-    </div>
-    <div class="modal-body vstack gap-3">
-        <div class="card">
-            <h5 class="card-header">Account Details</h5>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-12">
-                        Account ID:
-                        <br>
-                        <i>{{textlib.accountTypeString(currentAccount?.type)}} -
-                            {{currentAccount?.id?.safeString()}}</i>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-4">Current Balance<br>${{currentAccount?.balance}}</div>
-                    <div class="col-sm-4">Available Balance<br>${{currentAccount?.balance}}</div>
-                    <div class="col-sm-4"></div>
-                </div>
-            </div>
-        </div>
-        <div class="card" id="transaction-card">
-            <h5 class="card-header">Recent Transactions</h5>
-            <div class="card-body position-relative">
-                <div class="col-sm-12">
-                    Transactions as of {{today | date}}:
-                </div>
-                <div class="col-sm-6">
-                    <form [formGroup]="txSearchForm" (ngSubmit)="filterTx()">
-                        <div class="input-group">
-                            <input type="text" class="form-control" [formControl]="txFilter"
-                                placeholder="Search by keyword">
-                            <button class="btn btn-primary" type="submit">Search</button>
-                        </div>
-                    </form>
-                </div>
-                <div class="col-sm-12">
-                    Showing {{filteredTransactions.length}} transaction{{filteredTransactions.length > 1 ? "s" : ""}}
-                </div>
-                <div class="col-sm-12">
-                    <table class="table table-striped table-hover" id="transaction_table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Date</th>
-                                <th scope="col">From/To</th>
-                                <th scope="col">Withdrawals</th>
-                                <th scope="col">Deposits</th>
-                                <th scope="col">Balance</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let tx of filteredTransactions">
-                                <td>{{tx.date.toDateString()}}</td>
-                                <ng-template [ngIf]="currentAccount && tx.sender?.equals(currentAccount.id)"
-                                    [ngIfElse]="showDeposit">
-                                    <td>{{tx.recipient?.safeString()}}</td>
-                                    <td class="text-danger">-{{tx.amount.currencyString()}}</td>
-                                    <td></td>
-                                    <td>{{tx.balance?.currencyString()}}</td>
-                                </ng-template>
-                                <ng-template #showDeposit>
-                                    <td class=>{{tx.sender?.safeString()}}</td>
-                                    <td></td>
-                                    <td>{{tx.amount.currencyString()}}</td>
-                                    <td>{{tx.balance?.currencyString()}}</td>
-                                </ng-template>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <!-- TODO@: ADD PAGINATION -->
-                </div>
-                <div class="blur-overlay" *ngIf=" !currentAccount?.showTransactions">
-                    <button class="btn btn-warning" (click)="showCurrentTransactions()">Show
-                        Transactions</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</ng-template>
+<app-account-details [(account)]="currentAccount"></app-account-details>

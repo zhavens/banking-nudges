@@ -8,9 +8,8 @@ import { NgChartsModule } from 'ng2-charts';
 
 import { AppComponent } from '@app/app.component';
 import { appRoutingModule } from '@app/app.routing';
-import { AccountsComponent } from '@app/components/accounts/accounts.component';
+import { AccountDetailsComponent, AccountsComponent } from '@app/components/accounts/accounts.component';
 import { AlertComponent } from '@app/components/alert/alert.component';
-import { CcComponent } from '@app/components/cc/cc.component';
 import { NavbarComponent } from '@app/components/navbar/navbar.component';
 import { PageNotFoundComponent } from '@app/components/page-not-found/page-not-found.component';
 import { PayeesComponent } from '@app/components/payees/payees.component';
@@ -26,6 +25,7 @@ import { PaymentsPage } from '@app/pages/payments/payments.page';
 import { ServicesPage } from '@app/pages/services/services.page';
 import { TransferPage } from '@app/pages/transfer/transfer.page';
 import { AddCoComponent } from './components/add-co/add-co.component';
+import { CardDetailsComponent, CardsComponent } from './components/cc/cc.component';
 import { TypeofPipe } from './helpers/pipe';
 import { LoginPage } from './pages/login/login.page';
 import { SplashPage } from './pages/splash/splash.page';
@@ -59,10 +59,12 @@ import { ConfirmDialogComponent, NotificationDialogComponent } from './services/
     SidebarComponent,
     NavbarComponent,
     AccountsComponent,
+    AccountDetailsComponent,
     PageNotFoundComponent,
     TransferComponent,
     PayeesComponent,
-    CcComponent,
+    CardsComponent,
+    CardDetailsComponent,
     PaymentsComponent,
     TasksComponent,
     ConfirmDialogComponent,

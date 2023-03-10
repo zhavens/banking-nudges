@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
+import { LoggingService } from '@/app/services/logging.service';
 import { ModalService } from '@/app/services/modal.service';
 import { PersonalizationService } from '@/app/services/personalization.service';
 import * as text from '@/helpers/text';
+import { Transaction } from '@/models/transaction';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { AuthenticationService } from '@app/services/auth.service';
-import { LoggingService } from '@app/services/logging.service';
 import { Account } from '@models/account';
-import { Transaction } from '@models/transaction';
 import { User } from '@models/user';
 
 @Component({
@@ -15,12 +16,57 @@ import { User } from '@models/user';
   templateUrl: './accounts.component.html',
   styleUrls: ['./accounts.component.css']
 })
-export class AccountsComponent implements OnInit {
+export class AccountsComponent {
+  @ViewChild(TemplateRef) accountDetailsModal!: TemplateRef<any>;
+
   accounts?: Account[];
+  currentAccount: Account | undefined = undefined;
+
+  today: Date = new Date();
+
+  constructor(
+    private route: ActivatedRoute,
+    private formBuilder: FormBuilder,
+    private auth: AuthenticationService,) {
+    this.auth.currentUserObs.subscribe((user: User) => { this.accounts = this.auth.currentUser?.accounts });
+  }
+
+  ngAfterContentInit(): void {
+    this.route.queryParamMap.subscribe(
+      (params: ParamMap) => {
+        let id = params.get('id');
+        if (id) {
+          console.log("Id", id)
+          let account = this.accounts?.find(x => x.id.accountNum == parseInt(id!));
+          if (account) {
+            console.log(account);
+            this.currentAccount = account;
+          }
+        }
+      }
+    )
+  }
+
+  showDetails(account: Account) {
+    this.currentAccount = account;
+  }
+
+  // Getter to expose library to templates.
+  get textlib() { return text };
+}
+
+@Component({
+  selector: 'app-account-details',
+  templateUrl: './details.component.html',
+  styleUrls: ['./accounts.component.css']
+})
+export class AccountDetailsComponent implements OnInit, OnChanges {
+  @ViewChild(TemplateRef) detailsModal!: TemplateRef<any>;
+  @Input() account: Account | undefined = undefined;
+  @Output() accountChange = new EventEmitter<Account | undefined>();
 
   txFilter: FormControl;
   txSearchForm: FormGroup;
-  currentAccount: Account | null = null;
   filteredTransactions: Transaction[] = [];
 
   today: Date = new Date();
@@ -28,40 +74,56 @@ export class AccountsComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private modalService: ModalService,
-    private auth: AuthenticationService,
     private personalization: PersonalizationService,
     private logging: LoggingService) {
-    this.auth.currentUserObs.subscribe((user: User) => { this.accounts = this.auth.currentUser?.accounts });
 
     this.txFilter = new FormControl('');
     this.txSearchForm = new FormGroup([]);
   }
+
   ngOnInit(): void {
     this.txSearchForm = this.formBuilder.group({
       query: this.txFilter
     });
   }
 
-  selectAccount(account: Account, modalContent: any) {
-    this.logging.info(`Showing account modal for ${account.name}`);
-    this.txFilter.setValue('');
-    this.currentAccount = account;
-    this.filteredTransactions = this.currentAccount.transactions || []
-    this.modalService.baseService.open(modalContent, {
-      size: 'lg',
-      fullscreen: 'md'
-    }).result.finally(() => {
-      this.logging.info(`Closed account modal for ${account.name}.`);
-      this.currentAccount = null;
-      this.filteredTransactions = [];
-    });
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!changes['account'].firstChange) {
+      this.showDetails();
+    }
+  }
+
+  ngAfterViewInit(): void {
+    if (this.account) {
+      this.showDetails();
+    }
+  }
+
+  showDetails() {
+    if (this.account) {
+      this.logging.info(`Showing account modal for ${this.account.name}`);
+      this.txFilter.setValue('');
+      this.account = this.account;
+      this.filteredTransactions = this.account.transactions || []
+      if (this.detailsModal) {
+        this.modalService.baseService.open(this.detailsModal, {
+          size: 'lg',
+          fullscreen: 'md'
+        }).result.finally(() => {
+          this.logging.info(`Closed account modal for ${this.account?.name}.`);
+          this.account = undefined;
+          this.accountChange.emit(undefined);
+          this.filteredTransactions = [];
+        });
+      }
+    }
   }
 
   filterTx() {
     if (this.txFilter.value) {
-      this.filteredTransactions = this.currentAccount?.transactions?.filter((x: Transaction) => x.description?.includes(this.txFilter.value) || x.sender?.safeString().includes(this.txFilter.value) || x.recipient?.safeString().includes(this.txFilter.value)) || []
+      this.filteredTransactions = this.account?.transactions?.filter((x: Transaction) => x.description?.includes(this.txFilter.value) || x.sender?.safeString().includes(this.txFilter.value) || x.recipient?.safeString().includes(this.txFilter.value)) || []
     } else {
-      this.filteredTransactions = this.currentAccount?.transactions || [];
+      this.filteredTransactions = this.account?.transactions || [];
     }
 
     this.logging.info(`Filtered using query "${this.txFilter.value}", showing ${this.filteredTransactions.length} accounts.`)
@@ -74,9 +136,9 @@ export class AccountsComponent implements OnInit {
       'Show Transactions', 'Cancel').
       then(
         () => {
-          if (this.currentAccount) {
-            this.logging.info(`Showing transactions for account ${this.currentAccount.name}`)
-            this.currentAccount.showTransactions = true;
+          if (this.account) {
+            this.logging.info(`Showing transactions for account ${this.account.name}`)
+            this.account.showTransactions = true;
           }
         }
       );
