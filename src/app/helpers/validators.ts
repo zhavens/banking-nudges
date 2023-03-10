@@ -1,4 +1,5 @@
 import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from "@angular/forms";
+import moment from 'moment';
 
 export const atLeastOne = (validator: ValidatorFn, controls: string[] = []) => (
     group: FormGroup,
@@ -17,7 +18,7 @@ export const atLeastOne = (validator: ValidatorFn, controls: string[] = []) => (
 
 export function futureDateValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-        return new Date(control.value) < new Date() ? { futureDate: { value: control.value } } : null;
+        return moment(control.value).endOf('day').isSameOrBefore(moment().startOf('day')) ? { futureDate: { value: control.value } } : null;
     };
 }
 

@@ -46,6 +46,7 @@
     "less-loader": "^11.0.0",
     "log4js": "^6.7.0",
     "minimongo": "^6.12.6",
+    "moment": "^2.29.4",
     "ndjson": "^2.0.0",
     "ndjson-parse": "^1.0.4",
     "ng2-charts": "^4.0.1",
