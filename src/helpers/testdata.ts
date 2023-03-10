@@ -12,23 +12,23 @@ export const TEST_ACCOUNTS: Account[] = [
         id: plainToClass(AccountId, { accountNum: 17654 }),
         type: AccountType.SAVINGS,
         name: "Account A",
-        balance: new Decimal(876.55),
+        balance: new Decimal(2876.55),
         showTransactions: false,
         transactions: [{
             type: TransactionType.ETRANSFER,
             date: new Date(),
             sender: plainToClass(AccountId, { accountNum: 17654 }),
-            recipient: new EtransferClient("test", "test@mail.com"),
+            recipient: new EtransferClient("Zach Havens", "zhavens@bankofbank.com"),
             amount: new Decimal(123.45),
-            balance: new Decimal(876.55)
+            balance: new Decimal(2876.55)
         },
         {
             type: TransactionType.DEBIT,
             date: new Date(),
             sender: new OtherEntity("Bank of Bank"),
             recipient: plainToClass(AccountId, { accountNum: 17654 }),
-            amount: new Decimal(1000.00),
-            balance: new Decimal(1000.00),
+            amount: new Decimal(3000.00),
+            balance: new Decimal(3000.00),
             description: "Initial deposit."
         },]
     },
@@ -36,13 +36,13 @@ export const TEST_ACCOUNTS: Account[] = [
         id: plainToClass(AccountId, { accountNum: 22387 }),
         type: AccountType.CHEQUING,
         name: "Account B",
-        balance: new Decimal(13267.89),
+        balance: new Decimal(267.89),
         showTransactions: false,
         transactions: [
             {
                 type: TransactionType.ETRANSFER,
                 date: new Date(),
-                sender: new EtransferClient("test", "test@mail.com"),
+                sender: new EtransferClient("Zach Havens", "zhavens@bankofbank.com"),
                 recipient: plainToClass(AccountId, { accountNum: 22387 }),
                 amount: new Decimal(267.89),
                 balance: new Decimal(267.89),
@@ -109,7 +109,7 @@ export const TEST_PERSONALIZATION: PersonalizationConfig = (() => {
     config.oaFirstName = "Maggie";
     config.oaLastName = "Winters";
     config.oaRelation = "mother";
-    config.nudgeOnLogin = NudgeOnLogin.ADD_CO;
+    config.nudgeOnLogin = NudgeOnLogin.TASKS;
     config.loginCount = 0;
     config.txCount = 5;
     return config

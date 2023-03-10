@@ -83,7 +83,8 @@
                         </div>
                         <div *ngIf="!unusualPayment">
                             <button type="submit" class="btn btn-primary"
-                                [disabled]="!transferForm.valid">Submit</button>
+                                [disabled]="!transferForm.valid">{{transferForm.value['recipient'] == otherEtransfer ?
+                                "Continue" : "Submit"}}</button>
                         </div>
                     </div>
                 </div>
