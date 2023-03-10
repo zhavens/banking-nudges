@@ -71,13 +71,11 @@ export class CardDetailsComponent implements OnInit, OnChanges {
     today: Date = new Date();
 
     constructor(
-        private route: ActivatedRoute,
         private router: Router,
         private formBuilder: FormBuilder,
         private modalService: ModalService,
         private personalization: PersonalizationService,
         private logging: LoggingService) {
-
         this.txFilter = new FormControl('');
         this.txSearchForm = new FormGroup([]);
     }

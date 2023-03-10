@@ -25,7 +25,8 @@
                     </div>
                     <div class="col-sm-1"></div>
                     <div class="col-sm-3">
-                        <button class="btn btn-primary" type=" button">Pay Off Balance</button>
+                        <button class="btn btn-primary" type=" button" [routerLink]="'/transfer'"
+                            [queryParams]="{toCC: card?.id?.ccNum}">Pay Off Balance</button>
                     </div>
                 </div>
             </div>

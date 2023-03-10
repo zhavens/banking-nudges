@@ -1,6 +1,7 @@
 import { ModalService } from '@/app/services/modal.service';
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { atLeastOne } from '@app/helpers/validators';
 import { AlertService } from '@app/services/alert.service';
 import { AuthenticationService } from '@app/services/auth.service';
@@ -54,6 +55,7 @@ export class TransferComponent implements OnInit {
   amountInputColor: string = '#ffffff';
 
   constructor(
+    private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private modalService: ModalService,
     public auth: AuthenticationService,
@@ -93,7 +95,22 @@ export class TransferComponent implements OnInit {
     })
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.route.queryParamMap.subscribe((params: ParamMap) => {
+      let num = params.get('toCC');
+      if (parseInt(num || '')) {
+        let card = this.user.cards.find(c => c.id.ccNum === parseInt(num || ''))
+        if (card) {
+          this.transferForm.get('recipient')?.setValue(card.id);
+        }
+      }
+    }
+    );
+
+    if (this.modalService.baseService.hasOpenModals()) {
+      this.modalService.dismissAll();
+    }
+  }
 
   ccPaymentValidator: ValidatorFn = (control: AbstractControl): Observable<ValidationErrors | null> => {
     let recipient = control.value;
