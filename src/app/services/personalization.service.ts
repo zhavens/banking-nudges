@@ -26,18 +26,12 @@ export class PersonalizationService {
     })
   }
 
-  setShownTaskModal() {
-    this.logging.info(`Marking task modal as shown.`);
-    this.user.personalization.showTasksModal = false;
-    this.auth.updateUser(this.user);
-  }
-
   setShownLogin() {
     // Cycle through the login options.
     if (this.user.personalization.nudgeOnLogin != NudgeOnLogin.NONE) {
       this.user.personalization.nudgeOnLogin =
         Math.max(1, (this.user.personalization.nudgeOnLogin + 1) % ((Object.keys(NudgeOnLogin).length - 1) / 2));
-      this.logging.info(`Updating shown login to ${NudgeOnLogin[this.user.personalization.nudgeOnLogin]}.`);
+      this.logging.info(`Updating next loging nudge to ${NudgeOnLogin[this.user.personalization.nudgeOnLogin]}.`);
       this.auth.updateUser(this.user);
     }
   }

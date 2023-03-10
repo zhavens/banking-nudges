@@ -87,8 +87,6 @@ export class AuthenticationService {
     user.payments = TEST_PAYMENTS;
     user.payees[1].nickname = `${user.firstName}'s Account`
     user.personalization = TEST_PERSONALIZATION;
-    // Don't show task modal on first login!
-    user.personalization.showTasksModal = false;
 
     let idx = this.localUsers.findIndex((x: User) => x.username == user.username)
     if (idx > -1) {

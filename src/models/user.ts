@@ -84,7 +84,6 @@ export class PersonalizationConfig {
     oaLastName: string = '';
     oaRelation: string = '';
 
-    showTasksModal: boolean = true;
     nudgeOnLogin: NudgeOnLogin = NudgeOnLogin.NONE;
 
     showConsequencesBanner: boolean = false;
