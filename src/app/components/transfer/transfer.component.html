@@ -64,14 +64,21 @@
                         </div>
                         <div class="card mb-3" *ngIf="transferForm.valid && suggestReceipt">
                             <div class="card-body" [ngClass]="receiptUploaded ? 'text-bg-green' :  'text-bg-orange'">
-                                <div class="row" *ngIf="!receiptUploaded; else uploaded">
-                                    <div class="col-9">If you are reimbursing yourself for a purchase, would you
-                                        consider
-                                        uploading a receipt?</div>
+                                <div class="row" *ngIf="!receiptUploaded; else uploaded"
+                                    (dragover)="receiptDragover($event)">
+                                    <div class="col-9">
+                                        If you are reimbursing yourself for a purchase, would you consider uploading a
+                                        receipt?
+                                    </div>
                                     <div class="col-3">
                                         <input type="file" (change)="receiptUploaded = true" hidden #fileChooser>
                                         <button type="button" class="btn btn-success"
                                             (click)="fileChooser.click()">Attach Receipt</button>
+                                    </div>
+                                    <div class="blur-overlay" [hidden]="!receiptHover || receiptUploaded"
+                                        (dragover)="receiptDragover($event)" (dragleave)="receiptLeave($event)"
+                                        (drop)="receiptDrop($event)">
+                                        <i class="bi bi-upload"></i>
                                     </div>
                                 </div>
                                 <ng-template #uploaded>

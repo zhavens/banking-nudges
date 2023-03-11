@@ -51,6 +51,7 @@ export class TransferComponent implements OnInit {
   unusualPayment: boolean = false;
   largePayment: boolean = false;
   suggestReceipt: boolean = false;
+  receiptHover: boolean = false;
   receiptUploaded: boolean = false;
   amountInputColor: string = '#ffffff';
 
@@ -173,6 +174,24 @@ export class TransferComponent implements OnInit {
     this.suggestReceipt = suggestReceipt;
 
     return null;
+  }
+
+  console = console;
+  receiptDragover(event: DragEvent): void {
+    event.preventDefault();
+    this.receiptHover = true;
+    event.dataTransfer!.effectAllowed = "copy";
+  }
+  receiptDrop(event: DragEvent): void {
+    event.preventDefault();
+    if (event.dataTransfer != null && event.dataTransfer.files.length > 0) {
+      this.receiptUploaded = true;
+    }
+    this.receiptHover = false;
+  }
+  receiptLeave(event: DragEvent): void {
+    event.preventDefault();
+    this.receiptHover = false;
   }
 
   submitTransferForm() {
