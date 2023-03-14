@@ -88,7 +88,7 @@
                 </div>
                 <div *ngIf="paymentRecurring.checked" class="vstack gap-3">
                     <div>
-                        <label class="form-label" for="paymentDuration">Duration</label>
+                        <label class="form-label" for="paymentDuration">Frequency</label>
                         <select class="form-select" formControlName="frequency">
                             <option value="day" selected>Daily</option>
                             <option value="week">Weekly</option>
@@ -101,14 +101,16 @@
                         <label class=" form-check-label" for="paymentPermanent">Permanent</label>
                         <input type="checkbox" class="form-check-input" formControlName="permanent"
                             id="paymentPermanent" #paymentPermanent>
+                        <br>
+                        <span><i>Scheduled ayments can be cancelled at any time.</i></span>
                     </div>
                     <div>
 
                         <fieldset [disabled]="paymentPermanent.checked">
-                            <label class="form-label" for="paymentDuration">Duration (Payments):</label>
+                            <label class="form-label" for="paymentDuration">Duration (# of payments):</label>
                             <input type="number" class="form-control" id="paymentDuration" formControlName="duration"
                                 [ngClass]="{'ng-invalid': paymentForm.errors?.['conditionalValidator']}"
-                                [required]="!paymentPermanent.checked" value="0">
+                                [required]="!paymentPermanent.checked" value="0" min="0">
                         </fieldset>
                     </div>
                 </div>

@@ -16,6 +16,7 @@ export class Transaction {
 
     @Type(() => Date)
     date: Date = new Date();
+    id?: string;
     @EntityType()
     sender?: Entity;
     @EntityType()

@@ -147,8 +147,9 @@
                             </div>
                         </div>
                         <div>
-                            <button type="submit" class="btn btn-primary me-3">Submit</button>
-                            <button class="btn btn-danger" (click)="cancelTransfer()">Cancel</button>
+                            <button type="submit" class="btn btn-primary me-3"
+                                [disabled]="!etransferForm.valid">Submit</button>
+                            <button type="button" class="btn btn-danger" (click)="modal.close('cancel')">Cancel</button>
                         </div>
                     </div>
                 </form>
@@ -168,10 +169,17 @@
 
 <ng-template #successDetails>
     <div class="row">
-        <p><b>The transfer has been completed successfully!</b></p>
-        <p><b>From:</b> {{tx.sender?.safeString()}}</p>
-        <p><b>To:</b> {{tx.recipient?.safeString()}}</p>
-        <p><b>Amount:</b> {{tx.amount.currencyString()}}</p>
-        <p><b>Date:</b> {{currentDate | date : 'long'}} </p>
+
+        <div class="col-10">
+            <p><b>The transfer has been completed successfully!</b></p>
+            <p *ngIf="tx.id"><b>Transaction ID: </b>{{tx.id}}</p>
+            <p><b>From:</b> {{tx.sender?.safeString()}}</p>
+            <p><b>To:</b> {{tx.recipient?.safeString()}}</p>
+            <p><b>Amount:</b> {{tx.amount.currencyString()}}</p>
+            <p><b>Date:</b> {{currentDate | date : 'long'}} </p>
+        </div>
+        <div class="col-2 ms-auto text-end">
+            <button type="button" class="btn btn-secondary"><i class="bi bi-printer"></i></button>
+        </div>
     </div>
 </ng-template>

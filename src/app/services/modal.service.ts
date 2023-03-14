@@ -54,8 +54,8 @@ export class NotificationDialogComponent {
 export class ConfirmDialogComponent {
   @Input() title!: string;
   @Input() content!: any;
-  @Input() confirmText: string = "Confirm";
-  @Input() cancelText: string = "Cancel";
+  @Input() confirmText: string = "Yes";
+  @Input() cancelText: string = "No";
 
   constructor(public activeModal: NgbActiveModal) { }
 }
@@ -87,8 +87,12 @@ export class ModalService {
     modalRef.componentInstance.confirmText = confirmText;
     modalRef.componentInstance.cancelText = cancelText;
     return modalRef.result
-      .then(() => { this.logging.info(`${title} confirmation modal closed.`) })
-      .catch((reason: any) => { this.logging.info(`${title} confirmation modal dismissed. Reason: ${reason}`) });
+      .then(
+        () => this.logging.info(`${title} confirmation modal closed.`),
+        (reason: any) => {
+          this.logging.info(`${title} confirmation modal dismissed. Reason: ${reason}`)
+          throw new Error(reason);
+        });
   }
 
   dismissAll() {

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { AlertService } from '@/app/services/alert.service';
 import { LoggingService, LoggingStatus } from '@/app/services/logging.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AdminService } from '@app/services/admin.service';
@@ -29,6 +30,7 @@ export class NavbarComponent {
     private formBuilder: FormBuilder,
     public auth: AuthenticationService,
     public admin: AdminService,
+    private alert: AlertService,
     private personalization: PersonalizationService,
     private logging: LoggingService,
   ) {
@@ -57,5 +59,6 @@ export class NavbarComponent {
     this.personalization.doLogoutUpdate();
     this.auth.logout();
     this.router.navigate(['/login']);
+    this.alert.success("Seuccessfully logged out.");
   }
 }

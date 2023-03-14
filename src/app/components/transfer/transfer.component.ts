@@ -207,15 +207,17 @@ export class TransferComponent implements OnInit {
       if (this.transferForm.value['recipient'] == this.otherEtransfer) {
         this.logging.info(`Showing e-transfer modal.`);
         this.modalService.baseService.open(
-          this.etransferClientModal, { size: 'xl' }).result.finally(() => {
-            this.logging.info(`Closed e-transfer modal.`);
-          });
+          this.etransferClientModal, { size: 'xl' }).result
+          .catch(() => this.etransferForm.reset())
+          .finally(() => this.logging.info(`Closed e-transfer modal.`));
       } else {
-        this.confirmTransfer().then(() => {
-          this.submitTransfer();
-          this.transferForm.reset();
-          this.etransferForm.reset();
-        });
+        this.modalService.openConfirmation('Confirm Transaction', this.confirmDetails)
+          .then((result) => {
+            this.submitTransfer();
+            this.transferForm.reset();
+            this.etransferForm.reset();
+            return result;
+          }, () => this.logging.warning("Transaction cancelled."));
       }
     }
   }
@@ -237,20 +239,14 @@ export class TransferComponent implements OnInit {
       this.user.payees.push(payee);
       this.logging.info(`Adding payee from etransfer: `, [payee])
     }
-    this.confirmTransfer().then(() => {
+    this.modalService.openConfirmation('Confirm E-Transfer', this.confirmDetails).then(() => {
       this.submitTransfer();
       this.transferForm.reset();
       this.etransferForm.reset();
-    }).finally(() => {
-      this.modalService.dismissAll();
-    });
+    }, () => this.logging.warning("E-transfer cancelled."));
   }
 
-  confirmTransfer(): Promise<any> {
-    return this.modalService.openConfirmation('Confirm Transaction', this.confirmDetails);
-  }
-
-  cancelTransfer() {
+  cancelEtransfer() {
     this.tx = new Transaction();
     this.transferForm.reset();
     this.etransferForm.reset();
@@ -259,6 +255,7 @@ export class TransferComponent implements OnInit {
 
   submitTransfer() {
     this.tx.date = new Date();
+    this.tx.id = Math.floor(Math.random() * 999999).toString().padStart(6, '0');
 
     switch (this.tx.recipient?.constructor) {
       case EtransferClient:
@@ -314,6 +311,7 @@ export class TransferComponent implements OnInit {
       this.alert.success('Transfer successful!');
       this.transferForm.reset();
       this.etransferForm.reset();
+      this.modalService.dismissAll();
       this.modalService.openNotification('Transfer Successful', this.successDetails);
     }
   }
