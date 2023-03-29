@@ -55,7 +55,7 @@
                             {{account.id.safeString()}}</option>
                         <option *ngIf="user?.cards?.length" disabled>--------</option>
                         <option *ngFor="let card of user?.cards" [ngValue]="card.id"> {{card.name}} -
-                            {{card.id.safeString()}}</option>
+                            {{card.id.safeString()}} (${{card.balance.toDecimalPlaces(2)}})</option>
                         <option *ngIf="user.payees.length > 0" disabled>--------</option>
                         <option *ngFor="let payee of user?.payees" [ngValue]="payee"> {{payee.safeString()}}
                         </option>
