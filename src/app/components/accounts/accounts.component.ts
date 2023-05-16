@@ -126,7 +126,7 @@ export class AccountDetailsComponent implements OnInit, OnChanges {
       this.filteredTransactions = this.account?.transactions || [];
     }
 
-    this.logging.info(`Filtered using query "${this.txFilter.value}", showing ${this.filteredTransactions.length} accounts.`)
+    this.logging.info(`Filtered using query <${this.txFilter.value}>, showing ${this.filteredTransactions.length} accounts.`)
   }
 
   showCurrentTransactions() {
